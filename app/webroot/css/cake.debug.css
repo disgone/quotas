@@ -1,0 +1,48 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	margin-bottom: 200px;
+	}
+
+.cake-sql-log {
+	border-collapse: collapse;
+	position: fixed;
+	bottom: 0;
+	z-index: 10;
+	width: 100%;
+	font-size: 11px;
+	margin: 0;
+	background: #E8F0CB;
+	color: #373C3F;
+	
+}
+
+.cake-sql-log tbody {
+	overflow-y: scroll;
+	overflow-x: auto;
+	height: 150px;
+	margin: 0;
+}
+
+.cake-sql-log td {
+	font-family: Consolas, Courier New, Courier, monospaced;
+	padding: 3px;
+	border-bottom: 1px dashed #BDC58F;
+	vertical-align: top;
+	font-weight: bold;
+}
+
+.cake-sql-log th {
+	background: #373C3F;
+	color: #E8F0CB;
+}
+
+.cake-sql-log caption {
+	color: #586164;
+	padding: 3px;
+	text-transform: uppercase;
+	font-size: 10px;
+	text-align: center;
+	background: #F7F7F7;
+	border-top: #A7A7A7;
+}

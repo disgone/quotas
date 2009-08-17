@@ -1,0 +1,173 @@
+@CHARSET "ISO-8859-1";
+
+html, body {
+	font-family: Calibri, Arial, Tahoma, Verdana, sans-serif;
+	font-size: 14px;
+	margin: 0px;
+	padding: 0px;
+	color: #222222;
+}
+
+body {
+	line-height: 1.3em;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+a {
+	color: #005C9C;
+	text-decoration: none;
+	}
+	
+a:hover {
+	text-decoration: underline;
+	}
+
+h1 {
+	font-size: 2em;
+	color: #3399CC;
+	font-family: Georgia, serif;
+	}
+
+#body {
+	font-size: 13px;
+}
+
+#wrap {
+	width: 960px;
+	margin: .5em auto;
+}
+
+.project-header {
+	margin-bottom: 1em;
+}
+
+.records {
+	width: 100%;
+}
+
+.records td {
+	border: 1px solid #DDDDDD;
+	padding: .5em;
+}
+
+.records th {
+	background: #E5E5E5;
+	border: 1px solid #BBBBBB;
+	padding: .5em;
+}
+
+.records th a {
+	display: block;
+}
+
+/*--------------------------------------------------
+	QUOTA DETAILS
+--------------------------------------------------*/
+.stats-panel {
+	border-top: 3px solid #333;
+	width: 100%;
+}
+
+.stats-panel td {
+	border-right: 1px solid #C2C2C2;
+}
+
+.stats-panel td.first {
+	border-left: 1px solid #C2C2C2;
+}
+
+.stats-panel td .stat {
+	padding: 5px;
+}
+
+.stats-panel td .stat h2 {
+	font-size: 1.1em;
+}
+
+.stats-panel .stat p.stat-focus {
+	font-size: 1.8em;
+	font-weight: bold;
+}
+
+.stats-panel .stat p.stat-meta {
+	color: #666;
+}
+
+.stats-ticker {
+	width: 100%;
+	border: 1px solid #C2C2C2;
+}
+
+.stats-ticker td {
+	padding: .5em;
+	background: #E7E7E7;
+	color: #666;
+}
+
+.value {
+	font-weight: bold;
+}
+
+.stats-controls {
+	color: #666;
+	float: right;
+	margin-bottom: 8px;
+}
+
+.stats-controls dt {
+	float: left;
+	font-weight: bold;
+	margin-right: 4px;
+}
+
+.stats-controls dd {
+	float: left;
+}
+
+.stats-controls li {
+	float: left;
+	margin-left: 12px;
+}
+
+.stats-controls li.selected {
+	font-weight: bold;
+}
+
+.chart {
+	margin: 1.5em 0pt 1em;
+}
+
+/*---------------------------------------------------
+	UTILITY CLASSES
+---------------------------------------------------*/
+
+.aRight {
+	text-align: right;
+}
+
+.aLeft {
+	text-align: left;
+}
+
+.aCenter {
+	text-align: center;
+}
+
+tr.alt td {
+	background: #F9F9F9;
+}
+
+.float-container {
+	overflow: hidden;
+}
+
+.inc {
+	color: #2CC42C;
+}
+	
+.dec {
+	color: #AA0033;
+}

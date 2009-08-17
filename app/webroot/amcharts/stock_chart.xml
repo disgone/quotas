@@ -1,0 +1,164 @@
+<settings>
+	<margins>0</margins>
+	<font>Calibri</font>
+	<number_format>
+		<thousand_separator>,</thousand_separator>
+		<decimal_separator>.</decimal_separator>
+	</number_format>
+	<data_sets>
+		<data_set did="0">
+			<title>Quota Usage</title>
+			<short>Usage</short>
+			<compare_list_box selected="false"/>
+			<color>333333</color>
+			<csv>
+				<separator>,</separator>
+				<date_format>YYYY-MM-DD hh:mm</date_format>
+				<columns>
+					<column>date</column>
+					<column>usage</column>
+					<column>allowance</column>
+					<column>change</column>
+				</columns>
+			</csv>
+		</data_set>
+	</data_sets>
+	<charts>
+		<chart cid="0">
+			<title>Quota Usage</title>
+			<height>100</height>
+			<column_width>100</column_width>
+			<values>
+				<x>
+					<bg_color>333333</bg_color>
+					<text_color>F7F7F7</text_color>
+				</x>
+				<y_left>
+					<bg_color>0000FF</bg_color>
+					<unit_position>right</unit_position>
+					<unit> MB</unit>
+					<digits_after_decimal>
+						<data>3</data>
+					</digits_after_decimal>
+				</y_left>
+			</values>
+			<legend>
+				<show_date>1</show_date>
+			</legend>
+			<comparing>
+				<recalculate_from_start>0</recalculate_from_start>
+			</comparing>
+			<graphs>
+				<graph>
+					<type>line</type>
+					<bullet>round</bullet>
+					<data_sources>
+						<close>usage</close>
+					</data_sources>
+					<fill_alpha>10</fill_alpha>
+					<cursor_color>005C9C</cursor_color>
+					<bullet_size>4</bullet_size>
+					<legend>
+						<date title="1" key="0">{sum}</date>
+					</legend>
+				</graph>
+				<graph>
+					<type>line</type>
+					<bullet>round</bullet>
+					<data_sources>
+						<close>allowance</close>
+					</data_sources>
+					<color>AFAFAF</color>
+					<fill_alpha>20</fill_alpha>
+					<cursor_color>333333</cursor_color>
+					<bullet_size>2</bullet_size>
+				</graph>
+			</graphs>
+		</chart>
+		<chart cid="1">
+			<title>Change</title>
+			<height>30</height>
+			<values>
+				<x>
+					<enabled>0</enabled>
+				</x>
+				<y_left>
+					<bg_color>0000FF</bg_color>
+					<unit_position>right</unit_position>
+					<unit> GB</unit>
+					<digits_after_decimal>
+						<data>2</data>
+					</digits_after_decimal>
+				</y_left>
+			</values>
+			<column_width>100</column_width>
+			<grid>
+				<y_left>
+					<approx_count>3</approx_count>
+				</y_left>
+			</grid>
+			<comparing>
+				<recalculate_from_start>0</recalculate_from_start>
+			</comparing>
+			<graphs>
+				<graph>
+					<type>step</type>
+					<period_value>sum</period_value>
+					<color>BFBFBF</color>
+					<alpha>30</alpha>
+					<fill_alpha>50</fill_alpha>
+					<data_sources>
+						<close>change</close>
+					</data_sources>
+					<bullet_size>4</bullet_size>
+					<legend>
+						<date title="0" key="0">{sum}</date>
+					</legend>
+				</graph>
+			</graphs>
+		</chart>
+	</charts>
+	<data_set_selector>
+		<enabled>0</enabled>
+		<drop_down>
+			<scroller_color>C7C7C7</scroller_color>
+		</drop_down>
+	</data_set_selector>
+	<period_selector>
+		<periods_title>Zoom:</periods_title>
+		<periods>
+			<period pid="0" type="DD" count="1" selected="1">1D</period>
+			<period pid="1" type="DD" count="3">3D</period>
+			<period pid="2" type="DD" count="10">10D</period>
+			<period pid="3" type="MM" count="1">1M</period>
+			<period pid="4" type="MM" count="3">3M</period>
+			<period pid="5" type="MM" count="6">6M</period>
+			<period pid="6" type="YYYY" count="1">1Y</period>
+			<period pid="7" type="YTD" count="0">YTD</period>
+			<period pid="8" type="MAX" count="0">MAX</period>
+		</periods>
+	</period_selector>
+	<header>
+		<enabled>0</enabled>
+	</header>
+	<balloon>
+		<border_color>B81D1B</border_color>
+	</balloon>
+	<background>
+		<alpha>100</alpha>
+	</background>
+	<scroller>
+		<resize_button_style>dragger</resize_button_style>
+		<graph_data_source>usage</graph_data_source>
+		<playback>
+			<enabled>1</enabled>
+			<speed>3</speed>
+		</playback>
+		<frequency>8</frequency>
+	</scroller>
+	<context_menu>
+		<default_items>
+		<print>0</print>
+		</default_items>
+	</context_menu>
+</settings>
