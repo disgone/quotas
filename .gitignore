@@ -1,0 +1,6 @@
+*.tmpl
+*.buildpath
+*.project
+/app/tmp/cache/*
+.settings/*
+database.php

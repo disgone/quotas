@@ -12,7 +12,10 @@ class ProjectsController extends AppController {
 		'recursive' => 0
 	);
 	
-	var $cacheAction = array('projects/projectData' => '10 minutes');
+	var $cacheAction = array(
+		'projectData'			=> '10 minutes',
+		'index' 				=> '10 minutes'
+	);
 	
 	function index() {
 		$projects = $this->paginate('Project');
