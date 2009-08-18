@@ -1,15 +1,19 @@
 @CHARSET "ISO-8859-1";
 
+@import 'reset.css';
+@import 'jquery.autocomplete.css';
+
 html, body {
-	font-family: Calibri, Arial, Tahoma, Verdana, sans-serif;
+	font-family: Calibri,Arial,Tahoma,Verdana,sans-serif;
 	font-size: 14px;
 	margin: 0px;
 	padding: 0px;
-	color: #222222;
+	color: #333333;
 }
 
 body {
 	line-height: 1.3em;
+	margin: 40px 0;
 }
 
 table {
@@ -24,20 +28,85 @@ a {
 a:hover {
 	text-decoration: underline;
 	}
+	
+h1,h2,h3,h4,h5,h6 {
+	line-height: 1em;
+	font-weight: normal;
+	}
 
 h1 {
 	font-size: 2em;
-	color: #3399CC;
+	color: #07577F;
 	font-family: Georgia, serif;
 	}
+	
+h2 {
+	font-size: 24px;
+	}
+	
+strong {
+	color: #666;
+	}
 
+.wrap {
+	width: 960px;
+	margin: .5em auto;
+}
+
+#head {
+	overflow: auto;
+	padding: 5px 0;
+}
+
+#logo {
+	float: left;
+}
+
+#logo h1 {
+}
+
+#navigation {
+	font-family: Plantin,"Plantin std","Plantin","Baskerville",Georgia,"Times New Roman",serif;
+	font-size: 90%;
+	text-transform: uppercase;
+	float: right;
+	width: 22em;
+}
+
+#navigation li {
+	display: block;
+	float: left;
+}
+
+#navigation li a {
+	color: #666666;
+	display: block;
+	float: left;
+	margin: 0 15px;
+}
+
+#navigation li a:hover {
+	color: #005C9C;
+	border-top: 2px solid #D7D7D7;
+	text-decoration: none;
+	margin-top: -2px;
+}
+
+#navigation li a.current {
+	color: #005C9C;
+	border-top: 2px solid #333;
+	margin-top: -2px;
+}
+	
 #body {
+	border-top: 1px solid #BFBFBF;
+	padding: 20px 0;
 	font-size: 13px;
 }
 
-#wrap {
-	width: 960px;
-	margin: .5em auto;
+#search {
+	float: right;
+	margin-left: 1em;
 }
 
 .project-header {
@@ -46,6 +115,7 @@ h1 {
 
 .records {
 	width: 100%;
+	margin: 1em 0pt;
 }
 
 .records td {
@@ -111,10 +181,15 @@ h1 {
 	font-weight: bold;
 }
 
+.location {
+	float: left;
+}
+
 .stats-controls {
 	color: #666;
 	float: right;
 	margin-bottom: 8px;
+	width: 210px;
 }
 
 .stats-controls dt {
@@ -170,4 +245,8 @@ tr.alt td {
 	
 .dec {
 	color: #AA0033;
+}
+
+.sm {
+	font-size: 11px;
 }

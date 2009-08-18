@@ -7,15 +7,14 @@ class ProjectsController extends AppController {
 	var $components = array("RequestHandler");
 	
 	var $paginate = array(
-		'limit' => 35,
+		'limit' => 25,
 		'order' => array('Project.number +0' => 'ASC', 'Project.name' => 'ASC'),
 		'recursive' => 0
 	);
 	
-	var $cacheAction = array(
-		'projectData'			=> '10 minutes',
-		'index' 				=> '10 minutes'
-	);
+	//var $cacheAction = array(
+	//	'index' 				=> '10 minutes'
+	//);
 	
 	function index() {
 		$projects = $this->paginate('Project');
@@ -71,13 +70,11 @@ class ProjectsController extends AppController {
 		unset($project);
 	}
 	
-	function _requestProjectData($id, $scope = false) {
-		$this->Project->recursive = 0;
-		$this->Quota->recursive = -1;
-		$project = $this->Project->findById($id);
+	function _requestProjectData($id, $max = false) {
+		$project = $this->Project->findById($id);	
 
 		//Get Quota for the current day.
-		if($scope)
+		if($max)
 			$project['Quota'] = $this->Quota->getProjectQuotas($id);
 		else
 			$project['Quota'] = $this->Quota->getRange($id);

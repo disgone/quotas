@@ -1,3 +1,4 @@
+<h1>Project Directory</h1>
 <table class="records">
 	<thead>
 		<tr>
@@ -19,7 +20,7 @@
 			<td class="aRight"><?php echo $units->format($project['Project']['Quota']['allowance']); ?></td>
 			<td class="aRight"><?php echo $units->format($project['Project']['Quota']['consumed'], true, 3); ?></td>
 			<td class="aRight"><?php echo round(($project['Project']['Quota']['consumed']/$project['Project']['Quota']['allowance'])*100, 2); ?>%</td>
-			<td class="aRight"><?php echo date('m/d/y H:i:s', strtotime($project['Project']['Quota']['created'])); ?>
+			<td class="aRight"><?php echo date('M d, Y H:i', strtotime($project['Project']['Quota']['created'])); ?>
 		</tr>
 		<?php endforeach; ?>
 	</tbody>

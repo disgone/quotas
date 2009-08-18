@@ -2,11 +2,14 @@
 <div class="project">
 	<div class="project-header">
 		<h1><?php echo $project['Project']['number']; ?> <?php echo $project['Project']['name']; ?></h1>
-		<p class="update">
-			Last Update: <?php echo date('F d, Y H:i:s', strtotime($project['Quota'][count($project['Quota'])-1]['Quota']['created'])); ?>
+		<p class="update sm">
+			<strong>Last Update:</strong> <?php echo date('F d, Y H:i:s', strtotime($project['Quota'][count($project['Quota'])-1]['Quota']['created'])); ?>
 		</p>
 	</div>
 	<div class="float-container">
+		<div class="location">
+			<strong>Direct Link:</strong> <a href="file:///<?php echo $project['Project']['path']; ?>" title="Explore this project"><?php echo $project['Project']['path']; ?></a>
+		</div>
 		<div class="stats-controls">
 			<dl>
 				<dt>Period:</dt>
