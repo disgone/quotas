@@ -30,6 +30,7 @@ class Quota extends AppModel {
 	}
 	
 	function getRange($project_id, $start = null, $end = null) {
+		//Default to current 24 hour period if none specified.
 		$start === null ? $start = date('Y-m-d') : $start;
 		$end === null ? $end = date('Y-m-d', strtotime('+1 day')) : $end;
 		

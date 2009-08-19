@@ -1,7 +1,6 @@
 @CHARSET "ISO-8859-1";
 
 @import 'reset.css';
-@import 'jquery.autocomplete.css';
 
 html, body {
 	font-family: Calibri,Arial,Tahoma,Verdana,sans-serif;
@@ -47,6 +46,11 @@ h2 {
 strong {
 	color: #666;
 	}
+	
+p {
+	margin: 0.8em 0;
+	line-height: 1.65em;
+	}
 
 .wrap {
 	width: 960px;
@@ -70,7 +74,6 @@ strong {
 	font-size: 90%;
 	text-transform: uppercase;
 	float: right;
-	width: 22em;
 }
 
 #navigation li {
@@ -101,16 +104,15 @@ strong {
 #body {
 	border-top: 1px solid #BFBFBF;
 	padding: 20px 0;
-	font-size: 13px;
-}
-
-#search {
-	float: right;
-	margin-left: 1em;
+	font-size: 14px;
 }
 
 .project-header {
 	margin-bottom: 1em;
+}
+
+.project-header p {
+	margin: 0;
 }
 
 .records {
@@ -157,6 +159,11 @@ strong {
 	font-size: 1.1em;
 }
 
+.stats-panel div.stat p {
+	line-height: 1.1em;
+	margin: 0pt;
+}
+
 .stats-panel .stat p.stat-focus {
 	font-size: 1.8em;
 	font-weight: bold;
@@ -164,6 +171,7 @@ strong {
 
 .stats-panel .stat p.stat-meta {
 	color: #666;
+	font-size: .9em;
 }
 
 .stats-ticker {
@@ -189,7 +197,6 @@ strong {
 	color: #666;
 	float: right;
 	margin-bottom: 8px;
-	width: 210px;
 }
 
 .stats-controls dt {

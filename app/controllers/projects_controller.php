@@ -12,9 +12,10 @@ class ProjectsController extends AppController {
 		'recursive' => 0
 	);
 	
-	//var $cacheAction = array(
-	//	'index' 				=> '10 minutes'
-	//);
+	var $cacheAction = array(
+		'index' 				=> '10 minutes',
+		'details'				=> '5 minutes'
+	);
 	
 	function index() {
 		$projects = $this->paginate('Project');
@@ -31,7 +32,7 @@ class ProjectsController extends AppController {
 	function details($id) {
 		//Throw a 404 error if ID was not specified.
 		if(!$id)
-			$this->cakeError('error404', array('url' => 'projects/details'));
+			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
 			
 		//Get project and quota data.
 		if(($project = Cache::read("project_" . $id, 'default')) === false) {
@@ -41,7 +42,7 @@ class ProjectsController extends AppController {
 		
 		//Throw a 404 error if the project with ID was not found in the database.
 		if(empty($project))
-			$this->cakeError('error404', array('url' => 'projects/details'));
+			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
 		
 		$this->set('project', $project);
 		$this->set('quota', $project['Meta']);
@@ -53,7 +54,7 @@ class ProjectsController extends AppController {
 		Configure::write('debug', 0);
 		//Throw a 404 error if ID was not specified.
 		if(!$id)
-			$this->cakeError('error404', array('url' => 'projects/details'));
+			$this->cakeError('error404', array('url' => "projects/projectData/$id"));
 		
 		//Get project and quota data.
 		if(($project = Cache::read("project_full_" . $id, 'default')) === false) {
@@ -62,8 +63,9 @@ class ProjectsController extends AppController {
 		}
 
 		//Throw a 404 error if the project with ID was not found in the database.
+		
 		if(empty($project))
-			$this->cakeError('error404', array('url' => 'projects/details'));
+			$this->cakeError('error404', array('url' => "projects/projectData/$id"));
 
 		$this->set('data', $project);
 		
@@ -71,15 +73,17 @@ class ProjectsController extends AppController {
 	}
 	
 	function _requestProjectData($id, $max = false) {
-		$project = $this->Project->findById($id);	
+		$project = $this->Project->findById($id);
+		//Project not found
+		if(empty($project))
+			return null;
 
-		//Get Quota for the current day.
 		if($max)
 			$project['Quota'] = $this->Quota->getProjectQuotas($id);
 		else
 			$project['Quota'] = $this->Quota->getRange($id);
 		
-		//No quota data was found for the current day, get last day quota data was available and get that days info.
+		//If no quota data was returned for the specified times we need to show the latest updates we have.
 		if(empty($project['Quota'])) {
 			$last = $this->Quota->find('first', array('conditions' => array('Quota.project_id' => $id), 'order' => 'Quota.created DESC', 'limit' => 1));
 			$start = date('Y-m-d', strtotime($last['Quota']['created'] . " - 1 day"));
@@ -102,6 +106,7 @@ class ProjectsController extends AppController {
 			if($quota['Quota']['consumed'] < $min)
 				$min = $quota['Quota']['consumed'];
 				
+			//Calculate change from previous update.
 			if($key > 0) {
 				$project['Quota'][$key]['Quota']['change'] = $quota['Quota']['consumed'] - $project['Quota'][$key-1]['Quota']['consumed'];
 			}
@@ -121,6 +126,8 @@ class ProjectsController extends AppController {
 		);
 		
 		$project['Meta'] = $quota;
+		
+		unset($quota, $max, $min, $options, $units);
 
 		return $project;
 	}
