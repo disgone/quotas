@@ -13,8 +13,8 @@ class ProjectsController extends AppController {
 	);
 	
 	var $cacheAction = array(
-		'index' 				=> '10 minutes',
-		'details'				=> '5 minutes'
+		'xindex' 				=> '15 minutes',
+		'xdetails'				=> '15 minutes'
 	);
 	
 	function index() {
@@ -34,20 +34,25 @@ class ProjectsController extends AppController {
 		if(!$id)
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
 			
+		$period = $this->_getPeriod();
+			
 		//Get project and quota data.
 		if(($project = Cache::read("project_" . $id, 'default')) === false) {
-			$project = $this->_requestProjectData($id);
-			Cache::write("project_" . $id, $project, 'default');
+			$project = $this->_requestProjectData($id, $period);
+			Cache::write("project_" . $id . "_" . $period['duration'], $project, 'default');
 		}
 		
 		//Throw a 404 error if the project with ID was not found in the database.
 		if(empty($project))
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
 		
+		$durations = array('1d', '7d', '14d', '1m', '3m');
 		$this->set('project', $project);
 		$this->set('quota', $project['Meta']);
+		$this->set('durations', $durations);
+		$this->set('period', isset($period['duration']) ? $period['duration'] : $durations[0]);
 		
-		unset($min, $max, $start, $end, $project, $quota);
+		unset($min, $max, $start, $end, $project, $quota, $durations);
 	}
 	
 	function projectData($id) {
@@ -56,11 +61,8 @@ class ProjectsController extends AppController {
 		if(!$id)
 			$this->cakeError('error404', array('url' => "projects/projectData/$id"));
 		
-		//Get project and quota data.
-		if(($project = Cache::read("project_full_" . $id, 'default')) === false) {
-			$project = $this->_requestProjectData($id, true);
-			Cache::write("project_full_" . $id, $project, 'default');
-		}
+		$period = $this->_getPeriod();
+		$project = $this->_requestProjectData($id, $period);
 
 		//Throw a 404 error if the project with ID was not found in the database.
 		
@@ -72,7 +74,32 @@ class ProjectsController extends AppController {
 		unset($project);
 	}
 	
-	function _requestProjectData($id, $max = false) {
+	
+	function update($id) {
+		Configure::write('debug', 0);
+		//Throw a 404 error if ID was not specified.
+		if(!$id)
+			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
+			
+		$this->layout = 'ajax';
+		
+		$period = $this->_getPeriod();
+			
+		//Get project and quota data.
+		if(($project = Cache::read("project_" . $id, 'default')) === false) {
+			$project = $this->_requestProjectData($id, $period);
+			Cache::write("project_" . $id . "_" . $period['duration'], $project, 'default');
+		}
+		
+		//Throw a 404 error if the project with ID was not found in the database.
+		if(empty($project))
+			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
+			
+		$this->set('project', $project);
+		$this->set('quota', $project['Meta']);
+	}
+	
+	function _requestProjectData($id, $period = null, $max = false) {
 		$project = $this->Project->findById($id);
 		//Project not found
 		if(empty($project))
@@ -80,6 +107,9 @@ class ProjectsController extends AppController {
 
 		if($max)
 			$project['Quota'] = $this->Quota->getProjectQuotas($id);
+		else if($period) {
+			$project['Quota'] = $this->Quota->getRange($id, $period['start'], $period['end']);
+		}
 		else
 			$project['Quota'] = $this->Quota->getRange($id);
 		
@@ -130,6 +160,48 @@ class ProjectsController extends AppController {
 		unset($quota, $max, $min, $options, $units);
 
 		return $project;
+	}
+	
+	function _getPeriod() {
+		if(isset($this->params['url']['period']) || isset($this->params['named']['period'])) {
+			//Get the period variable from the url.
+			$period = isset($this->params['url']['period']) ? $this->params['url']['period'] : $this->params['named']['period'];
+			//Get the date unit, IE m, d, w, h etc..
+			$unit = preg_split('/([0-9])+/i', $period, -1, PREG_SPLIT_NO_EMPTY);
+			$unit = isset($unit[0]) ? $unit[0] : 'd';
+			//Get the number from the period value.
+			$value = preg_split('/([a-z])+/i', $period, -1, PREG_SPLIT_NO_EMPTY);
+			$value = isset($value[0]) ? abs($value[0]) : 1;
+			
+			$duration = $value . $unit; 
+			
+			//Convert the date char to a strtotime friendly value.
+			switch($unit) {
+				case 'h':
+					$unit = 'hours';
+					break;
+				case 'w':
+					$unit = 'weeks';
+					break;
+				case 'm':
+					$unit = 'months';
+					break;
+				case 'y':
+					$unit = 'years';
+					break;
+				case 'd':
+				default:
+					$unit = 'days';
+					break;
+			}
+			
+			$start = date("Y-m-d H:i:s", strtotime($value*-1 . $unit));
+			$end = date("Y-m-d H:i:s");
+			
+			return array('start' => $start, 'end' => $end, 'duration' => $duration);
+		}
+		
+		return null;
 	}
 }
 

@@ -1,3 +1,5 @@
+AddOutputFilterByType DEFLATE text/html text/css application/x-javascript application/javascript
+
 <IfModule mod_expires.c>
 	ExpiresActive On
 	ExpiresByType image/gif "modified plus 1 month"

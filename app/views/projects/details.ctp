@@ -1,4 +1,5 @@
 <?php $javascript->link('swfobject', false); ?>
+<?php $javascript->link('project', false); ?>
 <div class="project">
 	<div class="project-header">
 		<h1><?php echo $project['Project']['number']; ?> <?php echo $project['Project']['name']; ?></h1>
@@ -15,11 +16,9 @@
 				<dt>Period:</dt>
 				<dd>
 					<ul>
-						<li class="selected"><a href="#">Today</a></li>
-						<li><a href="#">3d</a></li>
-						<li><a href="#">10d</a></li>
-						<li><a href="#">30d</a></li>
-						<li><a href="#">6m</a></li>
+						<?php foreach($durations as $cur): ?>
+						<li><?php echo $html->link($cur, array('controller' => 'projects', 'action' => 'details', $project['Project']['id'], 'period' => $cur), array("class" => $cur == $period ? "selected" : '')); ?></li>
+						<?php endforeach; ?>
 					</ul>
 				</dd>
 			</dl>
@@ -86,10 +85,6 @@
 		</tbody>
 	</table>
 	<div class="chart">
-		<?php echo $this->element('amstock', array('cache' => array('time' => '+1 day', 'key' => $project['Project']['id']), 'project_id' => $project['Project']['id'], 'project' => $project)); ?>
+		<?php echo $this->element('amstock', array('key' => $project['Project']['id'], 'project_id' => $project['Project']['id'], 'project' => $project)); ?>
 	</div>
 </div>
-
-<!-- <pre>
-<?php print_R($project); ?>
-</pre> -->

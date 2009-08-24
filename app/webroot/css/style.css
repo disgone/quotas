@@ -214,7 +214,7 @@ p {
 	margin-left: 12px;
 }
 
-.stats-controls li.selected {
+.stats-controls li a.selected {
 	font-weight: bold;
 }
 
