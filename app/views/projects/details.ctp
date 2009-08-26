@@ -1,30 +1,22 @@
 <?php $javascript->link('swfobject', false); ?>
 <?php $javascript->link('project', false); ?>
-<div class="project">
-	<div class="project-header">
-		<h1><?php echo $project['Project']['number']; ?> <?php echo $project['Project']['name']; ?></h1>
-		<p class="update sm">
-			<strong>Last Update:</strong> <?php echo date('F d, Y H:i:s', strtotime($project['Quota'][count($project['Quota'])-1]['Quota']['created'])); ?>
-		</p>
-	</div>
-	<div class="float-container">
-		<div class="location">
-			<strong>Direct Link:</strong> <a href="file:///<?php echo $project['Project']['path']; ?>" title="Explore this project"><?php echo $project['Project']['path']; ?></a>
+<div class="project" project_record="<?php echo $project['Project']['id']; ?>">
+	<div class="project-header float-container">
+		<div class="project-title fLeft">
+			<h1><span class="hover_target"><?php echo $project['Project']['number']; ?> <?php echo $project['Project']['name'] != null ? $project['Project']['name'] : "<em class='missing-detail'>Project Name</em>"; ?></span></h1>
+			<p class="location">
+				<strong>Direct Link:</strong> <a href="file:///<?php echo $project['Project']['path']; ?>" title="Explore this project"><?php echo $project['Project']['path']; ?></a>
+			</p>
 		</div>
-		<div class="stats-controls">
-			<dl>
-				<dt>Period:</dt>
-				<dd>
-					<ul>
-						<?php foreach($durations as $cur): ?>
-						<li><?php echo $html->link($cur, array('controller' => 'projects', 'action' => 'details', $project['Project']['id'], 'period' => $cur), array("class" => $cur == $period ? "selected" : '')); ?></li>
-						<?php endforeach; ?>
-					</ul>
-				</dd>
-			</dl>
+		<div class="project-meta fRight">
+			<ul>
+				<li><strong>Status:</strong> <span class='value'><?php echo $changed[0][0]['days'] > 14 ? 'Inactive' : 'Active'; ?></span></li>
+				<li><strong>Last Update:</strong> <span class='value'><?php echo $time->timeAgoInWords(strtotime($project['Quota'][count($project['Quota'])-1]['Quota']['created'])); ?> (<?php echo date('m/d g:ia', strtotime($project['Quota'][count($project['Quota'])-1]['Quota']['created'])); ?>)</span></li>
+				<li><strong>Last Change:</strong> <span class='value'><?php echo $time->timeAgoInWords(strtotime($changed[0]['Quota']['created'])); ?> (<?php echo date('m/d g:ia', strtotime($changed[0]['Quota']['created'])); ?>)</span></li>
+			</ul>
 		</div>
 	</div>
-	<table class="stats-panel">
+	<table class="clear stats-panel">
 		<tbody>
 			<tr>
 				<td class="first">

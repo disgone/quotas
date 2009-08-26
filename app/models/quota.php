@@ -3,6 +3,7 @@ class Quota extends AppModel {
 
 	var $name = 'Quota';
 	var $recursive = -1;
+		
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	var $belongsTo = array(
 			'Project' => array('className' => 'Project',
@@ -24,7 +25,8 @@ class Quota extends AppModel {
 	function getLatest($project_id) {
 		$cond = array(
 			'order' 		=> array('Quota.created' => 'DESC'),
-			'conditions' 	=> array('Quota.project_id' => $project_id)
+			'conditions' 	=> array('Quota.project_id' => $project_id),
+			'limit'			=> 1
 		);
 		return $this->find('first', $cond);
 	}
@@ -60,5 +62,16 @@ class Quota extends AppModel {
 		return $this->find('all', $cond);
 	}
 
+	function getLastChange($project_id) {
+		$cond = array(
+			'fields'		=> array('Quota.*', 'DATEDIFF(now(),Quota.created) as days'),
+			'order'			=> array('Quota.created' => 'DESC'),
+			'conditions'	=> array('Quota.project_id' => $project_id),
+			'group'			=> array('Quota.consumed'),
+			'limit'			=> 1
+		);
+		
+		return $this->find('all', $cond);
+	}
 }
 ?>

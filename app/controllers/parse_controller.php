@@ -28,6 +28,32 @@ class ParseController extends Controller {
 		$this->set('data', '');
 	}
 	
+	function processTest() {
+		$path = TMP . 'quota/QuotaNT07.xml';
+		
+		$this->Quota->useDbConfig = "test";
+		$this->Scan->useDbConfig = "test";
+		$this->Project->useDbConfig = "test";
+		
+		if(!file_exists($path))
+			exit();
+			
+		//Since Quota Server templates use square brackets as data fields
+		//we can't escape through the use of the template using CDATA.
+		//Escape ampersands after read, then load the corrected XML into the reader.
+		$file = fopen($path, 'r');
+		$contents = fread($file, filesize($path));
+		$data = preg_replace("/&/", "&amp;", $contents);
+		
+		//Convert XML object to easy to parse array.
+		App::import('Xml');
+		$x = new XML($data);
+		$data = Set::reverse($x);
+		
+		$this->_readData($data);
+		$this->set('data');
+	}
+	
 	function _readData($data) {
 		if($this->_isNew($data)) {
 			foreach($data['Data']['Quotas']['Quota'] as $key => $folder) {
@@ -42,21 +68,28 @@ class ParseController extends Controller {
 					if($project->number != null && !$this->Project->findByPath($project->path)) {
 						$this->Project->create();
 						$save = $this->Project->save($project);
+						$this->log("A new project was found and added, $project->path", 'scanner_projects');
 						if(!empty($save)) {
 							$this->Quota->create();
-							$this->data['Quota']['allowance'] = $project->Quota->allowance;
-							$this->data['Quota']['consumed'] = $project->Quota->consumed;
+							$this->data['Quota']['allowance'] = is_numeric($project->Quota->allowance) ? $project->Quota->allowance : 0;
+							$this->data['Quota']['consumed'] = is_numeric($project->Quota->consumed) ? $project->Quota->consumed : 0;
 							$this->data['Quota']['project_id'] = $this->Project->id;
 							$this->Quota->save($this->data);
 						}
 					}
 					else if($project->number != null && $cur = $this->Project->findByPath($project->path)) {
 						$this->Quota->create();
-						$this->data['Quota']['allowance'] = $project->Quota->allowance;
-						$this->data['Quota']['consumed'] = $project->Quota->consumed;
+						$this->data['Quota']['allowance'] = is_numeric($project->Quota->allowance) ? $project->Quota->allowance : 0;
+						$this->data['Quota']['consumed'] = is_numeric($project->Quota->consumed) ? $project->Quota->consumed : 0;
 						$this->data['Quota']['project_id'] = $cur['Project']['id'];
 						$this->Quota->save($this->data);
 					}
+					
+					//Log an potential data errors.
+					if(!is_numeric($project->Quota->allowance))
+						$this->log("Non numeric quota allowance encounted: " . $project->Quota->allowance . " was encountered for project " . $this->Project->id, "scanner_error");
+					if(!is_numeric($project->Quota->consumed))
+						$this->log("Non numeric quota consumption encounted: " . $project->Quota->consumed . " was encountered for project " . $this->Project->id, "scanner_error");
 				}
 			}
 		}

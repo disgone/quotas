@@ -2,7 +2,7 @@
 
 class ProjectsController extends AppController {
 	var $name = "Projects";
-	var $helpers = array('Units', 'Javascript', 'Cache');
+	var $helpers = array('Units', 'Javascript', 'Cache', 'Time');
 	var $uses = array('Project', 'Quota');
 	var $components = array("RequestHandler");
 	
@@ -13,11 +13,12 @@ class ProjectsController extends AppController {
 	);
 	
 	var $cacheAction = array(
-		'xindex' 				=> '15 minutes',
+		'index' 				=> '+1 hour',
 		'xdetails'				=> '15 minutes'
 	);
 	
 	function index() {
+		$this->pageTitle = "Project Directory";
 		$projects = $this->paginate('Project');
 		
 		//Get the most recent quota updates for each project.
@@ -29,40 +30,47 @@ class ProjectsController extends AppController {
 		$this->set('projects', $projects);
 	}
 	
-	function details($id) {
+	function details($id = null) {
+		$this->pageTitle = "Project Details";
 		//Throw a 404 error if ID was not specified.
 		if(!$id)
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
 			
+		//Grabs period time if specified in the url or a named parameter.
+		//?period=3d or period:3d
 		$period = $this->_getPeriod();
 			
 		//Get project and quota data.
 		if(($project = Cache::read("project_" . $id, 'default')) === false) {
 			$project = $this->_requestProjectData($id, $period);
-			Cache::write("project_" . $id . "_" . $period['duration'], $project, 'default');
+			Cache::write("project_" . $id, $project, 'default');
 		}
 		
 		//Throw a 404 error if the project with ID was not found in the database.
 		if(empty($project))
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
+
+		//Get the last time the project had a change in usage.
+		$changed = $this->Quota->getLastChange($id);
 		
-		$durations = array('1d', '7d', '14d', '1m', '3m');
-		$this->set('project', $project);
+		$this->pageTitle = $project['Project']['number'] . " Details";
+		$this->set(compact('project', 'changed'));
 		$this->set('quota', $project['Meta']);
-		$this->set('durations', $durations);
-		$this->set('period', isset($period['duration']) ? $period['duration'] : $durations[0]);
 		
 		unset($min, $max, $start, $end, $project, $quota, $durations);
 	}
 	
-	function projectData($id) {
+	function projectData($id = null) {
 		Configure::write('debug', 0);
 		//Throw a 404 error if ID was not specified.
 		if(!$id)
 			$this->cakeError('error404', array('url' => "projects/projectData/$id"));
 		
 		$period = $this->_getPeriod();
-		$project = $this->_requestProjectData($id, $period);
+		if(($project = Cache::read("project_" . $id . "_qd", 'default')) === false) {
+			$project = $this->_requestProjectData($id, null, true);
+			Cache::write("project_" . $id . "_qd", $project, 'default');
+		}
 
 		//Throw a 404 error if the project with ID was not found in the database.
 		
@@ -74,8 +82,7 @@ class ProjectsController extends AppController {
 		unset($project);
 	}
 	
-	
-	function update($id) {
+	function update($id = null) {
 		Configure::write('debug', 0);
 		//Throw a 404 error if ID was not specified.
 		if(!$id)
@@ -97,6 +104,19 @@ class ProjectsController extends AppController {
 			
 		$this->set('project', $project);
 		$this->set('quota', $project['Meta']);
+	}
+	
+	function edit($id = null) {
+		$this->Project->id = $id;
+		if(empty($this->data)) {
+			$this->data = $this->Project->read();
+		}
+		else {
+			if($this->Project->save($this->data)) {
+				$this->Session->setFlash("Project details have been updated.");
+				$this->redirect(array("controller" => "projects", "action" => "details", $id));
+			}
+		}
 	}
 	
 	function _requestProjectData($id, $period = null, $max = false) {

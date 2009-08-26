@@ -55,6 +55,7 @@ p {
 .wrap {
 	width: 960px;
 	margin: .5em auto;
+	position: relative;
 }
 
 #head {
@@ -107,14 +108,6 @@ p {
 	font-size: 14px;
 }
 
-.project-header {
-	margin-bottom: 1em;
-}
-
-.project-header p {
-	margin: 0;
-}
-
 .records {
 	width: 100%;
 	margin: 1em 0pt;
@@ -136,8 +129,50 @@ p {
 }
 
 /*--------------------------------------------------
+	LAYOUT/COLUMNS
+---------------------------------------------------*/
+.gr-main-col {
+	width: 630px;
+}
+
+.gr-sec-col {
+	width: 300px;
+}
+
+/*--------------------------------------------------
 	QUOTA DETAILS
 --------------------------------------------------*/
+.project-header {
+	margin-bottom: 1em;
+	position: relative;
+}
+
+.project-header p {
+	margin: 0;
+}
+
+.project-meta {
+	margin-bottom: 8px;
+	width: 285px;
+	font-size: 85%;
+}
+
+.project-meta li strong {
+	margin-right: 5px;
+	display: inline-block;
+	width: 75px;
+	white-space: nowrap;
+}
+
+.project-meta li span.value {
+	display: inline-block;
+	text-align: right;
+	width: 200px;
+	white-space: nowrap;
+	font-weight: normal;
+}
+
+
 .stats-panel {
 	border-top: 3px solid #333;
 	width: 100%;
@@ -187,10 +222,6 @@ p {
 
 .value {
 	font-weight: bold;
-}
-
-.location {
-	float: left;
 }
 
 .stats-controls {
@@ -246,6 +277,18 @@ tr.alt td {
 	overflow: hidden;
 }
 
+.fRight {
+	float: right;
+}
+
+.fLeft {
+	float: left;
+}
+
+.clear {
+	clear: both;
+}
+
 .inc {
 	color: #2CC42C;
 }
@@ -256,4 +299,9 @@ tr.alt td {
 
 .sm {
 	font-size: 11px;
+}
+
+.missing-detail {
+	color: #DFDFDF;
+	font-style: italic;
 }
