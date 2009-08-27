@@ -25,4 +25,4 @@
 		<?php endforeach; ?>
 	</tbody>
 </table>
-<?php echo $paginator->numbers(); ?>
+<?php echo $this->element('pagination'); ?>
