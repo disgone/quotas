@@ -12,7 +12,6 @@ html, body {
 
 body {
 	line-height: 1.3em;
-	margin: 40px 0;
 }
 
 table {
@@ -54,13 +53,37 @@ p {
 
 .wrap {
 	width: 960px;
-	margin: .5em auto;
+	margin: 0 auto;
 	position: relative;
 }
+
+#top-nav {
+	background: #333;
+	color: #999999;
+	font-size: 12px;
+	padding: 8px 0 4px;
+	}
+	#top-nav ul {
+		float: right;
+		overflow: hidden;
+		}
+	#top-nav ul li {
+		float: left;
+		display: inline;
+		padding: 1px 7px 0 9px;
+		}
+	#top-nav li a {
+		color: #999999;
+		}
+	#top-nav li a:hover {
+		color: #FFFFFF;
+		text-decoration: none;
+		}
 
 #head {
 	overflow: auto;
 	padding: 5px 0;
+	margin-top: 40px;
 }
 
 #logo {

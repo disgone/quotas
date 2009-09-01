@@ -34,7 +34,9 @@ body {
 
 .cake-sql-log th {
 	background: #373C3F;
-	color: #E8F0CB;
+	color: #F7F7F7;
+	white-space: nowrap;
+	padding: 2px 4px;
 }
 
 .cake-sql-log caption {
@@ -44,5 +46,5 @@ body {
 	font-size: 10px;
 	text-align: center;
 	background: #F7F7F7;
-	border-top: #A7A7A7;
+	border-top: 1px solid #A7A7A7;
 }

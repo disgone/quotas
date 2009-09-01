@@ -2,7 +2,7 @@
 
 class ProjectsController extends AppController {
 	var $name = "Projects";
-	var $helpers = array('Units', 'Javascript', 'Cache', 'Time');
+	var $helpers = array('Units', 'Javascript', 'Cache', 'Time', 'Form');
 	var $uses = array('Project', 'Quota');
 	var $components = array("RequestHandler");
 	
@@ -13,7 +13,7 @@ class ProjectsController extends AppController {
 	);
 	
 	var $cacheAction = array(
-		'index' 				=> '+1 hour',
+		'xindex' 				=> '+1 hour',
 		'xdetails'				=> '15 minutes'
 	);
 	
@@ -21,13 +21,15 @@ class ProjectsController extends AppController {
 		$this->pageTitle = "Project Directory";
 		$projects = $this->paginate('Project');
 		
-		//Get the most recent quota updates for each project.
-		foreach($projects as &$project) {
-			$quota = $this->Quota->getLatest($project['Project']['id']);
-			$project['Project']['Quota'] = $quota['Quota'];
+		$ids = Set::extract("/Project/id", $projects);
+		$updates = $this->Quota->getLatest($ids);
+
+		foreach($projects as $ndx => &$project) {
+			$project['Project']['Quota'] = $updates[$ndx]['Quota'];
 		}
 
 		$this->set('projects', $projects);
+		unset($list, $updates, $projects, $ids);
 	}
 	
 	function details($id = null) {
@@ -106,17 +108,16 @@ class ProjectsController extends AppController {
 		$this->set('quota', $project['Meta']);
 	}
 	
-	function edit($id = null) {
-		$this->Project->id = $id;
-		if(empty($this->data)) {
-			$this->data = $this->Project->read();
+	function updateTitle() {
+		if(!empty($this->data)) {
+			App::import("Core", "Sanitize");
+			$title = Sanitize::clean($this->data['Project']['title']);
+			$this->Project->id = $this->data['Project']['id'];
+			$this->Project->saveField("title", $title);
+
+			$this->set('title', $title);
 		}
-		else {
-			if($this->Project->save($this->data)) {
-				$this->Session->setFlash("Project details have been updated.");
-				$this->redirect(array("controller" => "projects", "action" => "details", $id));
-			}
-		}
+		$this->set('title', 'XXX');
 	}
 	
 	function _requestProjectData($id, $period = null, $max = false) {
@@ -142,6 +143,16 @@ class ProjectsController extends AppController {
 			unset($last, $start, $end);
 		}
 		
+		if($max) {
+			$tmp = array();
+			if(count($project['Quota']) > 1000) {
+				for($i = 0; $i < count($project['Quota']); $i=$i+4) {
+					array_push($tmp, $project['Quota'][$i]);
+				}
+				$project['Quota'] = $tmp;
+			}
+		}
+		
 		//Import units helper
 		App::import('Helper', 'Units');
 		$units = new UnitsHelper();
@@ -155,14 +166,13 @@ class ProjectsController extends AppController {
 				$max = $quota['Quota']['consumed'];
 			if($quota['Quota']['consumed'] < $min)
 				$min = $quota['Quota']['consumed'];
-				
+
 			//Calculate change from previous update.
 			if($key > 0) {
 				$project['Quota'][$key]['Quota']['change'] = $quota['Quota']['consumed'] - $project['Quota'][$key-1]['Quota']['consumed'];
 			}
 			else
 				$project['Quota'][$key]['Quota']['change'] = 0;
-			
 		}
 	
 		$quota = array(
@@ -180,6 +190,10 @@ class ProjectsController extends AppController {
 		unset($quota, $max, $min, $options, $units);
 
 		return $project;
+	}
+	
+	function _scope($data) {
+		print_r($data);
 	}
 	
 	function _getPeriod() {

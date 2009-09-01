@@ -9,6 +9,14 @@
 	<?php echo $scripts_for_layout ?>
 </head> 
 <body>
+	<div id="top-nav">
+		<div class="wrap">
+			<?php echo date("F d, Y"); ?>
+			<ul class="navtop">
+				<li><a href="#">Login</a></li>
+			</ul>
+		</div>
+	</div>
 	<div id="head" class="wrap">
 		<div id="logo">
 			<?php echo $html->link('Quota Tracker', array('controller' => 'projects', 'action' => 'index')); ?>
@@ -18,6 +26,7 @@
 				<li><?php echo $html->link('Projects', array('controller' => 'projects', 'action' => 'index'), array('title' => 'Go to the main project index', 'class' => 'current')); ?></li>
 				<li><a href="#">Reports</a></li>
 				<li><a href="#">Tracker</a></li>
+				<li><a href="#">Admin</a></li>
 			</ul>
 		</div>
 	</div>

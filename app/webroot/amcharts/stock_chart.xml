@@ -1,6 +1,7 @@
 <settings>
 	<margins>0</margins>
 	<font>Calibri</font>
+	<max_series>100</max_series>
 	<number_format>
 		<thousand_separator>,</thousand_separator>
 		<decimal_separator>.</decimal_separator>

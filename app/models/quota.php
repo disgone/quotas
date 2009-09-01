@@ -23,12 +23,21 @@ class Quota extends AppModel {
 	}
 	
 	function getLatest($project_id) {
-		$cond = array(
-			'order' 		=> array('Quota.created' => 'DESC'),
-			'conditions' 	=> array('Quota.project_id' => $project_id),
-			'limit'			=> 1
-		);
-		return $this->find('first', $cond);
+		if(is_array($project_id)) {
+			//Extract a list of project_id for this group of projects.
+			$list = implode(',', $project_id);
+			//Get the last recorded updates for all projects on this page.
+			$query = sprintf("SELECT Quota.* FROM quotas Quota LEFT JOIN (SELECT MAX(id) id1 FROM quotas WHERE project_id IN (%s) GROUP BY project_id ORDER BY max(id) desc) t on id1 = id LEFT JOIN projects on Quota.project_id = projects.id where id1 IS NOT null ORDER BY projects.number+0 ASC", $list);
+			return $this->query($query);
+		}
+		else {
+			$cond = array(
+				'order' 		=> array('Quota.created' => 'DESC'),
+				'conditions' 	=> array('Quota.project_id' => $project_id),
+				'limit'			=> 1
+			);
+			return $this->find('first', $cond);
+		}
 	}
 	
 	function getRange($project_id, $start = null, $end = null) {
