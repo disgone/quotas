@@ -32,6 +32,7 @@
 	</div>
 	<div class="wrap">
 		<div id="body">
+			<?php $session->check('Message.flash') ? $session->flash() : ''; ?>
 			<?php echo $content_for_layout ?>
 		</div>
 	</div>

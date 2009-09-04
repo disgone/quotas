@@ -1,5 +1,4 @@
 <?php $javascript->link('swfobject', false); ?>
-<?php $javascript->link('jquery.jeditable.mini', false); ?>
 <?php $javascript->link('projects/project', false); ?>
 <div class="project" project_record="<?php echo $project['Project']['id']; ?>">
 	<div class="project-header float-container">
@@ -11,7 +10,7 @@
 		</div>
 		<div class="project-meta fRight">
 			<ul>
-				<li><strong>Status:</strong> <span class='value'><?php echo $changed[0][0]['days'] > 14 ? 'Inactive' : 'Active'; ?></span></li>
+				<li><strong>Status:</strong> <span class='value'><?php echo $changed[0][0]['days'] > 14 ? 'Perceived Inactive' : 'Active'; ?></span></li>
 				<li><strong>Last Update:</strong> <span class='value'><?php echo $time->timeAgoInWords(strtotime($project['Quota'][count($project['Quota'])-1]['Quota']['created'])); ?> (<?php echo date('m/d g:ia', strtotime($project['Quota'][count($project['Quota'])-1]['Quota']['created'])); ?>)</span></li>
 				<li><strong>Last Change:</strong> <span class='value'><?php echo $time->timeAgoInWords(strtotime($changed[0]['Quota']['created'])); ?> (<?php echo date('m/d g:ia', strtotime($changed[0]['Quota']['created'])); ?>)</span></li>
 			</ul>
@@ -77,7 +76,14 @@
 			</tr>
 		</tbody>
 	</table>
+	<div class="controls clear">
+		<div class="admin-controls">
+			Admin Tools: <?php echo $html->link('Delete Project', array('action' => 'delete', 'id' => $project['Project']['id']), array('class' => 'delete'), 'Deleting this project will remove all quota data associated with it as well.  Are you sure you wish to remove this project, this cannot be undone?')?>
+		</div>
+	</div>
 	<div class="chart">
+	    <h3 style="font-size: 1.2em; font-family: Georgia; text-align: center;"><?php echo $project['Project']['name']; ?></h3>
+		<h4 style="text-align: center; font-family: Georgia; line-height: 1.2em; color: rgb(102, 102, 102);">Quota Usage Over Time</h4>
 		<?php echo $this->element('amstock', array('key' => $project['Project']['id'], 'project_id' => $project['Project']['id'], 'project' => $project)); ?>
 	</div>
 </div>

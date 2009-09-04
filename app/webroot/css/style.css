@@ -84,6 +84,7 @@ p {
 	overflow: auto;
 	padding: 5px 0;
 	margin-top: 40px;
+	border-bottom: 1px solid #BFBFBF;
 }
 
 #logo {
@@ -126,8 +127,7 @@ p {
 }
 	
 #body {
-	border-top: 1px solid #BFBFBF;
-	padding: 20px 0;
+	margin: 10px 0;
 	font-size: 14px;
 }
 
@@ -376,3 +376,16 @@ tr.alt td {
 	color: #DFDFDF;
 	font-style: italic;
 }
+
+.message {
+	padding: 5px;
+	background: #F7F7F7;
+	border: 1px solid #C2C2C2;
+	color: #666666;
+	margin: 10px 0;
+	}
+
+.admin-controls {
+	font-size: .8em;
+	padding: 2px 5px;
+	}

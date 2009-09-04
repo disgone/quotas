@@ -23,7 +23,7 @@ class ProjectsController extends AppController {
 		
 		$ids = Set::extract("/Project/id", $projects);
 		$updates = $this->Quota->getLatest($ids);
-
+		
 		foreach($projects as $ndx => &$project) {
 			$project['Project']['Quota'] = $updates[$ndx]['Quota'];
 		}
@@ -62,9 +62,25 @@ class ProjectsController extends AppController {
 		unset($min, $max, $start, $end, $project, $quota, $durations);
 	}
 	
+	function delete($id = null) {
+		$this->pageTitle = "Delete Project";
+		//Throw a 404 error if ID was not specified.
+		if(!$id)
+			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/delete'));
+			
+		$this->Project->id = $id;
+		$project = $this->Project->read();
+		$this->Project->delete($id);
+		$this->Session->setFlash(sprintf("Project %s has been deleted from the tracker.", $project['Project']['number']));
+		
+		$this->redirect(array('action'=>'index'));
+	}
+	
+	/*
+	 * URL access point for project data.
+	 */
 	function projectData($id = null) {
 		Configure::write('debug', 0);
-		//Throw a 404 error if ID was not specified.
 		if(!$id)
 			$this->cakeError('error404', array('url' => "projects/projectData/$id"));
 		
@@ -75,51 +91,19 @@ class ProjectsController extends AppController {
 		}
 
 		//Throw a 404 error if the project with ID was not found in the database.
-		
 		if(empty($project))
-			$this->cakeError('error404', array('url' => "projects/projectData/$id"));
+			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
 
 		$this->set('data', $project);
 		
-		unset($project);
+		unset($project, $period);
 	}
-	
-	function update($id = null) {
-		Configure::write('debug', 0);
-		//Throw a 404 error if ID was not specified.
-		if(!$id)
-			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
-			
-		$this->layout = 'ajax';
-		
-		$period = $this->_getPeriod();
-			
-		//Get project and quota data.
-		if(($project = Cache::read("project_" . $id, 'default')) === false) {
-			$project = $this->_requestProjectData($id, $period);
-			Cache::write("project_" . $id . "_" . $period['duration'], $project, 'default');
-		}
-		
-		//Throw a 404 error if the project with ID was not found in the database.
-		if(empty($project))
-			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
-			
-		$this->set('project', $project);
-		$this->set('quota', $project['Meta']);
-	}
-	
-	function updateTitle() {
-		if(!empty($this->data)) {
-			App::import("Core", "Sanitize");
-			$title = Sanitize::clean($this->data['Project']['title']);
-			$this->Project->id = $this->data['Project']['id'];
-			$this->Project->saveField("title", $title);
 
-			$this->set('title', $title);
-		}
-		$this->set('title', 'XXX');
-	}
-	
+	/*
+	 * Request Project Data
+	 * 
+	 * Retreives all quota data and stats for a given project.
+	 */
 	function _requestProjectData($id, $period = null, $max = false) {
 		$project = $this->Project->findById($id);
 		//Project not found
@@ -192,10 +176,15 @@ class ProjectsController extends AppController {
 		return $project;
 	}
 	
-	function _scope($data) {
-		print_r($data);
-	}
-	
+	/*
+	 * Get Time Period
+	 * 
+	 * Translates shorthand period variables (url parameter or named) to a strtotime consumable
+	 * format.
+	 * 
+	 * For example:
+	 * 3d => 3 days
+	 */
 	function _getPeriod() {
 		if(isset($this->params['url']['period']) || isset($this->params['named']['period'])) {
 			//Get the period variable from the url.
