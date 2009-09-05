@@ -1,9 +1,10 @@
 <?php $javascript->link('swfobject', false); ?>
+<?php $javascript->link('jquery.editinplace.packed', false); ?>
 <?php $javascript->link('projects/project', false); ?>
 <div class="project" project_record="<?php echo $project['Project']['id']; ?>">
 	<div class="project-header float-container">
 		<div class="project-title fLeft">
-			<h1><span class="hover_target"><?php echo $project['Project']['number']; ?> <em class="title edit"><?php echo $project['Project']['name'] != null ? $project['Project']['name'] : "Project Name"; ?></em></span></h1>
+			<h1><?php echo $project['Project']['number']; ?> <span class="title editable"><?php echo $project['Project']['name']; ?></span></h1>
 			<p class="location">
 				<strong>Direct Link:</strong> <a href="file:///<?php echo $project['Project']['path']; ?>" title="Explore this project"><?php echo $project['Project']['path']; ?></a>
 			</p>

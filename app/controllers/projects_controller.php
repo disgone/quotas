@@ -68,12 +68,54 @@ class ProjectsController extends AppController {
 		if(!$id)
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/delete'));
 			
+		if($this->RequestHandler->isAjax()) {
+			 Configure::write('debug', 0);
+			 $this->autoRender = false;
+			 exit();
+		}
+			
 		$this->Project->id = $id;
 		$project = $this->Project->read();
-		$this->Project->delete($id);
-		$this->Session->setFlash(sprintf("Project %s has been deleted from the tracker.", $project['Project']['number']));
-		
-		$this->redirect(array('action'=>'index'));
+		if($this->Project->delete($id)) {
+			if($this->RequestHandler->isAjax()) {
+				echo "success";
+			}
+			else {
+				$this->Session->setFlash(sprintf("Project %s has been deleted from the tracker.", $project['Project']['number']));
+				$this->redirect(array('action'=>'index'));
+			}
+		}
+		else {
+			if($this->RequestHandler->isAjax()) {
+				echo "error";
+			}
+			else {
+				$this->Session->setFlash(sprintf("Oh snap!  We've broken something and were not able to delete project %s.", $project['Project']['number']));
+				$this->redirect(array('action'=>'index'));
+			}
+		}
+	}
+	
+	function updateTitle($id = null) {
+		if(!$id)
+			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/delete'));
+			
+		 Configure::write('debug', 0);
+		 $this->autoRender = false;
+			
+		$this->Project->id = $id;
+		$project = $this->Project->read();
+		if(empty($this->data)) {
+			echo $project['Project']['name'];
+		}
+		else {
+			if($this->Project->saveField('name', $this->data['Project']['title'])) {
+				echo $this->data['Project']['title'];
+			}
+			else {
+				echo $project['Project']['name'];
+			}
+		}
 	}
 	
 	/*
