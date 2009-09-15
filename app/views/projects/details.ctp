@@ -5,6 +5,9 @@
 	<div class="project-header float-container">
 		<div class="project-title fLeft">
 			<h1><?php echo $project['Project']['number']; ?> <span class="title editable"><?php echo $project['Project']['name']; ?></span></h1>
+			<p class="sm">
+				<strong><?php echo $time->niceShort($project['Quota'][0]['Quota']['created']); ?> - <?php echo $time->niceShort($project['Quota'][count($project['Quota'])-1]['Quota']['created']); ?></strong>
+			</p>
 			<p class="location">
 				<strong>Direct Link:</strong> <a href="file:///<?php echo $project['Project']['path']; ?>" title="Explore this project"><?php echo $project['Project']['path']; ?></a>
 			</p>
@@ -13,7 +16,7 @@
 			<ul>
 				<li><strong>Status:</strong> <span class='value'><?php echo $changed[0][0]['days'] > 14 ? 'Perceived Inactive' : 'Active'; ?></span></li>
 				<li><strong>Last Update:</strong> <span class='value'><?php echo $time->timeAgoInWords(strtotime($project['Quota'][count($project['Quota'])-1]['Quota']['created'])); ?> (<?php echo date('m/d g:ia', strtotime($project['Quota'][count($project['Quota'])-1]['Quota']['created'])); ?>)</span></li>
-				<li><strong>Last Change:</strong> <span class='value'><?php echo $time->timeAgoInWords(strtotime($changed[0]['Quota']['created'])); ?> (<?php echo date('m/d g:ia', strtotime($changed[0]['Quota']['created'])); ?>)</span></li>
+				<li><strong>Last Change:</strong> <span class='value'><?php echo $time->timeAgoInWords(strtotime($changed[0]['Quota']['created']), array('format' => 'n/j/Y')); ?> (<?php echo date('m/d g:ia', strtotime($changed[0]['Quota']['created'])); ?>)</span></li>
 			</ul>
 		</div>
 	</div>

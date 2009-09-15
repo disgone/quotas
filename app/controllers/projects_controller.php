@@ -76,6 +76,7 @@ class ProjectsController extends AppController {
 			
 		$this->Project->id = $id;
 		$project = $this->Project->read();
+		/*
 		if($this->Project->delete($id)) {
 			if($this->RequestHandler->isAjax()) {
 				echo "success";
@@ -93,7 +94,7 @@ class ProjectsController extends AppController {
 				$this->Session->setFlash(sprintf("Oh snap!  We've broken something and were not able to delete project %s.", $project['Project']['number']));
 				$this->redirect(array('action'=>'index'));
 			}
-		}
+		}*/
 	}
 	
 	function updateTitle($id = null) {
@@ -111,6 +112,7 @@ class ProjectsController extends AppController {
 		else {
 			if($this->Project->saveField('name', $this->data['Project']['title'])) {
 				echo $this->data['Project']['title'];
+				Cache::delete("project_" . $id);
 			}
 			else {
 				echo $project['Project']['name'];

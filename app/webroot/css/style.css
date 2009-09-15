@@ -33,13 +33,16 @@ h1,h2,h3,h4,h5,h6 {
 	}
 
 h1 {
-	font-size: 2em;
+	font-size: 30px;
 	color: #07577F;
 	font-family: Georgia, serif;
+	margin: 10px 0;
 	}
 	
 h2 {
-	font-size: 24px;
+	font-size: 21px;
+	font-family: Georgia, serif;
+	margin: 10px 0 5px;
 	}
 	
 strong {
@@ -133,7 +136,6 @@ p {
 
 .records {
 	width: 100%;
-	margin: 1em 0 0;
 }
 
 .records td {
@@ -195,6 +197,15 @@ p {
 	font-weight: normal;
 }
 
+.project-title h1 {
+	margin: 0;
+	}
+
+.project-title .inplace_form input {
+	font-size: 1em;
+	font-family: Georgia, serif;
+	font: inherit;
+	}
 
 .stats-panel {
 	border-top: 3px solid #333;
@@ -327,11 +338,67 @@ p {
 /*---------------------------------------------------
 	FORMS
 ---------------------------------------------------*/
-.inplace_field {
+.inplace_form {
+	background: #FFFFFF;
+	}
+	
+.inplace_form input,
+.inplace_form select,
+.inplace_form textarea {
 	font: inherit;
-	border: none;
+	}
+	
+.inplace_field {
+	border: 1px solid #D7D7D7;
+	}
+	
+.inplace_save,
+.inplace_cancel {
+	font-family: Calibri,Arial,Tahoma,Verdana,sans-serif;
+	font-size: 12px;
+	background: #D7D7D7;
+	border: 1px solid #C2C2C2;
+	cursor: pointer;
+	margin-left: 5px;
+	padding: 3px;
+	line-height: 1em;
+	}
+	
+.inplace_save {
+	background: #D7D7D7 url(../img/disk-black.png) 3px center no-repeat;
+	padding-left: 20px;
+	}
+	
+.inplace_save:hover {
+	background: #B0EFAF url(../img/disk-black.png) 3px center no-repeat;
+	padding-left: 20px;
+	border: 1px solid #2CC42C;
+	}
+	
+.inplace_cancel {
+	background: #D7D7D7 url(../img/cross-circle-frame.png) 3px center no-repeat;
+	padding-left: 20px;
+	}
+	
+.inplace_cancel:hover {
+	background: #EFCACA url(../img/cross-circle-frame.png) 3px center no-repeat;
+	padding-left: 20px;
+	border: 1px solid #830000;
 	}
 
+/*---------------------------------------------------
+	COLUMNS
+---------------------------------------------------*/
+.double {
+	float: left;
+	width: 49%;
+	margin-right: 1%;
+	}
+
+.endcol {
+	margin-right: 0pt;
+	margin-left: 1%;
+	}
 
 /*---------------------------------------------------
 	UTILITY CLASSES

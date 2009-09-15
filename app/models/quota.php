@@ -82,5 +82,68 @@ class Quota extends AppModel {
 		
 		return $this->find('all', $cond);
 	}
-}
+	
+	function getMovers($options = array()) {
+		$defaults = array(
+			'start'			=> date('Y-m-d', strtotime("-1 days")),
+			'end'			=> date('Y-m-d 23:59:59'),
+			'limit'			=> 10,
+			'dir'			=> 'desc'
+			);
+			
+		$options = array_merge($defaults, $options);
+			
+		$query = sprintf("
+					SELECT			projects.id, projects.number, projects.name, CAST(csEnd as SIGNED) - CAST(csStart as SIGNED) as movement
+					FROM			(
+									SELECT			Quota.project_id pid, consumed csEnd, allowance alEnd
+									FROM			quotas Quota
+									LEFT JOIN		latest on mid = Quota.id
+									WHERE			mid IS NOT NULL
+									ORDER BY		Quota.project_id
+									) r
+					LEFT JOIN		(
+									SELECT			project_id id2, consumed csStart, allowance alStart
+									FROM			quotas
+									WHERE			created > '%s'
+									GROUP BY		project_id
+									) x on id2 = pid
+					LEFT JOIN		projects ON projects.id = pid
+					ORDER BY		movement %s
+					LIMIT			%d
+					", $options['start'], $options['dir'], $options['limit']);
+		
+		return $this->query($query);
+	}
+	
+	function totalChange($options = array()) {
+			$defaults = array(
+				'start'			=> date('Y-m-d', strtotime("-1 days")),
+				'end'			=> date('Y-m-d 23:59:59'),
+				'limit'			=> 10,
+				'dir'			=> 'desc'
+				);
+				
+			$options = array_merge($defaults, $options);
+				
+			$query = sprintf("
+						SELECT			SUM(CAST(csEnd as SIGNED) - CAST(csStart as SIGNED)) as difference
+						FROM			(
+										SELECT			Quota.project_id pid, consumed csEnd, allowance alEnd
+										FROM			quotas Quota
+										LEFT JOIN		latest on mid = Quota.id
+										WHERE			mid IS NOT NULL
+										ORDER BY		Quota.project_id
+										) r
+						LEFT JOIN		(
+										SELECT			project_id id2, consumed csStart, allowance alStart
+										FROM			quotas
+										WHERE			created > '%s'
+										GROUP BY		project_id
+										) x on id2 = pid
+						", $options['start'], $options['dir'], $options['limit']);
+			
+			return $this->query($query);
+		}
+	}
 ?>

@@ -24,9 +24,8 @@
 		<div id="navigation">
 			<ul>
 				<li><?php echo $html->link('Projects', array('controller' => 'projects', 'action' => 'index'), array('title' => 'Go to the main project index', 'class' => 'current')); ?></li>
-				<li><a href="#">Reports</a></li>
-				<li><a href="#">Tracker</a></li>
-				<li><a href="#">Admin</a></li>
+				<li><?php echo $html->link('Reports', array('controller' => 'reports', 'action' => 'index'), array('title' => 'View the project report dashboard')); ?></li>
+				<li><a href="#">Search</a></li>
 			</ul>
 		</div>
 	</div>
