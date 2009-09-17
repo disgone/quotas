@@ -1,4 +1,4 @@
-<h1>Project Directory</h1>
+<h2>Project Directory</h2>
 <table class="records">
 	<thead>
 		<tr>

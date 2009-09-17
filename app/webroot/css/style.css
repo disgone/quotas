@@ -4,7 +4,7 @@
 
 html, body {
 	font-family: Calibri,Arial,Tahoma,Verdana,sans-serif;
-	font-size: 14px;
+	font-size: 12px;
 	margin: 0px;
 	padding: 0px;
 	color: #333333;
@@ -221,11 +221,14 @@ p {
 }
 
 .stats-panel td .stat {
+	font-family: Arial, verdana, sans-serif;
 	padding: 5px;
 }
 
 .stats-panel td .stat h2 {
-	font-size: 1.1em;
+	font-family: Arial, verdana, sans-serif;
+	margin: 0;
+	font-size: 14px;
 }
 
 .stats-panel div.stat p {
@@ -234,7 +237,7 @@ p {
 }
 
 .stats-panel .stat p.stat-focus {
-	font-size: 1.8em;
+	font-size: 1.5em;
 	font-weight: bold;
 }
 
@@ -286,6 +289,20 @@ p {
 .chart {
 	margin: 1.5em 0pt 1em;
 }
+
+.chart .title {
+	font-family: Georgia;
+	text-align: center;
+	}
+	
+.chart .title h3 {
+	font-size: 1.25em;
+	}
+	
+.chart .title h4 {
+	color: #666666;
+	line-height: 1.4em;
+	}
 
 /*--------------------------------------------------
 	PAGINATION

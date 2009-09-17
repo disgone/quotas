@@ -1,4 +1,4 @@
-<h1>Project Reports</h1>
+<h2>Project Reports</h2>
 <div class="column-layout">
 	<div class="4col double">
 		<table class="records">

@@ -3,7 +3,7 @@
 <head> 
 	<meta http-equiv="content-type" content="text/html;charset=utf-8"/> 
 	<title><?php echo $title_for_layout ? $title_for_layout . " | " : '';?> Project Quota Monitor</title>
-	<?php echo $html->css('style.css', 'stylesheet', array('media' => 'screen')); ?>
+	<?php echo $html->css('site.css', 'stylesheet', array('media' => 'screen,projection')); ?>
 	<?php echo Configure::read('debug') > 1 ? $html->css('cake.debug') : ''; ?>
 	<?php echo isset($javascript) ? $javascript->link('jquery-1.3.2.min') : ''; ?>
 	<?php echo $scripts_for_layout ?>

@@ -85,7 +85,7 @@ class Quota extends AppModel {
 	
 	function getMovers($options = array()) {
 		$defaults = array(
-			'start'			=> date('Y-m-d', strtotime("-1 days")),
+			'start'			=> date('Y-m-d 00:00:00', strtotime(date('Y-m-d'))),
 			'end'			=> date('Y-m-d 23:59:59'),
 			'limit'			=> 10,
 			'dir'			=> 'desc'
@@ -118,7 +118,7 @@ class Quota extends AppModel {
 	
 	function totalChange($options = array()) {
 			$defaults = array(
-				'start'			=> date('Y-m-d', strtotime("-1 days")),
+				'start'			=> date('Y-m-d 00:00:00', strtotime("-1 days")),
 				'end'			=> date('Y-m-d 23:59:59'),
 				'limit'			=> 10,
 				'dir'			=> 'desc'
