@@ -7,7 +7,7 @@ class ProjectsController extends AppController {
 	var $components = array("RequestHandler");
 	
 	var $paginate = array(
-		'limit' => 25,
+		'limit' => 30,
 		'order' => array('Project.number +0' => 'ASC', 'Project.name' => 'ASC'),
 		'recursive' => 0
 	);
