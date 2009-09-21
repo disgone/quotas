@@ -52,7 +52,7 @@ strong {
 	}
 	
 #content {
-	padding: 25px;
+	padding: 15px 25px;
 	}
 
 #content h2 {
@@ -88,6 +88,10 @@ table.records th {
 	border: 1px solid #BBBBBB;
 	}
 	
+table.records tr.subhead th {
+	background: #EAECDF;
+	}
+	
 table.records tr.alt td {
 	background: #F9F9F9;
 	}
@@ -98,7 +102,7 @@ table.records tr.alt td {
 #navigation {
 	font-family: Calibri, Arial, Tahoma, sans-serif;
 	overflow: hidden;
-	background: #D6D2C7;
+	background: #878264;
 	padding: 0 25px;
 	border: 1px solid #CBC5B5;
 	border-width: 1px 0;
@@ -113,7 +117,7 @@ table.records tr.alt td {
 	
 #navigation li a {
 	text-decoration: none;
-	color: #524F26;
+	color: #FFFFFF;
 	display: block;
 	padding: 5px 10px;
 	font-size: 14px;
@@ -237,10 +241,10 @@ table.records tr.alt td {
 	}
 
 .paginate .current {
-	border: none;
 	font-weight: bold;
 	background: #EB6E1F;
 	color: #FFFFFF;
+	border: 1px solid #C34E08;
 	}
 
 .paginate .pos {
