@@ -174,7 +174,7 @@ class ProjectsController extends AppController {
 		if($max) {
 			$tmp = array();
 			if(count($project['Quota']) > 1000) {
-				for($i = 0; $i < count($project['Quota']); $i=$i+4) {
+				for($i = 0; $i < count($project['Quota']); $i=$i+2) {
 					array_push($tmp, $project['Quota'][$i]);
 				}
 				$project['Quota'] = $tmp;

@@ -3,6 +3,7 @@
 *.project
 /app/tmp/cache/*
 /app/tmp/logs/*
+/app/tmp/quota/*.xml
 .settings/*
 empty*
 database.php

@@ -9,28 +9,20 @@
 	<?php echo $scripts_for_layout ?>
 </head> 
 <body>
-	<!-- <div id="top-nav">
-		<div class="wrap">
-			<?php echo date("F d, Y"); ?>
-			<ul class="navtop">
-				<li><a href="#">Login</a></li>
-			</ul>
+	<div id="body" class="wrap">
+		<div id="head">
+			<div id="logo">
+				<h1>Quota Tracker</h1>
+			</div>
+			<div id="navigation">
+				<ul>
+					<li><?php echo $html->link('Projects', array('controller' => 'projects', 'action' => 'index'), array('title' => 'Go to the main project index', 'class' => 'current')); ?></li>
+					<li><?php echo $html->link('Reports', array('controller' => 'reports', 'action' => 'index'), array('title' => 'View the project report dashboard')); ?></li>
+					<li><a href="#">Search</a></li>
+				</ul>
+			</div>
 		</div>
-	</div> -->
-	<div id="head" class="wrap">
-		<!--<div id="logo">
-			<?php echo $html->link('Quota Tracker', array('controller' => 'projects', 'action' => 'index')); ?>
-		</div>
-		--><div id="navigation">
-			<ul>
-				<li><?php echo $html->link('Projects', array('controller' => 'projects', 'action' => 'index'), array('title' => 'Go to the main project index', 'class' => 'current')); ?></li>
-				<li><?php echo $html->link('Reports', array('controller' => 'reports', 'action' => 'index'), array('title' => 'View the project report dashboard')); ?></li>
-				<li><a href="#">Search</a></li>
-			</ul>
-		</div>
-	</div>
-	<div class="wrap">
-		<div id="body">
+		<div id="content">
 			<?php $session->check('Message.flash') ? $session->flash() : ''; ?>
 			<?php echo $content_for_layout ?>
 		</div>

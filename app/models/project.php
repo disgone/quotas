@@ -7,20 +7,26 @@ class Project extends AppModel {
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	var $hasMany = array(
-			'Quota' => array('className' => 'Quota',
-								'foreignKey' => 'project_id',
-								'dependent' => false,
-								'conditions' => '',
-								'fields' => '',
-								'order' => '',
-								'limit' => '',
-								'offset' => '',
-								'exclusive' => '',
-								'finderQuery' => '',
-								'counterQuery' => ''
-			)
+		'Quota' => array(
+			'className' 	=> 'Quota',
+			'foreignKey' 	=> 'project_id',
+			'dependent' 	=> false,
+			'conditions'	=> '',
+			'fields' 		=> '',
+			'order' 		=> '',
+			'limit' 		=> '',
+			'offset' 		=> '',
+			'exclusive' 	=> '',
+			'finderQuery' 	=> '',
+			'counterQuery' 	=> ''
+		)
 	);
 
-
+	var $belongsTo = array(
+		'Server' => array(
+			'className'		=> 'Server',
+			'foreignKey'	=> 'server_id'
+		)
+	);
 }
 ?>
