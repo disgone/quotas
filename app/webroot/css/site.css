@@ -4,9 +4,11 @@
 
 html,body {
 	height: 100%;
+	background: #FFFFFF;
 	}
 	
 body {
+	border-top: 5px solid #333333;
 	font-size: 11px;
 	}
 	
@@ -29,6 +31,11 @@ h2 {
 	
 table {
 	border-collapse: collapse;
+	background: #FFFFFF;
+	}
+	
+strong {
+	font-weight: bold;
 	}
 	
 /*******************************************************
@@ -40,8 +47,8 @@ table {
 	}
 
 #body h2 {
-	font-family: Georgia, "Times New Roman", serif;
-	font-size: 2em;
+	font-family: Cambria,Georgia,Times,"Times New Roman",serif;
+	font-size: 2.25em;
 	font-weight: normal;
 	margin: 0 0 15px;
 	}
@@ -77,8 +84,44 @@ table.records tr.alt td {
 	}
 	
 /*--------------------------------------------------
+	NAVIGATION
+--------------------------------------------------*/
+#navigation {
+	overflow: hidden;
+	margin-bottom: 10px;
+	}
+	
+#navigation ul {
+	float: right;
+	}
+	
+#navigation li {
+	float: left;
+	margin-left: 15px;
+	}
+	
+#navigation li a {
+	text-decoration: none;
+	text-transform: uppercase;
+	color: #01436F;
+	font-size: 1.4em;
+	font-family: Calibri, Arial, Tahoma, sans-serif;
+	}
+
+	
+/*--------------------------------------------------
 	STATS
 --------------------------------------------------*/
+.project-header {
+	margin-bottom: 10px;
+	}
+	
+.project-status {
+	height: 55px;
+	float: right;
+	margin-top: -55px;
+	}
+	
 .stats {
 	margin-bottom: 10px;
 	}
@@ -107,7 +150,7 @@ table.records tr.alt td {
 	font-size: 1.6em;
 	}
 	
-.stat-meta {
+.stat-supp {
 	color: #666666;
 	}
 	
@@ -133,10 +176,6 @@ table.records tr.alt td {
 	}
 	
 .chart .title h3 {
-	font-size: 1.5em;
-	}
-	
-.chart .title h4 {
 	font-size: 1.25em;
 	color: #666666;
 	}
@@ -186,6 +225,14 @@ table.records tr.alt td {
 	background: #07577F;
 	color: #FFFFFF;
 	border: 1px solid #000;
+	}
+	
+/*--------------------------------------------------
+	CONTROLS
+--------------------------------------------------*/
+.delete {
+	background: transparent url(../img/minus-small-circle.png) left center no-repeat;
+	padding-left: 15px;
 	}
 	
 /*--------------------------------------------------
