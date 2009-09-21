@@ -4,17 +4,16 @@
 
 html,body {
 	height: 100%;
-	background: #FFFFFF;
+	background: #C3C0AF;
 	}
 	
 body {
-	border-top: 5px solid #333333;
-	font-size: 11px;
+	font-size: 12px;
 	}
 	
 html, body, div, p, th, td, select, input, textarea {
 	color: #333333;
-	font-family: "Helvetica Neue",Arial,Helvetica,sans-serif;
+	font-family: Calibri,"Helvetica Neue",Arial,Helvetica,sans-serif;
 	font-weight: normal;
 	text-align: left;
 	line-height: normal;
@@ -42,24 +41,34 @@ strong {
 	GENERAL LAYOUT
 *******************************************************/
 .wrap {
-	width: 945px;
+	width: 975px;
 	margin: 0 auto;
+	border: 9px solid #EAECDF;
+	background: #FFFFFF;
+	}
+	
+#logo {
+	margin-bottom: 10px;
+	}
+	
+#content {
+	padding: 25px;
 	}
 
-#body h2 {
+#content h2 {
 	font-family: Cambria,Georgia,Times,"Times New Roman",serif;
 	font-size: 2.25em;
 	font-weight: normal;
 	margin: 0 0 15px;
 	}
 	
-#body a {
-	color: #005C9C;
+#content a {
+	color: #524F26;
 	text-decoration: none;
 	}
 	
-#body a:hover {
-	text-decoration: underline;
+#content a:hover {
+	color: #EB6D1F;
 	}
 	
 table.records {
@@ -87,25 +96,32 @@ table.records tr.alt td {
 	NAVIGATION
 --------------------------------------------------*/
 #navigation {
+	font-family: Calibri, Arial, Tahoma, sans-serif;
 	overflow: hidden;
-	margin-bottom: 10px;
+	background: #D6D2C7;
+	padding: 0 25px;
+	border: 1px solid #CBC5B5;
+	border-width: 1px 0;
 	}
 	
 #navigation ul {
-	float: right;
 	}
 	
 #navigation li {
 	float: left;
-	margin-left: 15px;
 	}
 	
 #navigation li a {
 	text-decoration: none;
-	text-transform: uppercase;
-	color: #01436F;
-	font-size: 1.4em;
-	font-family: Calibri, Arial, Tahoma, sans-serif;
+	color: #524F26;
+	display: block;
+	padding: 5px 10px;
+	font-size: 14px;
+	}
+	
+#navigation li a:hover {
+	background: #EB6D1F;
+	color: #FFFFFF;
 	}
 
 	
@@ -120,6 +136,10 @@ table.records tr.alt td {
 	height: 55px;
 	float: right;
 	margin-top: -55px;
+	}
+	
+#content .project-title h2 {
+	margin: 0 0 10px;
 	}
 	
 .stats {
@@ -195,14 +215,14 @@ table.records tr.alt td {
 	}
 
 .paginate span a {
-	border: 1px solid #E7E7E7;
+	border: 1px solid #C3C0AF;
 	text-decoration: none;
 	padding: 2px 6px;
 	}
 
 .paginate span a:hover {
 	background: #F9F9F9;
-	border: 1px solid #333;
+	border: 1px solid #D6D2C7;
 	}
 
 .paginate .pos,
@@ -219,6 +239,8 @@ table.records tr.alt td {
 .paginate .current {
 	border: none;
 	font-weight: bold;
+	background: #EB6E1F;
+	color: #FFFFFF;
 	}
 
 .paginate .pos {
@@ -241,4 +263,16 @@ table.records tr.alt td {
 .sm {
 	font-size: 10px;
 	text-transform: uppercase;
+	}
+
+.aRight {
+	text-align: right;
+	}
+	
+.aLeft {
+	text-align: left;
+	}
+	
+.aCenter {
+	text-align: center;
 	}
