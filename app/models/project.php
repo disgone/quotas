@@ -28,5 +28,19 @@ class Project extends AppModel {
 			'foreignKey'	=> 'server_id'
 		)
 	);
+	
+	function getNewProjects($server_id = null, $date = null) {
+		$date == null ? $date = date('Y-m-d') : null;
+		$cond = array(
+			'conditions'	=> array('Project.created >' 	=> $date),
+			'order' 		=> array('Project.number + 0' => 'ASC', 'Project.name' => 'ASC')
+			);
+		
+		if($server_id) {
+			array_push($cond['conditions'], array('Project.server_id' => $server_id));
+		}
+		
+		return $this->find('all', $cond);
+	}
 }
 ?>

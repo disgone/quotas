@@ -37,10 +37,11 @@ class ParseController extends Controller {
 				//we also want to ignore folders not inside of root project folders.
 				//IE FSOR01\102 is valid, but FSOR01\Profiles will be ignored.
 				if(count($pieces) > 2 && is_numeric($pieces[1])) {
+					$this->Project->create();
 					$project = $this->_parseDetails($folder);
 					//If there is a project number and it's not the the db alreay, add it.
 					if($project->number != null && !$this->Project->findByPath($project->path)) {
-						$this->Project->create();
+						$project->server_id = 1;
 						if(is_numeric($project->Quota->consumed)) {
 							$save = $this->Project->save($project);
 							$this->log("A new project was found and added, $project->path", 'scanner_projects');
@@ -57,6 +58,7 @@ class ParseController extends Controller {
 					}
 					else if($project->number != null && $cur = $this->Project->findByPath($project->path)) {
 						$this->Quota->create();
+						$this->Project->id = $cur['Project']['id'];
 						if(is_numeric($project->Quota->consumed) && is_numeric($project->Quota->allowance)) {
 							$this->data['Quota']['allowance'] = $project->Quota->allowance;
 							$this->data['Quota']['consumed'] = $project->Quota->consumed;
@@ -67,9 +69,9 @@ class ParseController extends Controller {
 					
 					//Log an potential data errors.
 					if(!is_numeric($project->Quota->allowance))
-						$this->log("Non numeric quota allowance encounted: " . $project->Quota->allowance . " was encountered for project " . $this->Project->id, "scanner_error");
+						$this->log("Non numeric quota allowance encounted: (" . $project->Quota->allowance != null ? $project->Quota->allowance : 'null' . ") was encountered for project [ID:" . $this->Project->id . "] " . $project->path, "scanner_error");
 					if(!is_numeric($project->Quota->consumed))
-						$this->log("Non numeric quota consumption encounted: " . $project->Quota->consumed . " was encountered for project " . $this->Project->id, "scanner_error");
+						$this->log("Non numeric quota consumption encounted: (" . $project->Quota->consumed . ") was encountered for project [ID:" . $this->Project->id . "] " . $project->path, "scanner_error");
 				}
 			}
 		}
@@ -102,7 +104,7 @@ class ParseController extends Controller {
 		$pieces = $this->_splitPath($data['path']);
 		$details->number = $this->_getProjectNumber($pieces[2]);
 		$details->name = $this->_getProjectName($pieces[2]);
-		$details->server = $pieces[0];
+		$details->server_id = $pieces[0];
 		
 		$details->Quota->allowance = is_numeric(str_replace(',', '', $data['quota_limit'])) ? str_replace(',', '', $data['quota_limit']) : null;
 		$details->Quota->consumed = is_numeric(str_replace(',', '', $data['quota_used'])) ? str_replace(',', '', $data['quota_used']) : null;

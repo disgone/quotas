@@ -37,14 +37,19 @@ strong {
 	font-weight: bold;
 	}
 	
+em {
+	font-style: italic;
+	}
+	
 /*******************************************************
 	GENERAL LAYOUT
 *******************************************************/
 .wrap {
-	width: 975px;
+	width: 980px;
 	margin: 0 auto;
-	border: 9px solid #EAECDF;
+	border: 10px solid #EAECDF;
 	background: #FFFFFF;
+	position: relative;
 	}
 	
 #logo {
@@ -52,7 +57,7 @@ strong {
 	}
 	
 #content {
-	padding: 15px 25px;
+	padding: 15px 26px;
 	}
 
 #content h2 {
@@ -63,7 +68,7 @@ strong {
 	}
 	
 #content a {
-	color: #524F26;
+	color: #985B18;
 	text-decoration: none;
 	}
 	
@@ -94,6 +99,24 @@ table.records tr.subhead th {
 	
 table.records tr.alt td {
 	background: #F9F9F9;
+	}
+	
+/*---COLUMNS---*/
+.column-layout {
+	width: 100%;
+	}
+	
+.column {
+	left: 5px;
+	}
+	
+.column-layout .double {
+	width: 459px;
+	margin-right: 10px;
+	}
+
+.column-layout .endcol {
+	margin-right: 0;
 	}
 	
 /*--------------------------------------------------
@@ -279,4 +302,12 @@ table.records tr.alt td {
 	
 .aCenter {
 	text-align: center;
+	}
+	
+.fLeft {
+	float: left;
+	}
+
+.fRight {
+	float: right;
 	}

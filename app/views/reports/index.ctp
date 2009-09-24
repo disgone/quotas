@@ -1,9 +1,30 @@
-<h2>Project Reports</h2>
+<h2><?php echo $pageTitle; ?></h2>
 <div class="column-layout">
-	<div class="4col double">
+	<div>
 		<table class="records">
 			<tr>
-				<th colspan="2">Largest Increase (24hrs)</th>
+				<th colspan="4">Server Details</th>
+			</tr>
+			<tr class="subhead">
+				<th>Server</th>
+				<th>Disk Usage (est)</th>
+				<th>Quota Allowance (est)</th>
+				<th>Average Project Size</th>
+			</tr>
+			<?php foreach($usage as $key => $item): ?>
+			<tr<?php echo $key%2 == 1 ? " class='alt'" : ''; ?>>
+				<td><?php echo $item['Server']['name']; ?></td>
+				<td><?php echo $units->format($item[0]['consumed']); ?></td>
+				<td><?php echo $units->format($item[0]['allowance']); ?></td>
+				<td><?php echo $units->format($item[0]['average_consumed']); ?></td>
+			</tr>
+			<?php endforeach; ?>
+		</table>
+	</div>
+	<div class="column double fLeft">
+		<table class="records">
+			<tr>
+				<th colspan="2">Largest Increase <em class="sm">(24hrs)</em></th>
 			</tr>
 			<?php foreach($gainers as $key => $project): ?>
 			<tr<?php echo $key%2 == 1 ? " class='alt'" : ''; ?>>
@@ -13,10 +34,10 @@
 			<?php endforeach; ?>
 		</table>
 	</div>
-	<div class="4col double endcol">
+	<div class="column double endcol">
 		<table class="records">
 			<tr>
-				<th colspan="2">Largest Decrease (24hrs)</th>
+				<th colspan="2">Largest Decrease <em class="sm">(24hrs)</em></th>
 			</tr>
 			<?php foreach($losers as $key => $project): ?>
 			<tr<?php echo $key%2 == 1 ? " class='alt'" : ''; ?>>
@@ -29,22 +50,33 @@
 	<div>
 		<table class="records">
 			<tr>
-				<th colspan="4">Server Details</th>
+				<th colspan="4">New Projects <em class="sm">(24hrs)</em></th>
 			</tr>
 			<tr class="subhead">
+				<th>Project</th>
 				<th>Server</th>
-				<th>Disk Usage (est)</th>
-				<th>Quota Allowance (est)</th>
-				<th>Average Usage</th>
+				<th>Date Added</th>
 			</tr>
-			<?php foreach($usage as $key => $item): ?>
-			<tr<?php echo $key%2 == 1 ? " class='alt'" : ''; ?>>
-				<td><?php echo $item['Server']['name']; ?></td>
-				<td><?php echo $units->format($item[0]['consumed']); ?></td>
-				<td><?php echo $units->format($item[0]['allowance']); ?></td>
-				<td><?php echo $units->format($item[0]['average_consumed']); ?></td>
-			</tr>
-			<?php endforeach; ?>
+			<?php if(count($projects)): ?>
+				<?php foreach($projects as $key => $project): ?>
+					<?php if($key < 10): ?>
+					<tr<?php echo $key%2 == 1 ? " class='alt'" : ''; ?>>
+						<td><?php echo $html->link($project['Project']['number'] . ' ' . $project['Project']['name'], array('controller' => 'projects', 'action' => 'details', $project['Project']['id'])); ?></td>
+						<td><?php echo $project['Server']['name']; ?></td>
+						<td><?php echo $time->nice($project['Project']['created']); ?></td>
+					</tr>
+					<?php endif; ?>
+				<?php endforeach; ?>
+				<?php if(count($projects) >= 10): ?>
+					<tr class="subhead">
+						<th colspan="3" class="aCenter">Wow, busy day.  There are too many new projects to list, <?php echo $html->link('view the full list of new additions', array('controller' => 'reports', 'action' => 'new_projects')); ?></a>.</th>
+					</tr>
+				<?php endif; ?>
+			<?php else: ?>
+				<tr>
+					<td colspan="3" class="aCenter">No new projects were found.</td>
+				</tr>
+			<?php endif; ?>
 		</table>
 	</div>
 </div>
