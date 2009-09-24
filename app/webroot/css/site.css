@@ -4,10 +4,11 @@
 
 html,body {
 	height: 100%;
-	background: #C3C0AF;
+	background: #FFFFFF;
 	}
 	
 body {
+	background: #C3C0AF;
 	font-size: 12px;
 	}
 	
@@ -123,15 +124,17 @@ table.records tr.alt td {
 	NAVIGATION
 --------------------------------------------------*/
 #navigation {
+	overflow: hidden;
+	margin-bottom: 10px;
+	}
+	
+#navigation ul {
 	font-family: Calibri, Arial, Tahoma, sans-serif;
 	overflow: hidden;
 	background: #878264;
 	padding: 0 25px;
 	border: 1px solid #CBC5B5;
 	border-width: 1px 0;
-	}
-	
-#navigation ul {
 	}
 	
 #navigation li {
@@ -168,7 +171,7 @@ table.records tr.alt td {
 #content .project-title h2 {
 	margin: 0 0 10px;
 	}
-	
+
 .stats {
 	margin-bottom: 10px;
 	}

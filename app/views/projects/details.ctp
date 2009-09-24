@@ -26,7 +26,7 @@
 				<tr>
 					<td class="first">
 						<div class="stat">
-							<h3>Usage</h3>
+							<h3>Current Usage</h3>
 							<p class="stat-focus">
 								<?php echo $units->format($quota['current']); ?>
 							</p>
