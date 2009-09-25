@@ -5,7 +5,12 @@
 	<title><?php echo $title_for_layout ? $title_for_layout . " | " : '';?> Project Quota Monitor</title>
 	<?php echo $html->css('site.css', 'stylesheet', array('media' => 'screen,projection')); ?>
 	<?php echo Configure::read('debug') > 1 ? $html->css('cake.debug') : ''; ?>
-	<?php echo isset($javascript) ? $javascript->link('jquery-1.3.2.min') : ''; ?>
+	<?php 
+		if(isset($javascript)) {
+			echo $javascript->link('jquery-1.3.2.min');
+			echo $javascript->link('search');
+		}
+	?>
 	<?php echo $scripts_for_layout ?>
 </head> 
 <body>
@@ -13,6 +18,11 @@
 		<div id="head">
 			<div id="logo">
 				<h1>Quota Tracker</h1>
+			</div>
+			<div id="search">
+				<form>
+					<label for="search"><input type="text" name="q" id="q" value="Search" /></label>
+				</form>
 			</div>
 			<div id="navigation">
 				<ul>

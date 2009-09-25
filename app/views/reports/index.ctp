@@ -74,7 +74,7 @@
 				<?php endif; ?>
 			<?php else: ?>
 				<tr>
-					<td colspan="3" class="aCenter">No new projects were found.</td>
+					<td colspan="3" class="aCenter">There are no new projects (yet) today.</td>
 				</tr>
 			<?php endif; ?>
 		</table>
