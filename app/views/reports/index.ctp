@@ -3,20 +3,24 @@
 	<div>
 		<table class="records">
 			<tr>
-				<th colspan="4">Server Details</th>
+				<th colspan="6">Server Details</th>
 			</tr>
 			<tr class="subhead">
 				<th>Server</th>
 				<th>Disk Usage (est)</th>
+				<th>Project Count</th>
 				<th>Quota Allowance (est)</th>
 				<th>Average Project Size</th>
+				<th>Average Project Quota</th>
 			</tr>
 			<?php foreach($usage as $key => $item): ?>
 			<tr<?php echo $key%2 == 1 ? " class='alt'" : ''; ?>>
 				<td><?php echo $item['Server']['name']; ?></td>
 				<td><?php echo $units->format($item[0]['consumed']); ?></td>
+				<td><?php echo round($item[0]['consumed']/$item[0]['average_consumed']); ?></td>
 				<td><?php echo $units->format($item[0]['allowance']); ?></td>
 				<td><?php echo $units->format($item[0]['average_consumed']); ?></td>
+				<td><?php echo $units->format($item[0]['average_quota']); ?></td>
 			</tr>
 			<?php endforeach; ?>
 		</table>

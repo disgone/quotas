@@ -3,12 +3,11 @@
 @import 'reset.css';
 
 html,body {
-	height: 100%;
-	background: #FFFFFF;
+	background: #C3C0AF;
+	min-height: 100%;
 	}
 	
 body {
-	background: #C3C0AF;
 	font-size: 12px;
 	}
 	
@@ -25,8 +24,17 @@ h1,h2,h3,h4,h5,h6 {
 	}
 	
 h2 {
-	font-size: 12px;
+	font-size: 2em;
 	line-height: 18px;
+	margin-bottom: 10px;
+	}
+	
+h3 {
+	font-family: Cambria,Georgia,Times,"Times New Roman",serif;
+	font-size: 1.8em;
+	line-height: 16px;
+	margin: 5px 0 10px;
+	color: #666666;
 	}
 	
 table {
@@ -57,12 +65,7 @@ p {
 	position: relative;
 	}
 	
-#logo {
-	margin-bottom: 10px;
-	}
-	
 #content {
-	height: 100%;
 	padding: 15px 26px;
 	}
 
@@ -125,12 +128,49 @@ table.records tr.alt td {
 	margin-right: 0;
 	}
 	
+#logo {
+	padding: 15px 26px;
+	}
+	
+#logo h1 a {
+	display: block;
+	background: transparent url(../img/xlogo.gif) left center no-repeat;
+	width: 177px;
+	height: 55px;
+	text-indent: -10000px;
+	}
+	
+/*---SEARCH---*/
+#search {
+	position: absolute;
+	right: 26px;
+	top: 32px;
+	}
+
+#search label {
+	font-family: Cambria,Georgia,Times,"Times New Roman",serif;
+	font-size: 1.5em;
+	display: block;
+	padding-bottom: 5px;
+	}
+	
+#search .field {
+	width: 15em;
+	background: #FFF url(../img/magnifier-medium-left) 3px center no-repeat;
+	border: 1px solid #BBBBBB;
+	padding: 3px 3px 3px 21px;
+	}
+	
+.match strong {
+	border: 1px solid #C3C0AF;
+	background: #EAECDF;
+	}
+	
 /*--------------------------------------------------
 	NAVIGATION
 --------------------------------------------------*/
 #navigation {
 	overflow: hidden;
-	margin-bottom: 10px;
 	}
 	
 #navigation ul {
@@ -157,6 +197,10 @@ table.records tr.alt td {
 #navigation li a:hover {
 	background: #EB6D1F;
 	color: #FFFFFF;
+	}
+	
+#navigation li.current a {
+	background: #4F4A2C;
 	}
 
 	
@@ -201,7 +245,9 @@ table.records tr.alt td {
 	}
 	
 .stats-panel h3 {
+	font-family: Calibri,"Helvetica Neue",Arial,Helvetica,sans-serif;
 	font-size: 1.2em;
+	margin: 0;
 	}
 	
 .stat-focus {
@@ -297,11 +343,50 @@ table.records tr.alt td {
 	}
 	
 /*--------------------------------------------------
+	MESSAGES
+--------------------------------------------------*/
+.message {
+	padding: 5px 5px 5px 30px;
+	border: 1px solid #BBBBBB;
+	}
+	
+.info {
+	}
+	
+.notice {
+	background: #F3ECC5 url(../img/exclamation.png) 8px center no-repeat;
+	border: 1px solid #EBDC25;
+	}
+	
+.error {
+	background: #FBE3E4 url(../img/exclamation-red-frame.png) 8px center no-repeat;
+	border: 1px solid #B81111;
+	}
+	
+/*--------------------------------------------------
 	UTILITY
 --------------------------------------------------*/
 .sm {
 	font-size: 10px;
 	text-transform: uppercase;
+	}
+	
+.em {
+	font-style: italic;
+	}
+	
+.light {
+	color: #666666;
+	}
+	
+.nm {
+	margin: 0;
+	}
+	
+.bullets li {
+	list-style-type: square;
+	margin-left: 15px;
+	line-height: 1.5em;
 	}
 
 .aRight {

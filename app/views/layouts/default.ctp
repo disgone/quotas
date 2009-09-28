@@ -12,25 +12,20 @@
 		}
 	?>
 	<?php echo $scripts_for_layout ?>
-</head> 
+</head>
 <body>
 	<div id="body" class="wrap">
 		<div id="head">
 			<div id="logo">
-				<h1>Quota Tracker</h1>
+				<h1><?php echo $html->link('Quota Tracker', array('controller' => 'projects', 'action' => 'index')); ?></h1>
 			</div>
 			<div id="search">
-				<form>
-					<label for="search"><input type="text" name="q" id="q" value="Search" /></label>
+				<?php echo $form->create('Search', array('url' => '/search/results/', 'type' => 'get', 'id' => 'search-form')); ?>
+					<input type="text" name="q" id="search-term" class="em light field" value="Project name or number" />
+					<input type="submit" name="search_btn" id="search_btn" value="Search" />
 				</form>
 			</div>
-			<div id="navigation">
-				<ul>
-					<li><?php echo $html->link('Projects', array('controller' => 'projects', 'action' => 'index'), array('title' => 'Go to the main project index', 'class' => 'current')); ?></li>
-					<li><?php echo $html->link('Reports', array('controller' => 'reports', 'action' => 'index'), array('title' => 'View the project report dashboard')); ?></li>
-					<li><a href="#">Search</a></li>
-				</ul>
-			</div>
+			<?php echo $this->element('main_navigation', array('controller' => $this->params['controller'])); ?>
 		</div>
 		<div id="content">
 			<?php $session->check('Message.flash') ? $session->flash() : ''; ?>

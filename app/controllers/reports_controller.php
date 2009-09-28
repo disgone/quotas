@@ -5,8 +5,13 @@ class ReportsController extends AppController {
 	var $helpers = array('Units', 'Javascript', 'Cache', 'Time', 'Form');
 	var $uses = array('Project', 'Quota', 'Server');
 	
+	var $cacheAction = array(
+		'xindex' 				=> '10 minutes',
+		'xdetails'				=> '10 minutes'
+	);
+	
 	function index() {
-		$this->pageTitle = "Project Reporting";
+		$this->pageTitle = "Report Dashboard";
 		$gainers = $this->Quota->getMovers();
 		$losers = $this->Quota->getMovers(array('dir' => 'asc'));
 		$usage = $this->Server->getUsage();

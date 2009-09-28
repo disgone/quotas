@@ -23,6 +23,11 @@
 			<td class="aRight"><?php echo date('M d, Y h:ia', strtotime($project['Project']['Quota']['created'])); ?>
 		</tr>
 		<?php endforeach; ?>
+		<?php if(count($projects) < 1): ?>
+		<tr>
+			<td colspan="7" class="aCenter">No projects are available.</td>
+		</tr>
+		<?php endif; ?>
 	</tbody>
 </table>
 <?php echo $this->element('pagination'); ?>

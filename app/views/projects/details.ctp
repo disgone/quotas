@@ -5,7 +5,7 @@
 	<div class="project-header float-container">
 		<div class="project-title">
 			<h2><?php echo $project['Project']['number']; ?> <span class="title editable"><?php echo $project['Project']['name']; ?></span></h2>
-			<p class="sm">
+			<p class="sm nm">
 				<?php echo $time->nice($project['Quota'][0]['Quota']['created']); ?> - <?php echo $time->nice($project['Quota'][count($project['Quota'])-1]['Quota']['created']); ?>
 			</p>
 			<p class="location">

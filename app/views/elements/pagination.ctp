@@ -1,4 +1,5 @@
 <div class="paginate">
+	<p class="fRight light em"><?php echo $paginator->counter(array('format' => "Displaying page %page% of %pages%")); ?></p>
 	<?php if($paginator->first()): ?>
 		<?php echo $paginator->first("First"); ?>
 	<?php else: ?>
