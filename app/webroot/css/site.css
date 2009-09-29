@@ -134,9 +134,9 @@ table.records tr.alt td {
 	
 #logo h1 a {
 	display: block;
-	background: transparent url(../img/xlogo.gif) left center no-repeat;
-	width: 177px;
-	height: 55px;
+	background: transparent url(../img/logo.png) left center no-repeat;
+	width: 225px;
+	height: 70px;
 	text-indent: -10000px;
 	}
 	
@@ -144,7 +144,7 @@ table.records tr.alt td {
 #search {
 	position: absolute;
 	right: 26px;
-	top: 32px;
+	top: 40px;
 	}
 
 #search label {

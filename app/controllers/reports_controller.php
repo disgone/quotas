@@ -6,8 +6,7 @@ class ReportsController extends AppController {
 	var $uses = array('Project', 'Quota', 'Server');
 	
 	var $cacheAction = array(
-		'xindex' 				=> '10 minutes',
-		'xdetails'				=> '10 minutes'
+		'xindex' 				=> '10 minutes'
 	);
 	
 	function index() {

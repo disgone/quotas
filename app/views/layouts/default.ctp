@@ -2,12 +2,18 @@
 <html> 
 <head> 
 	<meta http-equiv="content-type" content="text/html;charset=utf-8"/> 
-	<title><?php echo $title_for_layout ? $title_for_layout . " | " : '';?> Project Quota Monitor</title>
+	<title><?php echo $title_for_layout ? $title_for_layout . " | " : '';?> Project Quota Tracker</title>
+	<link rel="shortcut icon" href="favicon.ico" />
 	<?php echo $html->css('site.css', 'stylesheet', array('media' => 'screen,projection')); ?>
+	
+	<?php echo $html->css('jquery.autocomplete'); ?>
 	<?php echo Configure::read('debug') > 1 ? $html->css('cake.debug') : ''; ?>
 	<?php 
 		if(isset($javascript)) {
 			echo $javascript->link('jquery-1.3.2.min');
+			
+			echo $javascript->link('jquery.autocomplete.min.js');
+			
 			echo $javascript->link('search');
 		}
 	?>
@@ -17,7 +23,7 @@
 	<div id="body" class="wrap">
 		<div id="head">
 			<div id="logo">
-				<h1><?php echo $html->link('Quota Tracker', array('controller' => 'projects', 'action' => 'index')); ?></h1>
+				<h1><?php echo $html->link('Quota Tracker', array('controller' => 'projects', 'action' => 'index'), array('title' => 'HKS Quota Tracker')); ?></h1>
 			</div>
 			<div id="search">
 				<?php echo $form->create('Search', array('url' => '/search/results/', 'type' => 'get', 'id' => 'search-form')); ?>

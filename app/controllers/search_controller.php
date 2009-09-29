@@ -19,6 +19,7 @@ class SearchController extends AppController {
 	function autosense() {
 		$results = $this->_getSearchResults();
 		$term = $this->_getTerm();
+		$this->layout = "ajax";
 		$this->set(compact('results','term'));
 	}
 	
