@@ -1,12 +1,12 @@
 <h2><?php echo $pageTitle; ?></h2>
 <table class="records">
 	<tr>
-		<th colspan="4">New Projects <em class="sm">(24hrs)</em></th>
+		<th colspan="4">New Projects <em class="sm">(Last 7 days)</em></th>
 	</tr>
 	<tr class="subhead">
 		<th>Project</th>
 		<th>Server</th>
-		<th>Date Added</th>
+		<th>Date Created</th>
 	</tr>
 	<?php if(count($projects)): ?>
 		<?php foreach($projects as $key => $project): ?>

@@ -43,6 +43,7 @@
  * Application wide charset encoding
  */
 	Configure::write('App.encoding', 'UTF-8');
+	//Configure::write('Config.language', 'spa');
 /**
  * To configure CakePHP *not* to use mod_rewrite and to
  * use CakePHP pretty URLs, remove these .htaccess
@@ -99,7 +100,7 @@
  * To use database sessions, execute the SQL file found at /app/config/sql/sessions.sql.
  *
  */
-	Configure::write('Session.save', 'php');
+	Configure::write('Session.save', 'database');
 /**
  * The name of the table used to store CakePHP database sessions.
  *
@@ -107,22 +108,22 @@
  *
  * The table name set here should *not* include any table prefix defined elsewhere.
  */
-	//Configure::write('Session.table', 'cake_sessions');
+	Configure::write('Session.table', 'cake_sessions');
 /**
  * The DATABASE_CONFIG::$var to use for database session handling.
  *
  * 'Session.save' must be set to 'database' in order to utilize this constant.
  */
-	//Configure::write('Session.database', 'default');
+	Configure::write('Session.database', 'default');
 /**
  * The name of CakePHP's session cookie.
  */
-	Configure::write('Session.cookie', 'CAKEPHP');
+	Configure::write('Session.cookie', 'QuotaTracker');
 /**
  * Session time out time (in seconds).
  * Actual value depends on 'Security.level' setting.
  */
-	Configure::write('Session.timeout', '120');
+	Configure::write('Session.timeout', '7200');
 /**
  * If set to false, sessions are not automatically started.
  */
@@ -148,7 +149,7 @@
 /**
  * A random string used in security hashing methods.
  */
-	Configure::write('Security.salt', 'DYhG93b0qyJfIxfs2guVoUubWwvniR2G0FgaC9masdi');
+	Configure::write('Security.salt', 'A592e6A1D480f004B08226E694CABAB39EF535CB8ca33b208F30B65C3f414');
 /**
  * Compress CSS output by removing comments, whitespace, repeating tags, etc.
  * This requires a/var/cache directory to be writable by the web server for caching.
@@ -230,6 +231,16 @@
 		 'probability'=> 100,
 		 'path' => CACHE,
 		 'prefix' => 'cake_r_',
+		 'lock' => false,
+		 'serialize' => true,
+	 ));
+	 
+	 Cache::config('reports', array(
+		 'engine' => 'File',
+		 'duration'=> 600,
+		 'probability'=> 100,
+		 'path' => CACHE . DS . "data" . DS . "reports",
+		 'prefix' => 'reports_',
 		 'lock' => false,
 		 'serialize' => true,
 	 ));

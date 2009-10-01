@@ -109,6 +109,7 @@ class Quota extends AppModel {
 									GROUP BY		project_id
 									) x on id2 = pid
 					LEFT JOIN		projects ON projects.id = pid
+					WHERE 			CAST(csEnd as SIGNED) - CAST(csStart as SIGNED) IS NOT null
 					ORDER BY		movement %s
 					LIMIT			%d
 					", $options['start'], $options['dir'], $options['limit']);

@@ -2,7 +2,7 @@
 
 class ProjectsController extends AppController {
 	var $name = "Projects";
-	var $helpers = array('Units', 'Javascript', 'Cache', 'Time', 'Form');
+	var $helpers = array('Units');
 	var $uses = array('Project', 'Quota');
 	var $components = array("RequestHandler");
 	
@@ -100,10 +100,10 @@ class ProjectsController extends AppController {
 	function updateTitle($id = null) {
 		if(!$id)
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/delete'));
-			
-		 Configure::write('debug', 0);
-		 $this->autoRender = false;
-			
+		
+		Configure::write('debug', 0);
+		$this->autoRender = false;
+		
 		$this->Project->id = $id;
 		$project = $this->Project->read();
 		if(empty($this->data)) {
@@ -131,7 +131,7 @@ class ProjectsController extends AppController {
 		$period = $this->_getPeriod();
 		if(($project = Cache::read("project_" . $id . "_qd", 'default')) === false) {
 			$project = $this->_requestProjectData($id, null, true);
-			Cache::write("project_" . $id . "_qd", $project, 'default');
+			//Cache::write("project_" . $id . "_qd", $project, 'default');
 		}
 
 		//Throw a 404 error if the project with ID was not found in the database.
@@ -218,6 +218,10 @@ class ProjectsController extends AppController {
 		unset($quota, $max, $min, $options, $units);
 
 		return $project;
+	}
+	
+	function merge() {
+		
 	}
 	
 	/*

@@ -2,7 +2,7 @@
 
 class SearchController extends AppController {
 	var $name = "Search";
-	var $helpers = array('Units', 'Javascript', 'Cache', 'Time', 'Form', 'Lighter');
+	var $helpers = array('Units', 'Lighter');
 	var $uses = array('Project');
 	var $components = array("RequestHandler");
 	
@@ -13,7 +13,11 @@ class SearchController extends AppController {
 	function results() {
 		$results = $this->_getSearchResults();
 		$term = $this->_getTerm();
+		if(count($results) == 1) {
+			$this->redirect(array('controller' => 'projects', 'action' => 'details', $results[0]['Project']['id']));
+		}
 		$this->set(compact('results','term'));
+		unset($results, $term);
 	}
 	
 	function autosense() {
@@ -21,6 +25,7 @@ class SearchController extends AppController {
 		$term = $this->_getTerm();
 		$this->layout = "ajax";
 		$this->set(compact('results','term'));
+		unset($results, $term);
 	}
 	
 	function _getTerm() {
@@ -37,7 +42,7 @@ class SearchController extends AppController {
 			return null;
 	}
 	
-	function _getSearchResults() {
+	function _getSearchResults($limit = 10) {
 		$term = $this->_getTerm();
 
 		if(!$term)
@@ -47,7 +52,7 @@ class SearchController extends AppController {
 			 Configure::write('debug', 0);
 		}
 			
-		return $this->Project->search($term);
+		return $this->Project->search($term, $limit);
 	}
 
 }

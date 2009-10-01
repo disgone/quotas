@@ -21,6 +21,17 @@ class Project extends AppModel {
 			'counterQuery' 	=> ''
 		)
 	);
+	
+	var $hasAndBelongsToMany = array(
+		'User' => array(
+			'className'					=> 'User',
+			'joinTable'					=> 'projects_users',
+			'foreignKey'				=> 'user_id',
+			'associationForeignKey' 	=> 'project_id',
+			'unique'					=> false,
+			'order'						=> array('Project.number+0' => 'ASC', 'Project.name' => 'ASC')
+		)
+	);
 
 	var $belongsTo = array(
 		'Server' => array(
@@ -50,6 +61,22 @@ class Project extends AppModel {
 		}
 		
 		return $this->find('all', $cond);
+	}
+	
+	/*
+	 * Returns projects with duplicate numbers
+	 * 
+	 * Projects should have unique numbers per server, so this returns a list of projects that have been mislabeled or duplicated.
+	 */
+	function getDupes() {
+		$cond = array(
+			'fields'		=> array('Project.number'),
+			'group'			=> array('Project.number HAVING COUNT(*) > 1'),
+			);
+
+		//Get dupes in list form so we can pull them by project number.
+		$dupes = $this->find('list', $cond);
+		return $this->find('all', array('conditions' => array('Project.number' => $dupes)));
 	}
 }
 ?>

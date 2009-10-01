@@ -119,8 +119,23 @@ table.records tr.alt td {
 	left: 5px;
 	}
 	
+.column-layout .full {
+	width: 100%;
+	margin-right: 10px;
+	}
+	
+.column-layout .triple {
+	width: 692px;
+	margin-right: 10px;
+	}
+
 .column-layout .double {
 	width: 459px;
+	margin-right: 10px;
+	}
+	
+.column-layout .single {
+	width: 224px;
 	margin-right: 10px;
 	}
 
@@ -169,28 +184,29 @@ table.records tr.alt td {
 /*--------------------------------------------------
 	NAVIGATION
 --------------------------------------------------*/
-#navigation {
+.navigation ul {
 	overflow: hidden;
+	padding: 0 25px;
 	}
 	
+.navigation li {
+	float: left;
+	}
+	
+.navigation li a {
+	text-decoration: none;
+	display: block;
+	padding: 5px 10px;
+	}
+
 #navigation ul {
-	font-family: Calibri, Arial, Tahoma, sans-serif;
-	overflow: hidden;
 	background: #878264;
-	padding: 0 25px;
 	border: 1px solid #CBC5B5;
 	border-width: 1px 0;
 	}
 	
-#navigation li {
-	float: left;
-	}
-	
 #navigation li a {
-	text-decoration: none;
 	color: #FFFFFF;
-	display: block;
-	padding: 5px 10px;
 	font-size: 14px;
 	}
 	
@@ -201,6 +217,90 @@ table.records tr.alt td {
 	
 #navigation li.current a {
 	background: #4F4A2C;
+	}
+	
+#subnavigation ul {
+	background: #4F4A2C;
+	margin: -1px 0 0;
+	}
+	
+#subnavigation li a {
+	color: #EAECDF;
+	font-weight: bold;
+	padding: 8px 10px;
+	}
+	
+#subnavigation li a:hover {
+	color: #C3C0AF;
+	}
+	
+#subnavigation li.current a {
+	color: #EB6D1F;
+	}
+
+#top-nav {
+	color: #938D6C;
+	background: #4F4A2C;
+	margin: 0pt auto;
+	padding: 8px 10px 8px;
+	width: 980px;
+	text-align: right;
+	font-weight: bold;
+	}
+	
+#top-nav a {
+	color: #EAECDF;
+	text-decoration: none;
+	}
+	
+#top-nav a:hover {
+	color: #E96F23;
+	}
+	
+/*******************************************************
+	FORMS
+*******************************************************/
+.dataForm {
+	width: 100%;
+	}
+	
+.dataForm div.input label {
+	font-weight: bold;
+	display: block;
+	margin-bottom: 5px;
+	}
+	
+.dataForm div.input {
+	margin-bottom: 10px;
+	}
+	
+.dataForm input {
+	border: 1px solid #BBBBBB;
+	padding: 3px;
+	}
+	
+.dataForm div.text input,
+.dataForm div.password input {
+	width: 25em;
+	margin-bottom: 10px;
+	}
+	
+.dataForm div.submit input,
+.sub_btn {
+	background: #878264;
+	color: #FFFFFF;
+	border: none;
+	padding: 2px 8px;
+	cursor: pointer;
+	}
+	
+.dataForm div.submit input:hover,
+.sub_btn:hover {
+	background: #4F4A2C;
+	}
+	
+.dataForm input.form-error {
+	background: #FBE3E4;
 	}
 
 	
@@ -342,24 +442,36 @@ table.records tr.alt td {
 	padding-left: 15px;
 	}
 	
+.star {
+	background: transparent url(../img/star-small.png) right center no-repeat;
+	}
+	
 /*--------------------------------------------------
 	MESSAGES
 --------------------------------------------------*/
 .message {
-	padding: 5px 5px 5px 30px;
+	padding: 8px 8px 8px 35px;
 	border: 1px solid #BBBBBB;
+	margin-bottom: 10px;
 	}
 	
 .info {
+	background: #DCE3F7 url(../img/information-frame.png) 10px center no-repeat;
+	border: 1px solid #2D5AD5;
+	}
+	
+.success {
+	background: #E3FBE5 url(../img/tick-circle-frame.png) 10px center no-repeat;
+	border: 1px solid #0CA015;
 	}
 	
 .notice {
-	background: #F3ECC5 url(../img/exclamation.png) 8px center no-repeat;
+	background: #F3ECC5 url(../img/exclamation.png) 10px center no-repeat;
 	border: 1px solid #EBDC25;
 	}
 	
 .error {
-	background: #FBE3E4 url(../img/exclamation-red-frame.png) 8px center no-repeat;
+	background: #FBE3E4 url(../img/exclamation-red-frame.png) 10px center no-repeat;
 	border: 1px solid #B81111;
 	}
 	
@@ -373,6 +485,8 @@ table.records tr.alt td {
 	
 .em {
 	font-style: italic;
+	/*--Fix for IE7/8 in case the element is floated or positioned--*/
+	overflow: hidden;
 	}
 	
 .light {
@@ -408,3 +522,20 @@ table.records tr.alt td {
 .fRight {
 	float: right;
 	}
+	
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+    }
+
+.clearfix {display: inline-block;}  /* for IE/Mac */
+	
+<!--[if IE]>
+.clearfix {
+	zoom: 1;
+	display: block;
+	}
+<![endif]-->

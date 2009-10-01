@@ -1,6 +1,6 @@
 <h2><?php echo $pageTitle; ?></h2>
 <div class="column-layout">
-	<div>
+	<div class="column full">
 		<table class="records">
 			<tr>
 				<th colspan="6">Server Details</th>
@@ -51,7 +51,7 @@
 			<?php endforeach; ?>
 		</table>
 	</div>
-	<div>
+	<div class="column full">
 		<table class="records">
 			<tr>
 				<th colspan="4">New Projects <em class="sm">(24hrs)</em></th>

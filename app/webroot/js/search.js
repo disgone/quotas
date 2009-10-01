@@ -5,11 +5,13 @@ $(document).ready(function() {
         autoFill:false,
         mustMatch:false,
         max:10,
-        width: 250,
+        width: 225,
         selectFirst: false,
-        formatResult: formatResult
+        formatResult: function formatResult(row) {
+    		return row[0].split(" ")[0];
+    	}
 	}).result(function(event,item) {
-		location.href = "/quotas/projects/details/" + item[1];
+		$("#search-form").submit();
 	});
 
 	
@@ -30,8 +32,6 @@ $(document).ready(function() {
 			$("#search-term").val('');
 	});
 	
-	function formatResult(row) {
-		return row[0].split(" ")[0];
-	}
+	
 
 });
