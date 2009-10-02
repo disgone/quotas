@@ -83,9 +83,12 @@
 		</table>
 	</div>
 	<div class="controls clear">
-		<div class="admin-controls">
-			<?php echo $html->link('Delete Project', array('action' => 'delete', 'id' => $project['Project']['id']), array('class' => 'delete'), 'Deleting this project will remove all quota data associated with it as well.  Are you sure you wish to remove this project, this cannot be undone?')?>
+		<div class="amin-controls">
+			<?php echo $html->link('Add To My Projects', array('action' => 'track', $project['Project']['id'])); ?>
 		</div>
+		<!-- <div class="admin-controls">
+			<?php echo $html->link('Delete Project', array('action' => 'delete', 'id' => $project['Project']['id']), array('class' => 'delete'), 'Deleting this project will remove all quota data associated with it as well.  Are you sure you wish to remove this project, this cannot be undone?')?>
+		</div> -->
 	</div>
 	<div class="chart">
 		<div class="title">

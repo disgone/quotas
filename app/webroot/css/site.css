@@ -282,7 +282,15 @@ table.records tr.alt td {
 .dataForm div.text input,
 .dataForm div.password input {
 	width: 25em;
-	margin-bottom: 10px;
+	}
+	
+.dataForm div.checkbox input{
+	float: left;
+	margin-right: 10px;
+	}
+	
+.dataForm div.checkbox label{
+	padding-top: 2px;
 	}
 	
 .dataForm div.submit input,
@@ -292,6 +300,10 @@ table.records tr.alt td {
 	border: none;
 	padding: 2px 8px;
 	cursor: pointer;
+	}
+	
+.dataForm div.submit {
+	margin-top: 10px;
 	}
 	
 .dataForm div.submit input:hover,
@@ -332,6 +344,7 @@ table.records tr.alt td {
 .stats-panel {
 	border-top: 3px solid #333;
 	width: 100%;
+	color: #666666;
 	}
 	
 .stats-panel td {
@@ -344,15 +357,29 @@ table.records tr.alt td {
 	border-left: 1px solid #BBBBBB;
 	}
 	
-.stats-panel h3 {
+.stats-panel h3,
+.stats-panel dt {
 	font-family: Calibri,"Helvetica Neue",Arial,Helvetica,sans-serif;
 	font-size: 1.2em;
 	margin: 0;
+	}
+
+.stats-panel dt {
+	font-size: 14px;
+	padding: 5px 0 5px;
+	}
+	
+.stats-panel dd {
+	border-bottom: 1px solid #BBBBBB;
+	padding: 5px 0 5px;
+	font-size: 14px;
+	font-family: Cambria,Georgia,Times,"Times New Roman",serif;
 	}
 	
 .stat-focus {
 	font-weight: bold;
 	font-size: 1.6em;
+	color: #333333;
 	}
 	
 .stat-supp {

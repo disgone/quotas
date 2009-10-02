@@ -97,6 +97,35 @@ class ProjectsController extends AppController {
 		}*/
 	}
 	
+	function track($id = null) {
+		if(!$id)
+			$this->cakeError('error404', array('url' => "projects/projectData/$id"));
+			
+		if(!$this->Session->check('User'))
+			$this->cakeError('login');
+
+		$this->Project->id = $id;
+		$project = $this->Project->read();
+		if(empty($project))
+			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/delete'));
+			
+		$data = array(
+			'user_id' => $this->Session->read('User.id'),
+			'project_id' => $id
+			);
+			
+		$exists = $this->Project->ProjectsUser->find('all', array('conditions' => array('ProjectsUser.user_id' => $data['user_id'], 'ProjectsUser.project_id' => $data['project_id'])));
+
+		if(empty($exists)) {
+			if($this->Project->ProjectsUser->save($data)) {
+				$this->Session->setFlash("Project added to <strong>My Projects</strong> list.", "flash/success");
+			}
+		}
+		else {
+			$this->Session->setFlash("Project is already on your <strong>My Projects</strong> list.", "flash/notice");
+		}
+	}
+	
 	function updateTitle($id = null) {
 		if(!$id)
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/delete'));
