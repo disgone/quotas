@@ -40,8 +40,6 @@ class UsersController extends AppController {
 	
 	function register() {
 		$this->pageTitle = "Create an Account";
-		
-		
 	}
 	
 }
