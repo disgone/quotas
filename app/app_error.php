@@ -7,6 +7,10 @@ class AppError extends ErrorHandler {
 		$this->_outputMessage('missing_project');
 	}
 	
+	function login($params = null) {
+		$this->_outputMessage('login');
+	}
+	
 }
 
 ?>

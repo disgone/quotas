@@ -4,7 +4,14 @@
 <div class="project" project_record="<?php echo $project['Project']['id']; ?>">
 	<div class="project-header float-container">
 		<div class="project-title">
-			<h2><?php echo $project['Project']['number']; ?> <span class="title editable"><?php echo $project['Project']['name']; ?></span></h2>
+			<h2>
+				<?php echo $project['Project']['number']; ?>
+				<?php if($session->read('User.Group.name') == 'Admin'): ?>
+					<span class="title editable"><?php echo $project['Project']['name']; ?></span>
+				<?php else: ?>
+					<?php echo $project['Project']['name']; ?>
+				<?php endif; ?>
+			</h2>
 			<p class="sm nm">
 				<?php echo $time->nice($project['Quota'][0]['Quota']['created']); ?> - <?php echo $time->nice($project['Quota'][count($project['Quota'])-1]['Quota']['created']); ?>
 			</p>
@@ -82,15 +89,28 @@
 			</tbody>
 		</table>
 	</div>
-	<div class="controls clear">
-		<div class="admin-controls">
-			<?php echo $html->link('Delete Project', array('action' => 'delete', 'id' => $project['Project']['id']), array('class' => 'delete'), 'Deleting this project will remove all quota data associated with it as well.  Are you sure you wish to remove this project, this cannot be undone?')?>
+	<?php if($session->check('User')): ?>
+		<!-- Project Toolbar -->
+		<div class="controls clear">
+			<div class="amin-controls">
+				<?php if(empty($my_project)): ?>
+					<?php echo $html->link('Add To My Projects', array('action' => 'track', $project['Project']['id'], "add"), array("title" => "Add to My Projects list", "class" => "estar fav", "rel" => 10)); ?>
+				<?php else: ?>
+					<?php echo $html->link('Remove From My Projects', array('action' => 'track', $project['Project']['id'], "remove"), array("title" => "Remove from My Projects list", "class" => "star fav", "rel" => 10)); ?>
+				<?php endif; ?>
+			</div>
+			<!-- <div class="admin-controls">
+				<?php echo $html->link('Delete Project', array('action' => 'delete', 'id' => $project['Project']['id']), array('class' => 'delete'), 'Deleting this project will remove all quota data associated with it as well.  Are you sure you wish to remove this project, this cannot be undone?')?>
+			</div> -->
 		</div>
-	</div>
+		<!-- End Project Toolbar -->
+	<?php endif; ?>
+	<!-- Quota Graph -->
 	<div class="chart">
 		<div class="title">
 			<h3>Quota Usage Over Time</h3>
 		</div>
 		<?php echo $this->element('amstock', array('key' => $project['Project']['id'], 'project_id' => $project['Project']['id'], 'project' => $project)); ?>
 	</div>
+	<!-- End Quota Graph -->
 </div>

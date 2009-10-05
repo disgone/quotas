@@ -3,7 +3,7 @@
 class ProjectsController extends AppController {
 	var $name = "Projects";
 	var $helpers = array('Units');
-	var $uses = array('Project', 'Quota');
+	var $uses = array('Project', 'Quota', 'User');
 	var $components = array("RequestHandler");
 	
 	var $paginate = array(
@@ -32,6 +32,13 @@ class ProjectsController extends AppController {
 		unset($list, $updates, $projects, $ids);
 	}
 	
+	/*
+	 * Project Details
+	 * 
+	 * Displays the details for a specified project
+	 * 
+	 * @param int $id ID of project to display details for.
+	 */
 	function details($id = null) {
 		$this->pageTitle = "Project Details";
 		//Throw a 404 error if ID was not specified.
@@ -55,8 +62,15 @@ class ProjectsController extends AppController {
 		//Get the last time the project had a change in usage.
 		$changed = $this->Quota->getLastChange($id);
 		
-		$this->pageTitle = $project['Project']['number'] . " Details";
+		//Check if this project belongs to a logged in users "my project" list.
+		$my_project = null;
+		if($this->Session->check('User'))
+			$my_project = $this->User->ProjectsUser->find('all', array('conditions' => array('ProjectsUser.user_id' => 1, 'ProjectsUser.project_id' => $id)));
+		
+		$this->pageTitle = trim($project['Project']['number'] . " " . $project['Project']['name']);
+		
 		$this->set(compact('project', 'changed'));
+		$this->set('my_project', $my_project);
 		$this->set('quota', $project['Meta']);
 		
 		unset($min, $max, $start, $end, $project, $quota, $durations);
@@ -97,6 +111,68 @@ class ProjectsController extends AppController {
 		}*/
 	}
 	
+	/*
+	 * Track Project
+	 * 
+	 * Adds the specified project to the logged in user's "My Project" list.
+	 * 
+	 * @param int $id ID of project to display details for.
+	 */
+	function track($id = null, $action = null) {
+		if(!$id)
+			$this->cakeError('error404', array('url' => "projects/projectData/$id"));
+			
+		if(!$this->Session->check('User'))
+			$this->cakeError('login');
+
+		$this->Project->id = $id;
+		$project = $this->Project->read();
+		if(empty($project))
+			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/delete'));
+			
+		$data = array(
+			'user_id' => $this->Session->read('User.id'),
+			'project_id' => $id
+			);
+			
+		$exists = $this->Project->ProjectsUser->find('first', array('conditions' => array('ProjectsUser.user_id' => $data['user_id'], 'ProjectsUser.project_id' => $data['project_id'])));
+
+		switch($action) {
+			case "remove":
+				if(!empty($exists)) {
+					if($this->Project->ProjectsUser->delete($exists['ProjectsUser']['id'])); {
+						if(!$this->RequestHandler->isAjax())
+							$this->Session->setFlash("Project removed from <strong>My Projects</strong> list.", "flash/success");
+					}
+				}
+				break;
+			case "add":
+				if(empty($exists)) {
+					if($this->Project->ProjectsUser->save($data)) {
+						if(!$this->RequestHandler->isAjax())
+							$this->Session->setFlash("Project added to <strong>My Projects</strong> list.", "flash/success");
+					}
+				}
+				break;
+			default:
+				exit();
+		}
+		
+		if($this->RequestHandler->isAjax()) {
+			$this->layout = "ajax";
+		}
+		else
+			$this->redirect(array('controller' => 'dashboard', 'action' => 'index'));
+		
+	}
+	
+	/*
+	 * Update Title
+	 * 
+	 * Changes the name of a specified project.
+	 * 
+	 * @param int $id ID of project to display details for.
+	 */
 	function updateTitle($id = null) {
 		if(!$id)
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/delete'));
@@ -121,7 +197,12 @@ class ProjectsController extends AppController {
 	}
 	
 	/*
-	 * URL access point for project data.
+	 * Project Details
+	 * 
+	 * URL access point for project data.  Used primarily for sending quota data to the
+	 * Quota graphs on the details page.
+	 * 
+	 * @param int $id ID of project to display details for.
 	 */
 	function projectData($id = null) {
 		Configure::write('debug', 0);
@@ -147,6 +228,10 @@ class ProjectsController extends AppController {
 	 * Request Project Data
 	 * 
 	 * Retreives all quota data and stats for a given project.
+	 * 
+	 * @param int ID of project to get data for.
+	 * @param array Start/End dates to retrive data for.
+	 * @param bool Set to true to return all data for the specified project.
 	 */
 	function _requestProjectData($id, $period = null, $max = false) {
 		$project = $this->Project->findById($id);
@@ -174,7 +259,7 @@ class ProjectsController extends AppController {
 		if($max) {
 			$tmp = array();
 			if(count($project['Quota']) > 1000) {
-				for($i = 0; $i < count($project['Quota']); $i=$i+2) {
+				for($i = 0; $i < count($project['Quota']); $i=$i+4) {
 					array_push($tmp, $project['Quota'][$i]);
 				}
 				$project['Quota'] = $tmp;
