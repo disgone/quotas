@@ -40,6 +40,20 @@ class UsersController extends AppController {
 	
 	function register() {
 		$this->pageTitle = "Create an Account";
+		$this->User->set($this->data);
+		
+		if($this->data && $this->User->validates()) {
+			$this->data['User']['password'] = $this->Login->encrypt($this->data['User']['password']);
+			if($this->User->save($this->data, false)) {
+				$this->Session->setFlash("Your account was created successfully.", "flash/success");
+				$this->redirect("/login");
+			}
+			else {
+				$this->Session->setFlash("There was an error creating your account.", "flash/error");
+			}
+		}
+		
+		$this->data['User']['password'] = $this->data['User']['confirm'] = "";
 	}
 	
 }

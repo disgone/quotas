@@ -11,7 +11,8 @@ $(document).ready(function() {
     		return row[0].split(" ")[0];
     	}
 	}).result(function(event,item) {
-		$("#search-form").submit();
+		window.location = "/quotas/projects/details/" + item[1];
+		//$("#search-form").submit();
 	});
 
 	
@@ -31,7 +32,4 @@ $(document).ready(function() {
 		if($("#search-term").val() == 'Project name or number')
 			$("#search-term").val('');
 	});
-	
-	
-
 });

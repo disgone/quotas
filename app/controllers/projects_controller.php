@@ -21,11 +21,13 @@ class ProjectsController extends AppController {
 		$this->pageTitle = "Project Directory";
 		$projects = $this->paginate('Project');
 		
-		$ids = Set::extract("/Project/id", $projects);
-		$updates = $this->Quota->getLatest($ids);
-		
-		foreach($projects as $ndx => &$project) {
-			$project['Project']['Quota'] = $updates[$ndx]['Quota'];
+		if(!empty($projects)) {
+			$ids = Set::extract("/Project/id", $projects);
+			$updates = $this->Quota->getLatest($ids);
+			
+			foreach($projects as $ndx => &$project) {
+				$project['Project']['Quota'] = $updates[$ndx]['Quota'];
+			}
 		}
 
 		$this->set('projects', $projects);
@@ -63,14 +65,17 @@ class ProjectsController extends AppController {
 		$changed = $this->Quota->getLastChange($id);
 		
 		//Check if this project belongs to a logged in users "my project" list.
-		$my_project = null;
-		if($this->Session->check('User'))
-			$my_project = $this->User->ProjectsUser->find('all', array('conditions' => array('ProjectsUser.user_id' => 1, 'ProjectsUser.project_id' => $id)));
+		$following = false;
+		if($this->Session->check('User')) {
+			$my_projects = Set::extract("/Project/id", $this->User->findById($this->Session->read("User.id")));
+			if(in_array($id, $my_projects))
+				$following = true;
+		}
 		
 		$this->pageTitle = trim($project['Project']['number'] . " " . $project['Project']['name']);
 		
 		$this->set(compact('project', 'changed'));
-		$this->set('my_project', $my_project);
+		$this->set('following', $following);
 		$this->set('quota', $project['Meta']);
 		
 		unset($min, $max, $start, $end, $project, $quota, $durations);
@@ -90,7 +95,7 @@ class ProjectsController extends AppController {
 			
 		$this->Project->id = $id;
 		$project = $this->Project->read();
-		/*
+		
 		if($this->Project->delete($id)) {
 			if($this->RequestHandler->isAjax()) {
 				echo "success";
@@ -108,7 +113,7 @@ class ProjectsController extends AppController {
 				$this->Session->setFlash(sprintf("Oh snap!  We've broken something and were not able to delete project %s.", $project['Project']['number']));
 				$this->redirect(array('action'=>'index'));
 			}
-		}*/
+		}
 	}
 	
 

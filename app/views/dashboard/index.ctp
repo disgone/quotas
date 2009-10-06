@@ -6,9 +6,9 @@
 			<tr>
 				<th>Project</th>
 				<th>Server</th>
-				<th class="aRight">Allowance</th>
 				<th class="aRight">Usage</th>
-				<th class="aRight">Created</th>
+				<th class="aRight">Allowance</th>
+				<th class="aRight">Last Update</th>
 			</tr>
 			<?php if($session->check('User')): ?>
 				<?php if(count($projects) > 0): ?>
@@ -16,9 +16,9 @@
 						<tr<?php echo $key%2 == 0 ? " class='alt'" : ''; ?>>
 							<td><?php echo $html->link(trim($project['Project']['number'] . ' ' . $project['Project']['name']), array('controller' => 'projects', 'action' => 'details', $project['Project']['id'])); ?></td>
 							<td><?php echo $project['Server']['name']; ?></td>
-							<td class="aRight"><?php echo $units->format($project['Project']['Quota']['allowance']); ?></td>
 							<td class="aRight"><?php echo $units->format($project['Project']['Quota']['consumed']); ?></td>
-							<td class="aRight"><?php echo $time->niceShort($project['Project']['created']); ?></td>
+							<td class="aRight"><?php echo $units->format($project['Project']['Quota']['allowance']); ?></td>
+							<td class="aRight"><?php echo date('M d, Y h:ia', strtotime($project['Project']['Quota']['created'])); ?></td>
 						</tr>
 					<?php endforeach; ?>
 				<?php else: ?>

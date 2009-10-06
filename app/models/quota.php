@@ -27,7 +27,7 @@ class Quota extends AppModel {
 			//Extract a list of project_id for this group of projects.
 			$list = implode(',', $project_id);
 			//Get the last recorded updates for all projects on this page.
-			$query = sprintf("SELECT Quota.* FROM quotas Quota LEFT JOIN (SELECT MAX(id) id1 FROM quotas WHERE project_id IN (%s) GROUP BY project_id ORDER BY max(id) desc) t on id1 = id LEFT JOIN projects on Quota.project_id = projects.id where id1 IS NOT null ORDER BY projects.number+0 ASC", $list);
+			$query = sprintf("SELECT Quota.* FROM quotas Quota LEFT JOIN (SELECT MAX(id) id1 FROM quotas WHERE project_id IN (%s) GROUP BY project_id ORDER BY max(id) desc) t on id1 = id LEFT JOIN projects on Quota.project_id = projects.id where id1 IS NOT null ORDER BY projects.number+0 ASC, projects.name ASC", $list);
 			return $this->query($query);
 		}
 		else {
@@ -94,7 +94,7 @@ class Quota extends AppModel {
 		$options = array_merge($defaults, $options);
 			
 		$query = sprintf("
-					SELECT			projects.id, projects.number, projects.name, CAST(csEnd as SIGNED) - CAST(csStart as SIGNED) as movement
+					SELECT			projects.id, projects.number, projects.name, CAST(csEnd as SIGNED) - CAST(csStart as SIGNED) as movement, Server.name, Server.id
 					FROM			(
 									SELECT			Quota.project_id pid, consumed csEnd, allowance alEnd
 									FROM			quotas Quota
@@ -109,6 +109,7 @@ class Quota extends AppModel {
 									GROUP BY		project_id
 									) x on id2 = pid
 					LEFT JOIN		projects ON projects.id = pid
+					LEFT JOIN		servers Server ON Server.id = projects.server_id
 					WHERE 			CAST(csEnd as SIGNED) - CAST(csStart as SIGNED) IS NOT null
 					ORDER BY		movement %s
 					LIMIT			%d

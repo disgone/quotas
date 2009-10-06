@@ -49,11 +49,12 @@ class Project extends AppModel {
 		return $this->find('all', $cond);
 	}
 	
-	function getNewProjects($server_id = null, $date = null) {
+	function getNewProjects($server_id = null, $date = null, $limit = 10) {
 		$date == null ? $date = date('Y-m-d') : null;
 		$cond = array(
 			'conditions'	=> array('Project.created >' 	=> $date),
-			'order' 		=> array('Project.number + 0' => 'ASC', 'Project.name' => 'ASC')
+			'order' 		=> array('Project.number + 0' => 'ASC', 'Project.name' => 'ASC'),
+			'limit'			=> $limit
 			);
 		
 		if($server_id) {

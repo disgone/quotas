@@ -3,7 +3,13 @@
 class ReportsController extends AppController {
 	var $name = "Reports";
 	var $helpers = array('Units');
-	var $uses = array('Project', 'Quota', 'Server');
+	var $uses = array('Project', 'Quota', 'Server', 'Scans');
+	
+	var $paginate = array(
+		'limit' => 30,
+		'order' => array('Project.number +0' => 'ASC', 'Project.name' => 'ASC'),
+		'recursive' => 0
+	);
 	
 	function index() {
 		$this->pageTitle = "Report Dashboard";
@@ -28,24 +34,23 @@ class ReportsController extends AppController {
 	
 	function new_projects() {
 		$this->pageTitle = "New Projects";
-		$projects = $this->Project->getNewProjects(null, date('Y-m-d 00:00:00', strtotime('-7 days')));
+		
+		$this->paginate['conditions'] = array('Project.created >=' => date('Y-m-d 00:00:00', strtotime('-7 days')));
+		$projects = $this->paginate('Project');
 		
 		$this->set(compact('projects'));
 		$this->set('pageTitle', $this->pageTitle);
 		unset($projects);
 	}
 	
-	function conflicts() {
-		$this->pageTitle = "Conflicts Report";
-		$dupes = $this->Project->getDupes();
+	function duplicates() {
+		$this->pageTitle = "Duplicates Report";
 		
-		$ids = Set::extract("/Project/id", $dupes);
-		$updates = $this->Quota->getLatest($ids);
-		
-		foreach($dupes as $ndx => &$project) {
-			$project['Project']['Quota'] = $updates[$ndx]['Quota'];
+		if(($dupes = Cache::read("dupes", 'reports')) === false) {
+			$dupes = $this->Project->getDupes();
+			Cache::write("dupes", $dupes, 'reports');
 		}
-
+		
 		$this->set(compact('dupes'));
 	}
 }

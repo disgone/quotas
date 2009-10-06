@@ -22,3 +22,4 @@
 		</tr>
 	<?php endif; ?>
 </table>
+<?php echo $this->element('pagination'); ?>

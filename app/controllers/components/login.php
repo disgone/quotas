@@ -12,7 +12,7 @@ class LoginComponent extends Object {
 		if(empty($data))
 			return false;
 			
-		$hash = Security::hash($data['User']['password'], null, true);
+		$hash = $this->encrypt($data['User']['password'], null, true);
 		unset($data['User']['password']);
 		
 		$this->model->unbindModel(
@@ -52,6 +52,10 @@ class LoginComponent extends Object {
 		}
 		
 		return false;
+	}
+	
+	function encrypt($value) {
+		return Security::hash($value, null, true);
 	}
 	
 }

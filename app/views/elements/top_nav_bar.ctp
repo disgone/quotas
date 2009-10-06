@@ -4,8 +4,10 @@
 	|
 	<?php echo $html->link(__('My Dashboard', true), array('controller' => 'dashboard', 'action' => 'index'), array('title' => 'View your dashboard')); ?>
 	|
-	<?php echo $html->link(__('Administration', true), array('controller' => 'projects', 'action' => 'index'), array('title' => 'Admin control panel')); ?>
-	|
+	<?php if($session->read('User.Group.name') == 'Admin'): ?>
+		<?php echo $html->link(__('Administration', true), array('controller' => 'projects', 'action' => 'index'), array('title' => 'Admin control panel')); ?>
+		|
+	<?php endif; ?>
 	<?php echo $html->link(__('Log Out', true), '/logout', array('title' => 'Log out of Quota Tracker')); ?>
 <?php else: ?>
 	Welcome Guest

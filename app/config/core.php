@@ -227,7 +227,7 @@
 	
 	 Cache::config('default', array(
 		 'engine' => 'File',
-		 'duration'=> 900,
+		 'duration'=> 1200,
 		 'probability'=> 100,
 		 'path' => CACHE,
 		 'prefix' => 'cake_r_',
@@ -237,7 +237,7 @@
 	 
 	 Cache::config('reports', array(
 		 'engine' => 'File',
-		 'duration'=> 600,
+		 'duration'=> 1200,
 		 'probability'=> 100,
 		 'path' => CACHE . DS . "data" . DS . "reports",
 		 'prefix' => 'reports_',

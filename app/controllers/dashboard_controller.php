@@ -11,9 +11,13 @@ class DashboardController extends AppController {
 		$projects = null;
 		
 		if($this->Session->check('User')) {
-			$ids = Set::extract("/Project/id", $this->User->getProjects($this->Session->read('User.id')));
+			$ids = Set::extract("/Project/id", $this->User->findById($this->Session->read("User.id")));
+
+			$this->paginate['conditions'] = array("Project.id" => $ids);
+			$projects = $this->paginate("Project");
+			$ids = Set::extract("/Project/id", $projects);
+
 			if(!empty($ids)) {
-				$projects = $this->Project->find('all', array('conditions' => array('Project.id' => $ids)));
 				$updates = $this->Quota->getLatest($ids);
 				$total_used = $total_allotted = 0;
 				foreach($projects as $ndx => &$project) {

@@ -93,7 +93,7 @@
 		<!-- Project Toolbar -->
 		<div class="controls clear">
 			<div class="amin-controls">
-				<?php if(empty($my_project)): ?>
+				<?php if(!$following): ?>
 					<?php echo $html->link('Add To My Projects', array('action' => 'track', $project['Project']['id'], "add"), array("title" => "Add to My Projects list", "class" => "estar fav", "rel" => 10)); ?>
 				<?php else: ?>
 					<?php echo $html->link('Remove From My Projects', array('action' => 'track', $project['Project']['id'], "remove"), array("title" => "Remove from My Projects list", "class" => "star fav", "rel" => 10)); ?>

@@ -3,7 +3,7 @@
 <head> 
 	<meta http-equiv="content-type" content="text/html;charset=utf-8"/> 
 	<title><?php echo $title_for_layout ? $title_for_layout . " | " : '';?> Quota Tracker</title>
-	<link rel="shortcut icon" href="favicon.ico" />
+	<link rel="shortcut icon" href="<?php echo $html->url('/favicon.ico'); ?>" />
 	<?php echo $html->css('site.css', 'stylesheet', array('media' => 'screen,projection')); ?>
 	<?php echo $html->css('jquery.autocomplete'); ?>
 	<?php echo Configure::read('debug') > 1 ? $html->css('cake.debug') : ''; ?>

@@ -8,6 +8,11 @@ class User extends AppModel {
 									'rule' 		=> 'email',
 									'required' 	=> true,
 									'message' 	=> 'Invalid email addresss'
+									),
+								'unique' => array(
+									'rule'		=> 'isUnique',
+									'on'		=> array('create'),
+									'message'	=> 'Account already exists with that email address.'
 									)
 								),
 		'password' 		=> array(
@@ -21,6 +26,19 @@ class User extends AppModel {
 									'required' 	=> true,
 									'on'		=> array('create'),
 									'message' 	=> 'Passwords must be at least 6 characters'
+									),
+								'matches'	=> array(
+									'rule'		=> 'confirmPassword',
+									'message'	=> 'Password does not match',
+									'on'		=> array('create')
+									)
+								),
+		'confirm'		=> array(
+								'notEmpty' => array(
+									'rule'		=> 'notEmpty',
+									'required'	=> true,
+									'on'		=> array('create'),
+									'message'	=> 'You must confirm your password.'
 									)
 								),
 		'displayname' 	=> array('notempty')
@@ -47,10 +65,10 @@ class User extends AppModel {
 			'order'						=> array('Project.number +0' => 'ASC', 'Project.name' => 'ASC')
 		)
 	);
-
-	function getProjects($id) {
-		$user = $this->find('all', array('conditions' => array('User.id', $id)));
-		return $user;
+	
+	function confirmPassword($data) {
+		$valid = $data['password'] == $this->data['User']['confirm'] ? true : false; 
+		return $valid;
 	}
 }
 ?>
