@@ -3,7 +3,7 @@
 class ProjectsController extends AppController {
 	var $name = "Projects";
 	var $helpers = array('Units');
-	var $uses = array('Project', 'Quota', 'User');
+	var $uses = array('Project', 'Quota', 'User', 'Server');
 	var $components = array("RequestHandler");
 	
 	var $paginate = array(
@@ -12,13 +12,14 @@ class ProjectsController extends AppController {
 		'recursive' => 0
 	);
 	
-	var $cacheAction = array(
-		'xindex' 				=> '+1 hour',
-		'xdetails'				=> '15 minutes'
-	);
-	
-	function index() {
-		$this->pageTitle = "Project Directory";
+	function index($server = null) {
+		$this->pageTitle = __("Project Directory", true);
+		if($server) {
+			$this->Server->recursive = -1;
+			$server = $this->Server->find('first', array('conditions' => array('Server.name' => $server, 'Server.enabled' => 1)));
+			if(!empty($server))
+				$this->paginate["conditions"] = array("Project.server_id" => $server['Server']['id']);
+		}
 		$projects = $this->paginate('Project');
 		
 		if(!empty($projects)) {
@@ -31,7 +32,10 @@ class ProjectsController extends AppController {
 		}
 
 		$this->set('projects', $projects);
-		unset($list, $updates, $projects, $ids);
+		$this->set('server', $server);
+		$this->set('servers', Cache::read('servers', 'mem'));
+		
+		unset($list, $updates, $projects, $ids, $server);
 	}
 	
 	/*
@@ -42,7 +46,7 @@ class ProjectsController extends AppController {
 	 * @param int $id ID of project to display details for.
 	 */
 	function details($id = null) {
-		$this->pageTitle = "Project Details";
+		$this->pageTitle = __("Project Details", true);
 		//Throw a 404 error if ID was not specified.
 		if(!$id)
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
@@ -67,7 +71,7 @@ class ProjectsController extends AppController {
 		//Check if this project belongs to a logged in users "my project" list.
 		$following = false;
 		if($this->Session->check('User')) {
-			$my_projects = Set::extract("/Project/id", $this->User->findById($this->Session->read("User.id")));
+			$my_projects = Set::extract("/Project/id", $this->Project->getUserProjects($this->Session->read("User.id")));
 			if(in_array($id, $my_projects))
 				$following = true;
 		}
@@ -82,7 +86,9 @@ class ProjectsController extends AppController {
 	}
 	
 	function delete($id = null) {
-		$this->pageTitle = "Delete Project";
+		$this->adminOnly();
+		
+		$this->pageTitle = __("Delete Project", true);
 		//Throw a 404 error if ID was not specified.
 		if(!$id)
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/delete'));
@@ -123,10 +129,12 @@ class ProjectsController extends AppController {
 	 * Adds the specified project to the logged in user's "My Project" list.
 	 * 
 	 * @param int $id ID of project to display details for.
+	 * @param string $action Add/Remove action
 	 */
 	function track($id = null, $action = null) {
-		if(!$id)
-			$this->cakeError('error404', array('url' => "projects/projectData/$id"));
+		//No id, or not numeric.
+		if(!$id || !is_numeric($id))
+			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/track'));
 			
 		if(!$this->Session->check('User'))
 			$this->cakeError('login');
@@ -134,7 +142,7 @@ class ProjectsController extends AppController {
 		$this->Project->id = $id;
 		$project = $this->Project->read();
 		if(empty($project))
-			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/delete'));
+			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/track'));
 			
 		$data = array(
 			'user_id' => $this->Session->read('User.id'),
@@ -183,6 +191,7 @@ class ProjectsController extends AppController {
 		if(!$id)
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/delete'));
 		
+		App::import('Sanitize');
 		Configure::write('debug', 0);
 		$this->autoRender = false;
 		
@@ -192,12 +201,12 @@ class ProjectsController extends AppController {
 			echo $project['Project']['name'];
 		}
 		else {
-			if($this->Project->saveField('name', $this->data['Project']['title'])) {
-				echo $this->data['Project']['title'];
+			if($this->Project->saveField('name', Sanitize::html($this->data['Project']['title']))) {
+				echo Sanitize::html($this->data['Project']['title']);
 				Cache::delete("project_" . $id);
 			}
 			else {
-				echo $project['Project']['name'];
+				echo Sanitize::html($project['Project']['name']);
 			}
 		}
 	}

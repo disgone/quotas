@@ -1,3 +1,4 @@
+<?php $paginator->options(array('url' => $this->passedArgs)); ?>
 <div class="paginate">
 	<p class="fRight light em"><?php echo $paginator->counter(array('format' => "Displaying page %page% of %pages%")); ?></p>
 	<?php if($paginator->first()): ?>

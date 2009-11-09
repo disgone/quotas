@@ -9,14 +9,16 @@ html,body {
 	
 body {
 	font-size: 12px;
+	line-height: 1em;
 	}
 	
-html, body, div, p, th, td, select, input, textarea {
+html, body, div, p, th, td, select, input, button, textarea {
 	color: #333333;
-	font-family: Calibri,"Helvetica Neue",Arial,Helvetica,sans-serif;
+	font-family: "Segoe UI",Calibri,Helvetica,Arial,sans-serif;
 	font-weight: normal;
 	text-align: left;
 	line-height: normal;
+	font-size: 11px;
 	}
 
 h1,h2,h3,h4,h5,h6 {
@@ -24,8 +26,8 @@ h1,h2,h3,h4,h5,h6 {
 	}
 	
 h2 {
+	font-family: Cambria,Georgia,Times,"Times New Roman",serif;
 	font-size: 2em;
-	line-height: 18px;
 	margin-bottom: 10px;
 	}
 	
@@ -66,14 +68,12 @@ p {
 	}
 	
 #content {
-	padding: 15px 26px;
+	padding: 10px 26px;
+	position: relative;
 	}
 
 #content h2 {
-	font-family: Cambria,Georgia,Times,"Times New Roman",serif;
-	font-size: 2.25em;
 	font-weight: normal;
-	margin: 0 0 15px;
 	}
 	
 #content a {
@@ -100,6 +100,7 @@ table.records th {
 	background: #E5E5E5;
 	color: #666666;
 	border: 1px solid #BBBBBB;
+	white-space: nowrap;
 	}
 	
 table.records tr.subhead th {
@@ -117,6 +118,12 @@ table.records tr.alt td {
 	
 .column {
 	left: 5px;
+	}
+	
+	/*----SEE .row for column starts under Utility-----*/
+	
+.column-layout .row {
+	padding-bottom: 1px;
 	}
 	
 .column-layout .full {
@@ -141,6 +148,10 @@ table.records tr.alt td {
 
 .column-layout .endcol {
 	margin-right: 0;
+	}
+	
+.column-layout .row {
+	margin-bottom: 10px;
 	}
 	
 #logo {
@@ -207,7 +218,7 @@ table.records tr.alt td {
 	
 #navigation li a {
 	color: #FFFFFF;
-	font-size: 14px;
+	font-size: 13px;
 	}
 	
 #navigation li a:hover {
@@ -300,6 +311,7 @@ table.records tr.alt td {
 	border: none;
 	padding: 2px 8px;
 	cursor: pointer;
+	border: 1px solid #4F4A2C;
 	}
 	
 .dataForm div.submit {
@@ -309,6 +321,7 @@ table.records tr.alt td {
 .dataForm div.submit input:hover,
 .sub_btn:hover {
 	background: #4F4A2C;
+	
 	}
 	
 .dataForm input.form-error {
@@ -324,13 +337,17 @@ table.records tr.alt td {
 	}
 	
 .project-status {
-	height: 55px;
 	float: right;
-	margin-top: -55px;
 	}
 	
 #content .project-title h2 {
-	margin: 0 0 10px;
+	line-height: 1em;
+	color: #E96F23;
+	}
+	
+.project-title .inplace_field {
+	font-size: 1em;
+	width: 20em;
 	}
 
 .stats {
@@ -360,7 +377,7 @@ table.records tr.alt td {
 .stats-panel h3,
 .stats-panel dt {
 	font-family: Calibri,"Helvetica Neue",Arial,Helvetica,sans-serif;
-	font-size: 1.2em;
+	font-size: 1.3em;
 	margin: 0;
 	}
 
@@ -379,6 +396,7 @@ table.records tr.alt td {
 .stat-focus {
 	font-weight: bold;
 	font-size: 1.6em;
+	line-height: 1.2em;
 	color: #333333;
 	}
 	
@@ -464,19 +482,28 @@ table.records tr.alt td {
 /*--------------------------------------------------
 	Icons
 --------------------------------------------------*/
+.icon {
+	padding-left: 15px;
+	}
+
 .delete {
 	background: transparent url(../img/minus-small-circle.png) left center no-repeat;
-	padding-left: 15px;
 	}
 	
 .star {
 	background: transparent url(../img/star-small.png) left center no-repeat;
-	padding-left: 15px;
 	}
 	
 .estar {
 	background: transparent url(../img/star-small-empty.png) left center no-repeat;
-	padding-left: 15px;
+	}
+	
+th.headerSortUp {
+	background: #EAECDF url(../img/control-090-small.png) right center no-repeat !important;
+	}
+	
+th.headerSortDown {
+	background: #EAECDF url(../img/control-270-small.png) right center no-repeat !important;
 	}
 	
 /*--------------------------------------------------
@@ -509,6 +536,17 @@ table.records tr.alt td {
 	}
 	
 /*--------------------------------------------------
+	INPLACE EDITOR
+--------------------------------------------------*/
+.inplace_form {
+	background: #FFFFFF;
+	}
+	
+.inplace_field {
+	width: 29em;
+	}
+	
+/*--------------------------------------------------
 	UTILITY
 --------------------------------------------------*/
 .sm {
@@ -530,10 +568,18 @@ table.records tr.alt td {
 	margin: 0;
 	}
 	
+.header {
+	cursor: pointer;
+	}
+	
 .bullets li {
 	list-style-type: square;
 	margin-left: 15px;
 	line-height: 1.5em;
+	}
+	
+.nowrap {
+	white-space: nowrap;	
 	}
 
 .aRight {
@@ -556,6 +602,12 @@ table.records tr.alt td {
 	float: right;
 	}
 	
+.clear {
+	clear: both;
+	overflow: auto;
+	}
+	
+.row:after,
 .clearfix:after {
     content: ".";
     display: block;
@@ -563,11 +615,11 @@ table.records tr.alt td {
     clear: both;
     visibility: hidden;
     }
-
-.clearfix {display: inline-block;}  /* for IE/Mac */
 	
 <!--[if IE]>
+.row,
 .clearfix {
+	display: inline-block;
 	zoom: 1;
 	display: block;
 	}

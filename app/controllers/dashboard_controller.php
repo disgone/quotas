@@ -11,11 +11,9 @@ class DashboardController extends AppController {
 		$projects = null;
 		
 		if($this->Session->check('User')) {
-			$ids = Set::extract("/Project/id", $this->User->findById($this->Session->read("User.id")));
-
-			$this->paginate['conditions'] = array("Project.id" => $ids);
-			$projects = $this->paginate("Project");
+			$projects = $this->Project->getUserProjects($this->Session->read("User.id"));
 			$ids = Set::extract("/Project/id", $projects);
+			
 
 			if(!empty($ids)) {
 				$updates = $this->Quota->getLatest($ids);

@@ -18,8 +18,13 @@ class UsersController extends AppController {
 				$this->redirect(array('controller' => 'dashboard', 'action' => 'index'));
 			}
 			else {
-				$this->Session->setFlash("Invalid username or password", "flash/error");
+				$this->data['User']['password'] = "";
+				$this->Session->setFlash($this->Login->error ? $this->Login->error : "Invalid username or password.", "flash/error");
 			}
+		}
+		else if($this->data && !$this->User->validates()) {
+			$this->data['User']['password'] = "";
+			$this->Session->setFlash("Username/password could not be authenticated.", "flash/error");
 		}
 		
 		//Check for "Remember me" cookie.
@@ -38,22 +43,11 @@ class UsersController extends AppController {
 		$this->redirect(array('controller' => 'projects', 'action' => 'index'));
 	}
 	
-	function register() {
-		$this->pageTitle = "Create an Account";
-		$this->User->set($this->data);
-		
-		if($this->data && $this->User->validates()) {
-			$this->data['User']['password'] = $this->Login->encrypt($this->data['User']['password']);
-			if($this->User->save($this->data, false)) {
-				$this->Session->setFlash("Your account was created successfully.", "flash/success");
-				$this->redirect("/login");
-			}
-			else {
-				$this->Session->setFlash("There was an error creating your account.", "flash/error");
-			}
-		}
-		
-		$this->data['User']['password'] = $this->data['User']['confirm'] = "";
+	function admin_index() {
+		$this->adminOnly();
+
+		$users = $this->User->find('all');
+		$this->set(compact('users'));
 	}
 	
 }

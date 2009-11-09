@@ -2,6 +2,7 @@
 class Server extends AppModel {
 	 
 	var $name = 'Server';
+	var $order = array("Server.name" => 'ASC');
 	 
 	var $hasMany = array(
 		'Project' => array(

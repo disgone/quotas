@@ -1,34 +1,51 @@
 <?php $javascript->link('swfobject', false); ?>
-<?php $javascript->link('jquery.editinplace.packed', false); ?>
+<?php $javascript->link('jquery.editinplace', false); ?>
 <?php $javascript->link('projects/project', false); ?>
 <div class="project" project_record="<?php echo $project['Project']['id']; ?>">
-	<div class="project-header float-container">
-		<div class="project-title">
-			<h2>
-				<?php echo $project['Project']['number']; ?>
-				<?php if($session->read('User.Group.name') == 'Admin'): ?>
-					<span class="title editable"><?php echo $project['Project']['name']; ?></span>
-				<?php else: ?>
-					<?php echo $project['Project']['name']; ?>
+	<div class="project-title">
+		<h2>
+			<?php echo $project['Project']['number']; ?>
+			<?php if($session->read('User.Group.name') == 'Admin'): ?>
+				<span class="title editable"><?php echo $project['Project']['name']; ?></span>
+			<?php else: ?>
+				<?php echo $project['Project']['name']; ?>
+			<?php endif; ?>
+		</h2>
+	</div>
+	<div class="column-layout">
+		<div class="row">
+			<div class="column double fLeft">
+				<p class="nm">
+					<?php echo $time->nice($project['Quota'][0]['Quota']['created']); ?> - <?php echo $time->nice($project['Quota'][count($project['Quota'])-1]['Quota']['created']); ?>
+				</p>
+				<p>
+					<strong>Direct Link:</strong> <a href="file:///<?php echo $project['Project']['path']; ?>" title="Explore this project"><?php echo $project['Project']['path']; ?></a>
+				</p>
+				<?php if($session->check('User')): ?>
+					<!-- Project Toolbar -->
+					<div>
+						<?php if(!$following): ?>
+							<?php echo $html->link('Add To My Projects', array('action' => 'track', $project['Project']['id'], "add"), array("title" => "Add to My Projects list", "class" => "estar icon fav")); ?>
+						<?php else: ?>
+							<?php echo $html->link('Remove From My Projects', array('action' => 'track', $project['Project']['id'], "remove"), array("title" => "Remove from My Projects list", "class" => "star icon fav")); ?>
+						<?php endif; ?>
+					</div>
+					<!-- End Project Toolbar -->
 				<?php endif; ?>
-			</h2>
-			<p class="sm nm">
-				<?php echo $time->nice($project['Quota'][0]['Quota']['created']); ?> - <?php echo $time->nice($project['Quota'][count($project['Quota'])-1]['Quota']['created']); ?>
-			</p>
-			<p class="location">
-				<strong>Direct Link:</strong> <a href="file:///<?php echo $project['Project']['path']; ?>" title="Explore this project"><?php echo $project['Project']['path']; ?></a>
-			</p>
-		</div>
-		<div class="project-status">
-			<ul>
-				<li><strong>Status:</strong> <span class='value'><?php echo $changed[0][0]['days'] > 14 ? 'Perceived Inactive' : 'Active'; ?></span></li>
-				<li><strong>Last Update:</strong> <span class='value'><?php echo $time->timeAgoInWords(strtotime($project['Quota'][count($project['Quota'])-1]['Quota']['created'])); ?> (<?php echo date('m/d g:ia', strtotime($project['Quota'][count($project['Quota'])-1]['Quota']['created'])); ?>)</span></li>
-				<li><strong>Last Change:</strong> <span class='value'><?php echo $time->timeAgoInWords(strtotime($changed[0]['Quota']['created']), array('format' => 'n/j/Y')); ?> (<?php echo date('m/d g:ia', strtotime($changed[0]['Quota']['created'])); ?>)</span></li>
-			</ul>
+			</div>
+			<div class="column double fLeft endcol aRight">
+				<div class="project-status">
+					<ul>
+						<li><strong>Status:</strong> <span class='value'><?php echo $changed[0][0]['days'] > 14 ? 'Perceived Inactive' : 'Active'; ?></span></li>
+						<li><strong>Last Update:</strong> <span class='value'><?php echo $time->timeAgoInWords(strtotime($project['Quota'][count($project['Quota'])-1]['Quota']['created'])); ?> (<?php echo date('m/d g:ia', strtotime($project['Quota'][count($project['Quota'])-1]['Quota']['created'])); ?>)</span></li>
+						<li><strong>Last Change:</strong> <span class='value'><?php echo $time->timeAgoInWords(strtotime($changed[0]['Quota']['created']), array('format' => 'n/j/Y')); ?> (<?php echo date('m/d g:ia', strtotime($changed[0]['Quota']['created'])); ?>)</span></li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="stats">
-		<table class="clear stats-panel">
+		<table class="stats-panel">
 			<tbody>
 				<tr>
 					<td class="first">
@@ -89,22 +106,6 @@
 			</tbody>
 		</table>
 	</div>
-	<?php if($session->check('User')): ?>
-		<!-- Project Toolbar -->
-		<div class="controls clear">
-			<div class="amin-controls">
-				<?php if(!$following): ?>
-					<?php echo $html->link('Add To My Projects', array('action' => 'track', $project['Project']['id'], "add"), array("title" => "Add to My Projects list", "class" => "estar fav", "rel" => 10)); ?>
-				<?php else: ?>
-					<?php echo $html->link('Remove From My Projects', array('action' => 'track', $project['Project']['id'], "remove"), array("title" => "Remove from My Projects list", "class" => "star fav", "rel" => 10)); ?>
-				<?php endif; ?>
-			</div>
-			<!-- <div class="admin-controls">
-				<?php echo $html->link('Delete Project', array('action' => 'delete', 'id' => $project['Project']['id']), array('class' => 'delete'), 'Deleting this project will remove all quota data associated with it as well.  Are you sure you wish to remove this project, this cannot be undone?')?>
-			</div> -->
-		</div>
-		<!-- End Project Toolbar -->
-	<?php endif; ?>
 	<!-- Quota Graph -->
 	<div class="chart">
 		<div class="title">

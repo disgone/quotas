@@ -65,6 +65,7 @@
 				</graph>
 				<graph>
 					<type>line</type>
+					<min_max>false</min_max>
 					<bullet>round</bullet>
 					<data_sources>
 						<close>allowance</close>
@@ -128,15 +129,12 @@
 	<period_selector>
 		<periods_title>Zoom:</periods_title>
 		<periods>
-			<period pid="0" type="DD" count="1" selected="1">1D</period>
-			<period pid="1" type="DD" count="3">3D</period>
-			<period pid="2" type="DD" count="10">10D</period>
-			<period pid="3" type="MM" count="1">1M</period>
-			<period pid="4" type="MM" count="3">3M</period>
-			<period pid="5" type="MM" count="6">6M</period>
-			<period pid="6" type="YYYY" count="1">1Y</period>
-			<period pid="7" type="YTD" count="0">YTD</period>
-			<period pid="8" type="MAX" count="0">MAX</period>
+			<period pid="0" type="hh" count="12">12H</period>
+			<period pid="1" type="DD" count="1" selected="1">1D</period>
+			<period pid="2" type="DD" count="3">3D</period>
+			<period pid="3" type="DD" count="10">1W</period>
+			<period pid="4" type="MM" count="1">1M</period>
+			<period pid="5" type="MM" count="3">3M</period>
 		</periods>
 	</period_selector>
 	<header>

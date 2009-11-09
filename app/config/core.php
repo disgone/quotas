@@ -65,7 +65,7 @@
  * 'admin' 		-> admin_index() and /admin/controller/index
  * 'superuser' -> superuser_index() and /superuser/controller/index
  */
-	//Configure::write('Routing.admin', 'admin');
+	Configure::write('Routing.admin', 'administration');
 
 /**
  * Turn off all caching application-wide.
@@ -247,7 +247,7 @@
 	
 	Cache::config('mem', array(
  		'engine' => 'Memcache',
- 		'duration'=> 900,
+ 		'duration'=> 43200,
  		'probability'=> 100,
  		'prefix' => Inflector::slug(APP_DIR) . '_',
  		'servers' => array(

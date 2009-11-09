@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * Set authenticaion process.
+ *
+ * You can specify the methods of authentication to try to
+ * login a user.  If a method fails, it will attempt the next
+ * method and so on.
+ *
+ */
+$config['Login']['authtype'] = array("db", "ldap");
+
+$config['Login']['admin_group'] = "Admin";
+
+/**
+ * LDAP Configuration
+ *
+ * Set the LDAP environment varibles for LDAP authentication.
+ *
+ */
+$config['Login']['domain'] = "example.com";
+$config['Login']['auth_servers'] = array("mydc");
+$config['Login']['ldap_search_path'] = "OU=UserGroup,DC=example,DC=com";
+
+/**
+ * Login variables.
+ *
+ * Name of the fields that are being used to authenticate in DB mode.
+ *
+ */
+$config['Login']['form_user_field'] = "username";
+$config['Login']['form_pass_field'] = "password";
+/**
+ * Database configuration
+ * Model name and columns to authenticate against.
+ */
+$config['Login']['model'] = "User";
+$config['Login']['src_user_field'] = "username";
+$config['Login']['src_pass_field'] = "password";
+
+
+
+?>

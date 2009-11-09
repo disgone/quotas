@@ -1,6 +1,5 @@
 cake/
 bin/
-*.tmpl
 *.buildpath
 *.project
 /app/tmp/cache/*

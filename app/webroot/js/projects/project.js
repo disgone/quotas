@@ -5,7 +5,9 @@ $(document).ready(function() {
 		params: "data[Project][id]=" + $('.project').attr('project_record'),
 		update_value: 'data[Project][title]',
 		default_text: "<em class='placeholder'>Click to edit</em>",
-		value_required: true
+		value_required: false,
+		cancel_button: "<button class='sub_btn inplace_cancel'>Cancel</button>",
+		save_button: "<input type='submit' class='sub_btn' value='Save' />"
 	});
 	
 	$(".fav").bind('click', function() {

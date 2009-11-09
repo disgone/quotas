@@ -53,7 +53,7 @@ class Project extends AppModel {
 		$date == null ? $date = date('Y-m-d') : null;
 		$cond = array(
 			'conditions'	=> array('Project.created >' 	=> $date),
-			'order' 		=> array('Project.number + 0' => 'ASC', 'Project.name' => 'ASC'),
+			'order' 		=> array('Project.created' => 'ASC', 'Project.number + 0' => 'ASC', 'Project.name' => 'ASC'),
 			'limit'			=> $limit
 			);
 		
@@ -78,6 +78,20 @@ class Project extends AppModel {
 		//Get dupes in list form so we can pull them by project number.
 		$dupes = $this->find('list', $cond);
 		return $this->find('all', array('conditions' => array('Project.number' => $dupes)));
+	}
+	
+	function getUserProjects($user_id) {
+		$query = sprintf(
+					"
+					SELECT			Project.id, Project.number, Project.name, Project.path, Server.name, Server.id
+					FROM			projects_users PU
+					LEFT JOIN		projects Project ON Project.id = PU.project_id
+					LEFT JOIN		servers Server ON Server.id = Project.server_id
+					WHERE			PU.user_id = %d
+					ORDER BY		Project.number +0 ASC, Project.name ASC
+					", $user_id);
+		
+		return $this->query($query);
 	}
 }
 ?>

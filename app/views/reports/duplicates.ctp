@@ -16,7 +16,7 @@
 	</tr>
 	<?php endif; ?>
 	<tr<?php echo $key%2 == 1 ? " class='alt'" : ''; ?>>
-		<td><?php echo $html->link($project['Project']['number'] . ' ' . $project['Project']['name'], array('controller' => 'projects', 'action' => 'details', $project['Project']['id'])); ?></td>
+		<td><?php echo $html->link($project['Project']['number'] . ' ' . $project['Project']['name'], array('controller' => 'projects', 'action' => 'details', $project['Project']['id']), null, null, false); ?></td>
 		<td><?php echo $project['Server']['name']; ?></td>
 		<td><?php echo $time->niceShort($project['Project']['created']); ?></td>
 	</tr>

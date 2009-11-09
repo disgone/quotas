@@ -29,6 +29,7 @@ class ReportsController extends AppController {
 		
 		$this->set(compact('gainers', 'losers', 'usage', 'projects'));
 		$this->set('pageTitle', $this->pageTitle);
+		
 		unset($gainers, $losers, $usage, $projects);
 	}
 	
@@ -36,10 +37,12 @@ class ReportsController extends AppController {
 		$this->pageTitle = "New Projects";
 		
 		$this->paginate['conditions'] = array('Project.created >=' => date('Y-m-d 00:00:00', strtotime('-7 days')));
+		$this->paginate['order'] = array('Project.created' => 'ASC', 'Project.number +0' => 'ASC', 'Project.name' => 'ASC');
 		$projects = $this->paginate('Project');
 		
 		$this->set(compact('projects'));
 		$this->set('pageTitle', $this->pageTitle);
+		
 		unset($projects);
 	}
 	
