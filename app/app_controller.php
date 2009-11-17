@@ -7,6 +7,8 @@ class AppController extends Controller {
 	var $logged = false;
 	
 	function beforeFilter() {
+		$this->RequestHandler->setContent('json', 'text/x-json');
+		
 		if(!$this->Session->check("User")) {
 			//Check for auto login
 			$cookie = $this->Cookie->read('User.pk');
@@ -22,11 +24,6 @@ class AppController extends Controller {
 			);
 			$servers = $this->Server->find('all');
 			Cache::write("servers", $servers, 'mem');
-		}
-		
-		if($this->RequestHandler->isAjax()) {
-			 Configure::write('debug', 0);
-			 $this->layout = "ajax";
 		}
 	}
 	

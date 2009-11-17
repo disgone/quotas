@@ -27,7 +27,8 @@
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 
-	Router::parseExtensions();
+	Router::mapResources('projects');
+	Router::parseExtensions('xml', 'csv', 'json', 'js');
 
 /**
  * Here, we are connecting '/' (base path) to controller called 'Pages',
