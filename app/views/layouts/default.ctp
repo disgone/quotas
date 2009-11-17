@@ -7,11 +7,12 @@
 	<?php echo $html->css('site.css', 'stylesheet', array('media' => 'screen,projection')); ?>
 	<?php echo $html->css('jquery.autocomplete'); ?>
 	<?php echo Configure::read('debug') > 1 ? $html->css('cake.debug') : ''; ?>
+	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+	<script type="text/javascript">google.load("jquery", "1.3.2");</script>
 	<?php 
 		if(isset($javascript)) {
-			echo $javascript->link('jquery-1.3.2.min');
-			echo $javascript->link('jquery.autocomplete.min.js');
-			echo $javascript->link('search');
+			echo $javascript->link('lib/jquery.autocomplete.min.js');
+			echo $javascript->link('core/search');
 		}
 	?>
 	<?php echo $scripts_for_layout ?>

@@ -1,5 +1,5 @@
-<?php $javascript->link('swfobject', false); ?>
-<?php $javascript->link('jquery.editinplace', false); ?>
+<?php $javascript->link('lib/swfobject', false); ?>
+<?php $javascript->link('lib/jquery.editinplace.packed', false); ?>
 <?php $javascript->link('projects/project', false); ?>
 <div class="project" project_record="<?php echo $project['Project']['id']; ?>">
 	<div class="project-title">
