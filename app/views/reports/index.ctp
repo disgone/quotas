@@ -1,34 +1,8 @@
-<h2><?php echo $pageTitle; ?></h2>
+<h2><?php echo $this->pageTitle; ?></h2>
 <div class="column-layout">
 	<div class="row">
 		<div class="column full">
-			<table id="servers" class="records">
-				<thead>
-					<tr>
-						<th colspan="6">Server Details <em class="sm">(Estimated)</em></th>
-					</tr>
-					<tr class="subhead">
-						<th>Server</th>
-						<th>Project Count</th>
-						<th>Disk Usage</th>
-						<th>Quota Allowance</th>
-						<th>Average Project Size</th>
-						<th>Average Project Quota</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach($usage as $key => $item): ?>
-					<tr<?php echo $key%2 == 1 ? " class='alt'" : ''; ?>>
-						<td><?php echo $item['Server']['name']; ?></td>
-						<td><?php echo $html->link(round($item[0]['consumed']/$item[0]['average_consumed']), array('controller' => 'projects', 'action' => 'index', $item['Server']['name'])); ?></td>
-						<td><?php echo $units->format($item[0]['consumed']); ?></td>
-						<td><?php echo $units->format($item[0]['allowance']); ?></td>
-						<td><?php echo $units->format($item[0]['average_consumed']); ?></td>
-						<td><?php echo $units->format($item[0]['average_quota']); ?></td>
-					</tr>
-					<?php endforeach; ?>
-				</tbody>
-			</table>
+			<?php echo $this->element('reports/server_details', array('usage' => $usage)); ?>
 		</div>
 	</div>
 	<div class="row">
@@ -39,15 +13,7 @@
 						<th colspan="3">Largest Increase <em class="sm">(Today)</em></th>
 					</tr>
 				</thead>
-				<tbody>
-					<?php foreach($gainers as $key => $project): ?>
-					<tr<?php echo $key%2 == 1 ? " class='alt'" : ''; ?>>
-						<td><?php echo $html->link($project['projects']['number'] . ' ' . $project['projects']['name'], array('controller' => 'projects', 'action' => 'details', $project['projects']['id']), null, null, false); ?></td>
-						<td><?php echo $project['Server']['name']; ?></td>
-						<td nowrap="true"><?php echo $units->format($project[0]['movement']); ?></td>
-					</tr>
-					<?php endforeach; ?>
-				</tbody>
+				<?php echo $this->element('reports/movers', array("movers" => $gainers)); ?>
 			</table>
 		</div>
 		<div class="column double endcol">
@@ -57,15 +23,7 @@
 						<th colspan="3">Largest Decrease <em class="sm">(Today)</em></th>
 					</tr>
 				</thead>
-				<tbody>
-					<?php foreach($losers as $key => $project): ?>
-					<tr<?php echo $key%2 == 1 ? " class='alt'" : ''; ?>>
-						<td><?php echo $html->link($project['projects']['number'] . ' ' . $project['projects']['name'], array('controller' => 'projects', 'action' => 'details', $project['projects']['id']), null, null, false); ?></td>
-						<td><?php echo $project['Server']['name']; ?></td>
-						<td nowrap="true"><?php echo $units->format($project[0]['movement']); ?></td>
-					</tr>
-					<?php endforeach; ?>
-				</tbody>
+				<?php echo $this->element('reports/movers', array("movers" => $losers)); ?>
 			</table>
 		</div>
 	</div>

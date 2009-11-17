@@ -28,7 +28,6 @@ class ReportsController extends AppController {
 		$projects 	= $report['projects'];
 		
 		$this->set(compact('gainers', 'losers', 'usage', 'projects'));
-		$this->set('pageTitle', $this->pageTitle);
 		
 		unset($gainers, $losers, $usage, $projects);
 	}
