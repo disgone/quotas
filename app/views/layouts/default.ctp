@@ -10,10 +10,8 @@
 	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 	<script type="text/javascript">google.load("jquery", "1.3.2");</script>
 	<?php 
-		if(isset($javascript)) {
-			echo $javascript->link('lib/jquery.autocomplete.min.js');
-			echo $javascript->link('core/search');
-		}
+		echo $javascript->link('core/application');
+		echo $javascript->link('core/search');
 	?>
 	<?php echo $scripts_for_layout ?>
 </head>

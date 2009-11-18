@@ -1,13 +1,12 @@
 $(document).ready(function() {
 	function init() {
-	}
-	
-	function load() {
-		$('head');
+		$.getScript(QT.JS + "/lib/jquery.autocomplete.min.js", function() {
+			addSearch();
+		});
 	}
 	
 	function addSearch() {
-		$("#search-term").autocomplete("/quotas/search/autosense/", {
+		$("#search-term").autocomplete(QT.WEBROOT + "/search/autosense/", {
 			matchContains:true,
 	        minChars:2, 
 	        autoFill:false,
@@ -19,7 +18,7 @@ $(document).ready(function() {
 	    		return row[0].split(" ")[0];
 	    	}
 		}).result(function(event,item) {
-			window.location = "/quotas/projects/details/" + item[1];
+			window.location = QT.WEBROOT + "/projects/details/" + item[1];
 			//$("#search-form").submit();
 		});
 	
@@ -41,4 +40,6 @@ $(document).ready(function() {
 				$("#search-term").val('');
 		});
 	}
+	
+	init();
 });

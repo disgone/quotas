@@ -1,5 +1,5 @@
 $(document).ready(function() {
 	$(".selector").change(function() {
-	    $("#project-listing").load("/quotas/projects/index/" + $(this).val());
+	    $("#project-listing").load(QT.WEBROOT + "/projects/index/" + $(this).val());
 	});
 });

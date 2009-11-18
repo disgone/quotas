@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	$('.editable').editInPlace({
-		url: '/quotas/projects/updateTitle/' + $('.project').attr('project_record'),
+		url: QT.WEBROOT + '/projects/updateTitle/' + $('.project').attr('project_record'),
 		show_buttons: true,
 		params: "data[Project][id]=" + $('.project').attr('project_record'),
 		update_value: 'data[Project][title]',
