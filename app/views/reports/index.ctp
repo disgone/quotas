@@ -7,23 +7,27 @@
 	</div>
 	<div class="row">
 		<div class="column double fLeft">
-			<table class="records">
+			<table class="records" id="largest-increase">
 				<thead>
 					<tr>
 						<th colspan="3">Largest Increase <em class="sm">(Today)</em></th>
 					</tr>
 				</thead>
-				<?php echo $this->element('reports/movers', array("movers" => $gainers)); ?>
+				<tbody>
+					<?php echo $this->element('reports/movers', array("movers" => $gainers)); ?>
+				</tbody>
 			</table>
 		</div>
 		<div class="column double endcol">
-			<table class="records">
+			<table class="records" id="largest-decrease">
 				<thead>
 					<tr>
 						<th colspan="3">Largest Decrease <em class="sm">(Today)</em></th>
 					</tr>
 				</thead>
-				<?php echo $this->element('reports/movers', array("movers" => $losers)); ?>
+				<tbody>
+					<?php echo $this->element('reports/movers', array("movers" => $losers)); ?>
+				</tbody>
 			</table>
 		</div>
 	</div>
