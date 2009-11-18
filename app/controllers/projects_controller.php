@@ -56,9 +56,10 @@ class ProjectsController extends AppController {
 		$period = $this->_getPeriod();
 			
 		//Get project and quota data.
-		if(($project = Cache::read("project_" . $id, 'default')) === false) {
+		$cache = "project_" . $id . "_project_data_" . $period['duration'];
+		if(($project = Cache::read($cache, 'default')) === false) {
 			$project = $this->_requestProjectData($id, $period);
-			Cache::write("project_" . $id, $project, 'default');
+			//Cache::write($cache, $project, 'default');
 		}
 		
 		//Throw a 404 error if the project with ID was not found in the database.
@@ -83,6 +84,23 @@ class ProjectsController extends AppController {
 		$this->set('quota', $project['Meta']);
 		
 		unset($min, $max, $start, $end, $project, $quota, $durations);
+	}
+	
+	function view($id = null) {
+		$this->pageTitle = __("Project Details", true);
+		$filters = $this->_getDataFilter();
+		
+		$project = $this->Project->findById($id);
+		
+		if($filters['level'] > 1) {
+			$quotas = $this->Quota->getRange($id, $filters['start'], $filters['end']);
+			$project['Details']['usage'] = $this->_calcDetails($quotas);
+		}
+		if($filters['level'] > 2) {
+			$project['Details']['quotas'] = array(Set::classicExtract($quotas, "{n}.Quota"));
+		}
+					
+		$this->set(compact('project'));
 	}
 	
 	function delete($id = null) {
@@ -224,19 +242,47 @@ class ProjectsController extends AppController {
 		if(!$id)
 			$this->cakeError('error404', array('url' => "projects/projectData/$id"));
 		
+		$this->params['url']['period'] = '1m';
 		$period = $this->_getPeriod();
-		if(($project = Cache::read("project_" . $id . "_qd", 'default')) === false) {
-			$project = $this->_requestProjectData($id, null, true);
-			//Cache::write("project_" . $id . "_qd", $project, 'default');
+		
+		$cache = "project_" . $id . "_quota_data_" . $period['duration'];
+		if(($data = Cache::read($cache, 'default')) === false) {
+			$data = $this->_requestProjectData($id, $period);
+			Cache::write($cache, $data, 'default');
 		}
 
 		//Throw a 404 error if the project with ID was not found in the database.
-		if(empty($project))
+		if(empty($data))
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
 
-		$this->set('data', $project);
+		$this->set('data', $data);
 		
 		unset($project, $period);
+	}
+	
+	function _getDataFilter() {
+		$filters = array(
+						'start'		=> date('Y-m-d 00:00:00'),
+						'end'		=> date('Y-m-d 23:59:59'),
+						'level'		=> 1
+						);
+		$options = array_merge($this->params['url'], $this->params['named']);
+		
+		//Date Ranges
+		if(isset($options['pstart']) && $date = strtotime($options['pstart'])) {
+			$filters['start'] = date('Y-m-d 00:00:00', $date);
+		}
+		
+		if(isset($options['pend']) && $date = strtotime($options['pend'])) {
+			$filters['end'] = date('Y-m-d 23:59:59', $date);
+		}
+		
+		if(isset($options['lvl']) && is_numeric($options['lvl']))
+			$filters['level'] = $options['lvl'];
+			
+		unset($options);
+
+		return $filters;
 	}
 
 	/*
@@ -248,15 +294,13 @@ class ProjectsController extends AppController {
 	 * @param array Start/End dates to retrive data for.
 	 * @param bool Set to true to return all data for the specified project.
 	 */
-	function _requestProjectData($id, $period = null, $max = false) {
+	function _requestProjectData($id, $period = null) {
 		$project = $this->Project->findById($id);
 		//Project not found
 		if(empty($project))
 			return null;
-
-		if($max)
-			$project['Quota'] = $this->Quota->getProjectQuotas($id);
-		else if($period) {
+			
+		if($period) {
 			$project['Quota'] = $this->Quota->getRange($id, $period['start'], $period['end']);
 		}
 		else
@@ -270,26 +314,25 @@ class ProjectsController extends AppController {
 			$project['Quota'] = $this->Quota->getRange($id, $start, $end);
 			unset($last, $start, $end);
 		}
+
+		$project['Meta'] = $this->_calcDetails($project['Quota']);
 		
-		if($max) {
-			$tmp = array();
-			if(count($project['Quota']) > 1000) {
-				for($i = 0; $i < count($project['Quota']); $i=$i+4) {
-					array_push($tmp, $project['Quota'][$i]);
-				}
-				$project['Quota'] = $tmp;
-			}
-		}
-		
+		return $project;
+	}
+	
+	function _calcDetails($data) {
 		//Import units helper
 		App::import('Helper', 'Units');
 		$units = new UnitsHelper();
 		
+		if(!isset($data[0]))
+			return null;
+		
 		//Get maximum or minimum quota usage.
 		$max = 0;
-		$min = $project['Quota'][0]['Quota']['consumed'];
+		$min = $data[0]['Quota']['consumed'];
 		
-		foreach($project['Quota'] as $key => $quota) {
+		foreach($data as $key => $quota) {
 			if($quota['Quota']['consumed'] > $max)
 				$max = $quota['Quota']['consumed'];
 			if($quota['Quota']['consumed'] < $min)
@@ -297,31 +340,25 @@ class ProjectsController extends AppController {
 
 			//Calculate change from previous update.
 			if($key > 0) {
-				$project['Quota'][$key]['Quota']['change'] = $quota['Quota']['consumed'] - $project['Quota'][$key-1]['Quota']['consumed'];
+				$data[$key]['Quota']['change'] = $quota['Quota']['consumed'] - $data[$key-1]['Quota']['consumed'];
 			}
 			else
-				$project['Quota'][$key]['Quota']['change'] = 0;
+				$data[$key]['Quota']['change'] = 0;
 		}
 	
 		$quota = array(
-			'current'		=> $project['Quota'][count($project['Quota'])-1]['Quota']['consumed'],
-			'start'			=> $project['Quota'][0]['Quota']['consumed'],
-			'change'		=> $project['Quota'][count($project['Quota'])-1]['Quota']['consumed'] - $project['Quota'][0]['Quota']['consumed'],
-			'allowed'		=> $project['Quota'][count($project['Quota'])-1]['Quota']['allowance'],
+			'current'		=> $data[count($data)-1]['Quota']['consumed'],
+			'start'			=> $data[0]['Quota']['consumed'],
+			'change'		=> $data[count($data)-1]['Quota']['consumed'] - $data[0]['Quota']['consumed'],
+			'allowed'		=> $data[count($data)-1]['Quota']['allowance'],
 			'max'			=> $max,
 			'min'			=> $min,
-			'unit'			=> array('label' => $units->unit($min), 'index' => $units->unitIndex($min))
+			'unit'			=> array('label' => $units->unit($min), 'index' => $units->unitIndex($min)),
+			'date_start'	=> $data[0]['Quota']['created'],
+			'date_end'		=> $data[count($data)-1]['Quota']['created'],
 		);
 		
-		$project['Meta'] = $quota;
-		
-		unset($quota, $max, $min, $options, $units);
-
-		return $project;
-	}
-	
-	function merge() {
-		
+		return $quota;
 	}
 	
 	/*
@@ -366,9 +403,9 @@ class ProjectsController extends AppController {
 					break;
 			}
 			
-			$start = date("Y-m-d H:i:s", strtotime($value*-1 . $unit));
-			$end = date("Y-m-d H:i:s");
-			
+			$start = date("Y-m-d 00:00:00", strtotime($value*-1 . $unit));
+			$end = date("Y-m-d 23:59:59");
+
 			return array('start' => $start, 'end' => $end, 'duration' => $duration);
 		}
 		
