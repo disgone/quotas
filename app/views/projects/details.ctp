@@ -25,9 +25,9 @@
 					<!-- Project Toolbar -->
 					<div>
 						<?php if(!$following): ?>
-							<?php echo $html->link('Add To My Projects', array('action' => 'track', $project['Project']['id'], "add"), array("title" => "Add to My Projects list", "class" => "estar icon fav")); ?>
+							<?php echo $html->link('Add To My Projects', array('action' => 'track', "add", $project['Project']['id']), array("title" => "Add to My Projects list", "class" => "estar icon fav")); ?>
 						<?php else: ?>
-							<?php echo $html->link('Remove From My Projects', array('action' => 'track', $project['Project']['id'], "remove"), array("title" => "Remove from My Projects list", "class" => "star icon fav")); ?>
+							<?php echo $html->link('Remove From My Projects', array('action' => 'track', "remove", $project['Project']['id']), array("title" => "Remove from My Projects list", "class" => "star icon fav")); ?>
 						<?php endif; ?>
 					</div>
 					<!-- End Project Toolbar -->

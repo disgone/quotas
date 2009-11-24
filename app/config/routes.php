@@ -28,7 +28,7 @@
  */
 
 	Router::mapResources('projects');
-	Router::parseExtensions('xml', 'csv', 'json', 'js');
+	Router::parseExtensions('xml', 'csv', 'json', 'js', 'htm');
 
 /**
  * Here, we are connecting '/' (base path) to controller called 'Pages',
@@ -43,4 +43,9 @@
 	Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
 	Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
 
+		
+	Router::connect('/projects/track/:method/:project_id', 
+					array('controller' => 'users', 'action' => 'track_project', 'method' => 'remove', 'project_id' => null),
+					array('method' => 'add|remove', 'project_id' => '[0-9]+')
+					);
 ?>

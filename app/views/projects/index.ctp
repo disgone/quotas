@@ -11,6 +11,6 @@
 	</div>
 <?php endif; ?>
 <div id="project-listing">
-	<?php echo $this->element('projects/list_full', array('projects' => $projects)); ?>
+	<?php echo $this->element('projects/list_full', array('projects' => $projects, 'favs' => $favs)); ?>
 	<?php echo $this->element('pagination'); ?>
 </div>

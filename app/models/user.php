@@ -65,5 +65,9 @@ class User extends AppModel {
 		$valid = $data['password'] == $this->data['User']['confirm'] ? true : false; 
 		return $valid;
 	}
+	
+	function favorites($id) {
+		return $this->ProjectsUser->find('all', array('conditions' => array('ProjectsUser.user_id' => $id)));
+	}
 }
 ?>

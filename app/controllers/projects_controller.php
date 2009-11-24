@@ -7,35 +7,49 @@ class ProjectsController extends AppController {
 	var $components = array("RequestHandler");
 	
 	var $paginate = array(
-		'limit' => 30,
+		'limit' => 25,
 		'order' => array('Project.number +0' => 'ASC', 'Project.name' => 'ASC'),
 		'recursive' => 0
 	);
 	
+	/*
+	 * Project Index
+	 * 
+	 * Displays all projects, or projects belonging to a specified server.
+	 * 
+	 * @param int $server Name of the server to filter the projects by.
+	 */
 	function index($server = null) {
 		$this->pageTitle = __("Project Directory", true);
+		//Filter the project directory by server if specified.
 		if($server) {
 			$this->Server->recursive = -1;
 			$server = $this->Server->find('first', array('conditions' => array('Server.name' => $server, 'Server.enabled' => 1)));
 			if(!empty($server))
 				$this->paginate["conditions"] = array("Project.server_id" => $server['Server']['id']);
 		}
+		
 		$projects = $this->paginate('Project');
 		
+		//This queries for usage details for the projects being displayed on the page.
 		if(!empty($projects)) {
+			//Extract the project_id's of the projects on page X, and get the usage...
 			$ids = Set::extract("/Project/id", $projects);
 			$updates = $this->Quota->getLatest($ids);
 			
+			//..then add the usage data to the project it belongs to.
 			foreach($projects as $ndx => &$project) {
 				$project['Project']['Quota'] = $updates[$ndx]['Quota'];
 			}
+			unset($ids, $updates);
 		}
-
-		$this->set('projects', $projects);
-		$this->set('server', $server);
-		$this->set('servers', Cache::read('servers', 'mem'));
 		
-		unset($list, $updates, $projects, $ids, $server);
+		//Get list of projects in "My Projects" list if a user is logged in.
+		$favs = $this->Session->check("User") ? $this->User->favorites($this->Session->read("User.id")) : array();
+		$favs = Set::classicExtract($favs, "{n}.ProjectsUser.project_id");
+
+		$this->set(compact('projects', 'server', 'favs'));
+		$this->set('servers', $this->Server->find('all'));
 	}
 	
 	/*
@@ -61,22 +75,15 @@ class ProjectsController extends AppController {
 			$project = $this->_requestProjectData($id, $period);
 			//Cache::write($cache, $project, 'default');
 		}
-		
+	
 		//Throw a 404 error if the project with ID was not found in the database.
 		if(empty($project))
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
 
 		//Get the last time the project had a change in usage.
 		$changed = $this->Quota->getLastChange($id);
-		
-		//Check if this project belongs to a logged in users "my project" list.
-		$following = false;
-		if($this->Session->check('User')) {
-			$my_projects = Set::extract("/Project/id", $this->Project->getUserProjects($this->Session->read("User.id")));
-			if(in_array($id, $my_projects))
-				$following = true;
-		}
-		
+		$following = $this->_isFollowing($id);
+
 		$this->pageTitle = trim($project['Project']['number'] . " " . $project['Project']['name']);
 		
 		$this->set(compact('project', 'changed'));
@@ -103,6 +110,13 @@ class ProjectsController extends AppController {
 		$this->set(compact('project'));
 	}
 	
+	/*
+	 * Delete a project
+	 * 
+	 * Deletes a specified project (and data) from the system.
+	 * 
+	 * @param int $id ID of project to delete.
+	 */
 	function delete($id = null) {
 		$this->adminOnly();
 		
@@ -149,9 +163,9 @@ class ProjectsController extends AppController {
 	 * @param int $id ID of project to display details for.
 	 * @param string $action Add/Remove action
 	 */
-	function track($id = null, $action = null) {
+	function xtrack($id = null, $action = null) {
 		//No id, or not numeric.
-		if(!$id || !is_numeric($id))
+		if(!$id)
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/track'));
 			
 		if(!$this->Session->check('User'))
@@ -195,7 +209,6 @@ class ProjectsController extends AppController {
 		}
 		else
 			$this->redirect(array('controller' => 'dashboard', 'action' => 'index'));
-		
 	}
 	
 	/*
@@ -255,6 +268,7 @@ class ProjectsController extends AppController {
 		if(empty($data))
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
 
+		debug($data);
 		$this->set('data', $data);
 		
 		unset($project, $period);
@@ -315,11 +329,12 @@ class ProjectsController extends AppController {
 			unset($last, $start, $end);
 		}
 
-		$project['Meta'] = $this->_calcDetails($project['Quota']);
+		//Get overall changes, plus add a "changed" field for each logged quota.
+		$project['Meta'] = $this->_calcDetails(&$project['Quota']);
 		
 		return $project;
 	}
-	
+
 	function _calcDetails($data) {
 		//Import units helper
 		App::import('Helper', 'Units');
@@ -330,7 +345,7 @@ class ProjectsController extends AppController {
 		
 		//Get maximum or minimum quota usage.
 		$max = 0;
-		$min = $data[0]['Quota']['consumed'];
+		$min = $change_min = $data[0]['Quota']['consumed'];
 		
 		foreach($data as $key => $quota) {
 			if($quota['Quota']['consumed'] > $max)
@@ -341,6 +356,7 @@ class ProjectsController extends AppController {
 			//Calculate change from previous update.
 			if($key > 0) {
 				$data[$key]['Quota']['change'] = $quota['Quota']['consumed'] - $data[$key-1]['Quota']['consumed'];
+				$change_min = $data[$key]['Quota']['change'] < $change_min ? $data[$key]['Quota']['change'] : $change_min;
 			}
 			else
 				$data[$key]['Quota']['change'] = 0;
@@ -353,7 +369,7 @@ class ProjectsController extends AppController {
 			'allowed'		=> $data[count($data)-1]['Quota']['allowance'],
 			'max'			=> $max,
 			'min'			=> $min,
-			'unit'			=> array('label' => $units->unit($min), 'index' => $units->unitIndex($min)),
+			'unit'			=> array('changelabel' => $units->unit($change_min), 'change_index' => $units->unitIndex($change_min), 'label' => $units->unit($min), 'index' => $units->unitIndex($min)),
 			'date_start'	=> $data[0]['Quota']['created'],
 			'date_end'		=> $data[count($data)-1]['Quota']['created'],
 		);
@@ -410,6 +426,16 @@ class ProjectsController extends AppController {
 		}
 		
 		return null;
+	}
+	
+	function _isFollowing($project_id) {
+		if($this->Session->check("User") == false)
+			return false;
+			
+		$favs = $this->User->favorites($this->Session->read("User.id"));
+		$favs = Set::classicExtract($favs, "{n}.ProjectsUser.project_id");
+
+		return in_array($project_id, $favs);
 	}
 }
 

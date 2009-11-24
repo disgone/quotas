@@ -506,6 +506,14 @@ th.headerSortDown {
 	background: #EAECDF url(../img/control-270-small.png) right center no-repeat !important;
 	}
 	
+.favorite {
+	position: absolute; 
+	left: 9px; 
+	margin-top: -5px; 
+	width: 15px; 
+	height: 23px;
+	}
+	
 /*--------------------------------------------------
 	MESSAGES
 --------------------------------------------------*/
@@ -605,6 +613,10 @@ th.headerSortDown {
 .clear {
 	clear: both;
 	overflow: auto;
+	}
+	
+.pointer {
+	cursor: pointer;
 	}
 	
 .row:after,

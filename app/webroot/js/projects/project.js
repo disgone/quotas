@@ -13,17 +13,23 @@ $(document).ready(function() {
 	$(".fav").bind('click', function() {
 		var id = $(this).attr('rel');
 		var url = $(this).attr('href');
-		var arguments = url.split(/\/{1,2}/);
+		var _this = this;
 		
-		$.ajax({
-			'url': url
-		});
+		$.getJSON(
+			url + ".json",
+			null,
+			completed
+		);
 		
-		if(arguments[arguments.length-1] == "remove") {
-			$(this).text("Add to My Projects").attr("href", (url.replace("remove", "add"))).removeClass('star').addClass('estar');
-		}
-		else {
-			$(this).text("Remove My Projects").attr("href", (url.replace("add", "remove"))).removeClass('estar').addClass('star');
+		function completed(data) {
+			if(data.success == true) {
+				if(url.indexOf("remove") >= 0) {
+					$(_this).text("Add to My Projects").attr("href", (url.replace("remove", "add"))).removeClass('star').addClass('estar');
+				}
+				else {
+					$(_this).text("Remove My Projects").attr("href", (url.replace("add", "remove"))).removeClass('estar').addClass('star');
+				}
+			}
 		}
 		
 		return false;
