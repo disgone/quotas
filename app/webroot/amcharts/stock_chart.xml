@@ -62,10 +62,10 @@
 					<legend>
 						<date title="1" key="0">{sum}</date>
 					</legend>
-				</graph>
+					<smoothed>false</smoothed></graph>
 				<graph>
 					<type>line</type>
-					<min_max>false</min_max>
+					<min_max>true</min_max>
 					<bullet>round</bullet>
 					<data_sources>
 						<close>allowance</close>

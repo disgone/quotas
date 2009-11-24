@@ -1,3 +1,3 @@
 <?php foreach($data['Quota'] as $key => $project): ?>
-<?php echo date('Y-m-d H:i', strtotime($project['Quota']['created'])); ?>,<?php echo $units->convertTo($project['Quota']['consumed'], $data['Meta']['unit']['index']); ?>,<?php echo $units->convertTo($project['Quota']['allowance'], $data['Meta']['unit']['index']); ?>,<?php echo $units->convertTo($project['Quota']['change'], $data['Meta']['unit']['index'], 4); ?>, 
+<?php echo date('Y-m-d H:i', strtotime($project['Quota']['created'])); ?>,<?php echo $units->convertTo($project['Quota']['consumed'], $data['Meta']['unit']['index']); ?>,<?php echo $units->convertTo($project['Quota']['allowance'], $data['Meta']['unit']['index']); ?>,<?php echo $units->convertTo($project['Quota']['change'], $data['Meta']['unit']['changeindex'], 3); ?>, 
 <?php endforeach; ?>
