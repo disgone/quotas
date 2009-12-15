@@ -1,14 +1,10 @@
 <table class="records">
 	<thead>
-		<tr>
-			<th>Number</th>
-			<th>Name</th>
-			<th>Server</th>
-			<th class="aRight">Quota Usage</th>
-			<th class="aRight">Quota Allowance</th>
-			<th class="aRight">% Used</th>
-			<th class="aRight">Last Update</th>
-		</tr>
+		<?php if(isset($paginator)): ?>
+			<?php echo $this->element('projects/project-header-sortable'); ?>
+		<?php else: ?>
+			<?php echo $this->element('projects/project-header'); ?>
+		<?php endif; ?>
 	</thead>
 	<tbody>
 		<?php foreach($projects as $key => $project): ?>
@@ -25,10 +21,10 @@
 			</td>
 			<td><?php echo $project['Project']['name'] ? $html->link($project['Project']['name'], array('controller' => 'projects', 'action' => 'details', $project['Project']['id']), null, null, false) : ''; ?></td>
 			<td><?php echo $project['Server']['name']; ?></td>
-			<td class="aRight"><?php echo $units->format($project['Project']['Quota']['consumed'], true, 3); ?></td>
-			<td class="aRight"><?php echo $units->format($project['Project']['Quota']['allowance']); ?></td>
-			<td class="aRight"><?php echo round(($project['Project']['Quota']['consumed']/$project['Project']['Quota']['allowance'])*100, 2); ?>%</td>
-			<td class="aRight nowrap"><?php echo date('m/d/Y h:ia', strtotime($project['Project']['Quota']['created'])); ?>
+			<td class="aRight"><?php echo $units->format($project['Quota'][0]['consumed'], true, 3); ?></td>
+			<td class="aRight"><?php echo $units->format($project['Quota'][0]['allowance']); ?></td>
+			<td class="aRight"><?php echo round(($project['Quota'][0]['consumed']/$project['Quota'][0]['allowance'])*100, 2); ?>%</td>
+			<td class="aRight nowrap"><?php echo date('m/d/Y h:ia', strtotime($project['Quota'][0]['created'])); ?></td>
 		</tr>
 		<?php endforeach; ?>
 		<?php if(count($projects) < 1): ?>

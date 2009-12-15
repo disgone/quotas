@@ -2,7 +2,7 @@
 
 class DashboardController extends AppController {
 	var $name = "Dashboard";
-	var $uses = array("Project", "Quota", "User", "ProjectsUser");
+	var $uses = array("Project", "Quota", "User");
 	var $components = array("Cookie");
 	
 	function index() {
@@ -11,19 +11,20 @@ class DashboardController extends AppController {
 		$projects = null;
 		
 		if($this->Session->check('User')) {
-			$projects = $this->Project->getUserProjects($this->Session->read("User.id"));
-			$ids = Set::extract("/Project/id", $projects);
+			$this->Project->Behaviors->attach('Containable');
+			$this->Project->contain('Server', 'Quota');
 			
-
-			if(!empty($ids)) {
-				$updates = $this->Quota->getLatest($ids);
-				$total_used = $total_allotted = 0;
-				foreach($projects as $ndx => &$project) {
-					$project['Project']['Quota'] = $updates[$ndx]['Quota'];
-					$total_used += $project['Project']['Quota']['consumed'];
-					$total_allotted += $project['Project']['Quota']['allowance'];
+			$mine = $this->Project->ProjectsUser->find('all', array('condtions' => array('User.id' => $this->Session->read('User.id'))));
+			
+			if(isset($mine[0])) {
+				$ids = Set::extract("/ProjectsUser/project_id", $mine);
+				$projects = $this->Project->find('all', array('conditions' => array('Project.id' => $ids)));
+				
+				$total = array('used' => 0, 'allowance' => 0);
+				foreach($projects as $project) {
+					$total['used'] += $project['Quota'][0]['consumed'];
+					$total['allowance'] += $project['Quota'][0]['allowance'];
 				}
-				$total = array('used' => $total_used, 'allowance' => $total_allotted);
 			}
 		}
 

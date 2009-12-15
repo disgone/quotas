@@ -13,23 +13,21 @@
 		</tr>
 	</thead>
 	<tbody>
-		<?php $proj_count = $tot_cons = $tot_quota = $avg_cons = $avg_quota = 0; ?>
 		<?php if(count($usage) > 0): ?>
+			<?php $proj_count = $tot_cons = $tot_quota = 0; ?>
 			<?php foreach($usage as $key => $item): ?>
-				<?php
-					$proj_count += round($item[0]['consumed']/$item[0]['average_consumed']);
-				$tot_cons += $item[0]['consumed'];
-				$tot_quota += $item[0]['allowance'];
-				$avg_cons += $item[0]['average_consumed'];
-				$avg_quota += $item[0]['average_quota'];
-			?>
+				<?php 
+					$proj_count += $item['server_stats']['projects'];
+					$tot_cons += $item['server_stats']['consumed']; 
+					$tot_quota += $item['server_stats']['allowance'];
+				?>
 			<tr<?php echo $key%2 == 1 ? " class='alt'" : ''; ?>>
-				<td><?php echo $item['Server']['name']; ?></td>
-				<td><?php echo $html->link(round($item[0]['consumed']/$item[0]['average_consumed']), array('controller' => 'projects', 'action' => 'index', $item['Server']['name'])); ?></td>
-				<td><?php echo $units->format($item[0]['consumed']); ?></td>
-				<td><?php echo $units->format($item[0]['allowance']); ?></td>
-				<td><?php echo $units->format($item[0]['average_consumed']); ?></td>
-				<td><?php echo $units->format($item[0]['average_quota']); ?></td>
+				<td><?php echo $item['server_stats']['name']; ?></td>
+				<td><?php echo $html->link($item['server_stats']['projects'], array('controller' => 'projects', 'action' => 'index', $item['server_stats']['name'])); ?></td>
+				<td><?php echo $units->format($item['server_stats']['consumed']); ?></td>
+				<td><?php echo $units->format($item['server_stats']['allowance']); ?></td>
+				<td><?php echo $units->format($item['server_stats']['project_size']); ?></td>
+				<td><?php echo $units->format($item['server_stats']['project_quota']); ?></td>
 			</tr>
 			<?php endforeach; ?>
 		<?php else: ?>
@@ -44,8 +42,8 @@
 			<th><?php echo $proj_count; ?></th>
 			<th><?php echo $units->format($tot_cons); ?></th>
 			<th><?php echo $units->format($tot_quota); ?></th>
-			<th><?php echo @$units->format($avg_cons/count($usage)); ?></th>
-			<th><?php echo @$units->format($avg_quota/count($usage)); ?></th>
+			<th><?php echo @$units->format($tot_cons/$proj_count); ?></th>
+			<th><?php echo @$units->format($tot_quota/$proj_count); ?></th>
 		</tr>
 	</tfoot>
 </table>

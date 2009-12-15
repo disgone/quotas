@@ -7,9 +7,10 @@ class ProjectsController extends AppController {
 	var $components = array("RequestHandler");
 	
 	var $paginate = array(
-		'limit' => 25,
-		'order' => array('Project.number +0' => 'ASC', 'Project.name' => 'ASC'),
-		'recursive' => 0
+		'Project' => array(
+			'contain' => array('Server' => array('fields' => array('id', 'name')), 'Quota'),
+			'limit' => 25
+		)
 	);
 	
 	/*
@@ -26,23 +27,13 @@ class ProjectsController extends AppController {
 			$this->Server->recursive = -1;
 			$server = $this->Server->find('first', array('conditions' => array('Server.name' => $server, 'Server.enabled' => 1)));
 			if(!empty($server))
-				$this->paginate["conditions"] = array("Project.server_id" => $server['Server']['id']);
+				$this->paginate['Project']["conditions"] = array("Project.server_id" => $server['Server']['id']);
 		}
 		
+		//$this->Project->bindModel(array('hasOne' => array('Quota')));
+		
+		$this->Project->Behaviors->attach("Containable");
 		$projects = $this->paginate('Project');
-		
-		//This queries for usage details for the projects being displayed on the page.
-		if(!empty($projects)) {
-			//Extract the project_id's of the projects on page X, and get the usage...
-			$ids = Set::extract("/Project/id", $projects);
-			$updates = $this->Quota->getLatest($ids);
-			
-			//..then add the usage data to the project it belongs to.
-			foreach($projects as $ndx => &$project) {
-				$project['Project']['Quota'] = $updates[$ndx]['Quota'];
-			}
-			unset($ids, $updates);
-		}
 		
 		//Get list of projects in "My Projects" list if a user is logged in.
 		$favs = $this->Session->check("User") ? $this->User->favorites($this->Session->read("User.id")) : array();
