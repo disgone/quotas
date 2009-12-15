@@ -55,6 +55,24 @@ class ReportsController extends AppController {
 		
 		$this->set(compact('dupes'));
 	}
+	
+	function movers($type = null) {
+		if(($report = Cache::read("main", 'reports')) === false) {
+			$report['gainers'] 	= $this->Quota->getMovers();
+			$report['losers'] 	= $this->Quota->getMovers(array('dir' => 'asc'));
+		}
+		$gainers 	= $report['gainers'];
+		$losers 	= $report['losers'];
+		
+		if($type == 'losers') {
+			$this->set('movers', $losers);
+			$this->render('/elements/reports/movers', 'ajax');
+		}
+		else {
+			$this->set('movers', $gainers);
+			$this->render('/elements/reports/movers', 'ajax');
+		}
+	}
 }
 
 ?>

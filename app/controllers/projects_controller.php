@@ -3,7 +3,7 @@
 class ProjectsController extends AppController {
 	var $name = "Projects";
 	var $helpers = array('Units');
-	var $uses = array('Project', 'Quota', 'User', 'Server');
+	var $uses = array('Project', 'Quota', 'User', 'Server', 'Action');
 	var $components = array("RequestHandler");
 	
 	var $paginate = array(
@@ -55,7 +55,7 @@ class ProjectsController extends AppController {
 		//Throw a 404 error if ID was not specified.
 		if(!$id)
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
-			
+
 		//Grabs period time if specified in the url or a named parameter.
 		//?period=3d or period:3d
 		$period = $this->_getPeriod();
@@ -130,7 +130,8 @@ class ProjectsController extends AppController {
 				echo "success";
 			}
 			else {
-				$this->Session->setFlash(sprintf("Project %s has been deleted from the tracker.", $project['Project']['number']));
+				$this->Action->log($this->Session->read("User.id"), sprintf("%s deleted project %s on %s (%s)", $this->Session->read('User.username'), $project['Project']['number'], $project['Server']['name'], $project['Project']['path']));
+				$this->Session->setFlash(sprintf("Project %s has been deleted from the tracker.", $project['Project']['number']), "flash/success");
 				$this->redirect(array('action'=>'index'));
 			}
 		}
@@ -139,67 +140,10 @@ class ProjectsController extends AppController {
 				echo "error";
 			}
 			else {
-				$this->Session->setFlash(sprintf("Oh snap!  We've broken something and were not able to delete project %s.", $project['Project']['number']));
+				$this->Session->setFlash(sprintf("Oh snap!  We've broken something and were not able to delete project %s.", $project['Project']['number']), "flash/error");
 				$this->redirect(array('action'=>'index'));
 			}
 		}
-	}
-	
-
-	/*
-	 * Track Project
-	 * 
-	 * Adds the specified project to the logged in user's "My Project" list.
-	 * 
-	 * @param int $id ID of project to display details for.
-	 * @param string $action Add/Remove action
-	 */
-	function xtrack($id = null, $action = null) {
-		//No id, or not numeric.
-		if(!$id)
-			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/track'));
-			
-		if(!$this->Session->check('User'))
-			$this->cakeError('login');
-
-		$this->Project->id = $id;
-		$project = $this->Project->read();
-		if(empty($project))
-			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/track'));
-			
-		$data = array(
-			'user_id' => $this->Session->read('User.id'),
-			'project_id' => $id
-			);
-			
-		$exists = $this->Project->ProjectsUser->find('first', array('conditions' => array('ProjectsUser.user_id' => $data['user_id'], 'ProjectsUser.project_id' => $data['project_id'])));
-
-		switch($action) {
-			case "remove":
-				if(!empty($exists)) {
-					if($this->Project->ProjectsUser->delete($exists['ProjectsUser']['id'])); {
-						if(!$this->RequestHandler->isAjax())
-							$this->Session->setFlash("Project removed from <strong>My Projects</strong> list.", "flash/success");
-					}
-				}
-				break;
-			case "add":
-				if(empty($exists)) {
-					if($this->Project->ProjectsUser->save($data)) {
-						if(!$this->RequestHandler->isAjax())
-							$this->Session->setFlash("Project added to <strong>My Projects</strong> list.", "flash/success");
-					}
-				}
-				break;
-			default:
-				exit();
-		}
-		
-		if($this->RequestHandler->isAjax()) {
-			$this->layout = "ajax";
-		}
-		else
-			$this->redirect(array('controller' => 'dashboard', 'action' => 'index'));
 	}
 	
 	/*
@@ -219,13 +163,14 @@ class ProjectsController extends AppController {
 		
 		$this->Project->id = $id;
 		$project = $this->Project->read();
-		if(empty($this->data)) {
+		if(empty($this->data) || !trim($this->data['Project']['title'])) {
 			echo $project['Project']['name'];
 		}
 		else {
 			if($this->Project->saveField('name', Sanitize::html($this->data['Project']['title']))) {
 				echo Sanitize::html($this->data['Project']['title']);
 				Cache::delete("project_" . $id);
+				$this->Action->log($this->Session->read("User.id"), sprintf("%s renamed project %s from %s to %s", $this->Session->read('User.username'), $project['Project']['number'], $project['Project']['name'], $this->data['Project']['title']));
 			}
 			else {
 				echo Sanitize::html($project['Project']['name']);

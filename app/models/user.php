@@ -56,8 +56,7 @@ class User extends AppModel {
 			'joinTable'					=> 'projects_users',
 			'foreignKey'				=> 'user_id',
 			'associationForeignKey' 	=> 'project_id',
-			'unique'					=> false,
-			'order'						=> array('Project.number +0' => 'ASC', 'Project.name' => 'ASC')
+			'unique'					=> false
 		)
 	);
 	
