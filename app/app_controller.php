@@ -25,10 +25,12 @@ class AppController extends Controller {
 			$servers = $this->Server->find('all');
 			Cache::write("servers", $servers, 'mem');
 		}
+		
+		$this->set("isAdmin", $this->Login->isAdmin());
 	}
 	
 	function adminOnly() {
-		if($this->Session->read('User.Group.name') != "Admin") {
+		if(!$this->Login->isAdmin()) {
 			$this->Session->setFlash("Access denied.", "flash/error");
 			$this->redirect("/");
 		}

@@ -142,6 +142,13 @@ class LoginComponent extends Object {
 		return Security::hash($value, null, true);
 	}
 	
+	function isAdmin() {
+		if($this->Session->read("User.Group.name") == $this->config['admin_group'])
+			return true;
+		else
+			return false;
+	}
+	
 }
 
 ?>

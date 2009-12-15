@@ -437,6 +437,15 @@ class ProjectsController extends AppController {
 
 		return in_array($project_id, $favs);
 	}
+	
+	
+	/*******************************************************
+	 * 		ADMIN FUNCTIONS
+	 * *****************************************************/
+	
+	function admin_index() {
+		$this->adminOnly();
+	}
 }
 
 ?>

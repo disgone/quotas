@@ -29,6 +29,9 @@
 						<?php else: ?>
 							<?php echo $html->link('Remove From My Projects', array('action' => 'track', "remove", $project['Project']['id']), array("title" => "Remove from My Projects list", "class" => "star icon fav")); ?>
 						<?php endif; ?>
+						<?php if($isAdmin == true): ?>
+							| <?php echo $html->link("Delete", array('controller' => 'projects', "action" => 'delete', $project['Project']['id']), array('title' => "Delete this project from the database", 'class' => 'delete icon'), "Are you sure you want to delete this project?  This cannot be undone."); ?>
+						<?php endif; ?>
 					</div>
 					<!-- End Project Toolbar -->
 				<?php endif; ?>
