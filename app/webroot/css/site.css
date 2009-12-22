@@ -32,11 +32,14 @@ h2 {
 	}
 	
 h3 {
-	font-family: Cambria,Georgia,Times,"Times New Roman",serif;
-	font-size: 1.8em;
 	line-height: 16px;
 	margin: 5px 0 10px;
 	color: #666666;
+	border-bottom: 1px solid rgb(215, 215, 215); 
+	font-family: Arial, Verdana, sans-serif; 
+	font-size: 13px; 
+	text-transform: uppercase; 
+	padding-bottom: 5px;
 	}
 	
 table {
@@ -54,6 +57,19 @@ em {
 	
 p {
 	margin: 0 0 10px;
+	}
+	
+li {
+	margin: 5px 0;
+	}
+	
+a {
+	color: #985B18;
+	text-decoration: none;
+	}
+	
+a:hover {
+	color: #EB6D1F;
 	}
 	
 /*******************************************************
@@ -76,15 +92,6 @@ p {
 	font-weight: normal;
 	}
 	
-#content a {
-	color: #985B18;
-	text-decoration: none;
-	}
-	
-#content a:hover {
-	color: #EB6D1F;
-	}
-	
 table.records {
 	width: 100%;
 	margin: 0 0 10px;
@@ -101,6 +108,10 @@ table.records th {
 	color: #666666;
 	border: 1px solid #BBBBBB;
 	white-space: nowrap;
+	}
+	
+table.records th a {
+	color: #666;
 	}
 	
 table.records tr.subhead th {
@@ -202,6 +213,7 @@ table.records tr.alt td {
 	
 .navigation li {
 	float: left;
+	margin: 0;
 	}
 	
 .navigation li a {
@@ -343,7 +355,7 @@ table.records tr.alt td {
 /*--------------------------------------------------
 	STATS
 --------------------------------------------------*/
-.project-header {
+.project-head {
 	margin-bottom: 10px;
 	}
 	
@@ -351,14 +363,36 @@ table.records tr.alt td {
 	float: right;
 	}
 	
-#content .project-title h2 {
+#content .project-head h2 {
 	line-height: 1em;
 	color: #E96F23;
+	border-bottom: 1px solid #E5E5E5;
+	padding: 0 0 5px;
+	margin: 0 0;
 	}
 	
-.project-title .inplace_field {
+.project-head .inplace_field {
 	font-size: 1em;
 	width: 20em;
+	overflow: hidden;
+	}
+	
+.project-bar {
+	height: 1em;
+	}
+	
+.project-bar li {
+	display: inline;
+	margin: 0;
+	}
+	
+.project-bar li a {
+	border-right: 1px solid #E5E5E5;
+	padding: 3px 5px;
+	}
+	
+.project-bar li:last-child a {
+	border: none;
 	}
 
 .stats {
@@ -390,6 +424,8 @@ table.records tr.alt td {
 	font-family: Calibri,"Helvetica Neue",Arial,Helvetica,sans-serif;
 	font-size: 1.3em;
 	margin: 0;
+	padding: 0;
+	border: none;
 	}
 
 .stats-panel dt {
@@ -437,7 +473,9 @@ table.records tr.alt td {
 	}
 	
 .chart .title h3 {
-	font-size: 1.25em;
+	font-size: 11px;
+	border: none;
+	padding: 0;
 	color: #666666;
 	}
 	
@@ -494,7 +532,7 @@ table.records tr.alt td {
 	Icons
 --------------------------------------------------*/
 .icon {
-	padding-left: 15px;
+	padding-left: 15px !important;
 	}
 
 .delete {
@@ -509,12 +547,18 @@ table.records tr.alt td {
 	background: transparent url(../img/star-small-empty.png) left center no-repeat;
 	}
 	
-th.headerSortUp {
-	background: #EAECDF url(../img/control-090-small.png) right center no-repeat !important;
+th.sortAsc {
+	background: #D7D7D7 url(../img/paging.png) right 4px no-repeat !important;
+	padding-right: 16px !important;
 	}
 	
-th.headerSortDown {
-	background: #EAECDF url(../img/control-270-small.png) right center no-repeat !important;
+th.sortDesc {
+	background: #D7D7D7 url(../img/paging.png) right -12px no-repeat !important;
+	padding-right: 16px !important;
+	}
+	
+th.sortDown a {
+	color: #4F4A2C !important;
 	}
 	
 .favorite {
@@ -587,8 +631,25 @@ th.headerSortDown {
 	margin: 0;
 	}
 	
+tr td.dark {
+	background: #F9F9F9 !important;
+	}
+	
+tr.alt td.dark {
+	background: #EFEFEF !important;
+	}
+	
+tr th.dark {
+	font-weight: bold;
+	background: #D7D7D7 !important;
+	}
+	
 .header {
 	cursor: pointer;
+	}
+	
+.bullets {
+	padding-left: 15px;
 	}
 	
 .bullets li {

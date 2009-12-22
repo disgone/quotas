@@ -4,6 +4,7 @@ class Project extends AppModel {
 	var $name = 'Project';
 	var $order = array("Project.number" => 'ASC', "Project.name" => "ASC");
 	var $recursive = 1;
+	var $displayField = "number";
 	
 	var $hasMany = array(
 		'Quota' => array(
@@ -33,6 +34,33 @@ class Project extends AppModel {
 		)
 	);
 	
+	function paginate($conditions, $fields, $order, $limit, $page = 1, $recursive = null) {
+		if(!empty($order)) {
+			//In order to sort by the quota (which is queried separately normally) we need to join it with the rest of the results.
+			if(preg_match('/quota/i', key($order))) {
+				$fields = array(
+								"Project.id", "Project.number", "Project.name", "Project.path", "Quota.consumed", "Quota.allowance", "Quota.created", "Server.id", "Server.name"
+								);
+				$joins = array(
+							array('table' => 'latest', 'alias' => 'LastUpdate', 'type' => 'LEFT', 'foreignKey' => 'project_id', 'conditions' => 'LastUpdate.project_id = Project.id'),
+							array('table' => 'quotas', 'alias' => 'Quota', 'type' => 'LEFT', 'foreignKey' => 'project_id', 'conditions' => 'Quota.id = LastUpdate.mid')
+						);
+			}
+			
+			//Human sort for the project name.  We wan't the null valued names to come at the bottom version showing up at the top.
+			if(preg_match('/Project.name/i', key($order))) {
+				$fields = array(
+							"Project.id", "Project.number", "Project.name", "Project.path", "Server.id", "Server.name", "IFNULL(Project.name,'ZZZZZ') as hasName"
+							);
+				$order = array(
+								"hasName" => $order['Project.name'], "Project.name" => $order['Project.name'], "Project.number" => "DESC"
+								);
+			}
+		}
+		
+		return $this->find('all', compact('conditions', 'recursive', 'fields', 'order', 'limit', 'page', 'joins'));
+	}
+	
 	function search($token) {
 		$cond = array(
 			'conditions'	=> array('Project.status' => 1, array('or' => array('Project.number LIKE' => "%$token%", 'Project.name LIKE' => "%$token%"))),
@@ -40,6 +68,10 @@ class Project extends AppModel {
 			);
 			
 		return $this->find('all', $cond);
+	}
+	
+	function merge($src, $dest) {
+		return $this->updateAll(array('Quota.project_id' => $dest), array("Quota.project_id" => $src));
 	}
 	
 	function getNewProjects($server_id = null, $date = null, $limit = 10) {

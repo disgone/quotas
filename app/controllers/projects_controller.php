@@ -13,6 +13,10 @@ class ProjectsController extends AppController {
 		)
 	);
 	
+	var $cacheAction = array(
+		'index/' => "30 mnutes"
+	);
+	
 	/*
 	 * Project Index
 	 * 
@@ -31,7 +35,6 @@ class ProjectsController extends AppController {
 		}
 		
 		//$this->Project->bindModel(array('hasOne' => array('Quota')));
-		
 		$this->Project->Behaviors->attach("Containable");
 		$projects = $this->paginate('Project');
 		
@@ -52,6 +55,7 @@ class ProjectsController extends AppController {
 	 */
 	function details($id = null) {
 		$this->pageTitle = __("Project Details", true);
+		
 		//Throw a 404 error if ID was not specified.
 		if(!$id)
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
@@ -70,14 +74,16 @@ class ProjectsController extends AppController {
 		//Throw a 404 error if the project with ID was not found in the database.
 		if(empty($project))
 			$this->cakeError('missingProject', array('project_id' => $id, 'url' => 'projects/details'));
-
+		
+		$this->Project->Behaviors->attach("Containable");
 		//Get the last time the project had a change in usage.
 		$changed = $this->Quota->getLastChange($id);
 		$following = $this->_isFollowing($id);
+		$related = $this->Project->find('all', array('contain' => array('Server', 'Quota'), 'conditions' => array('Project.id !=' => $id, 'Project.number LIKE' => $project['Project']['number'])));
 
 		$this->pageTitle = trim($project['Project']['number'] . " " . $project['Project']['name']);
 		
-		$this->set(compact('project', 'changed'));
+		$this->set(compact('project', 'changed', 'related'));
 		$this->set('following', $following);
 		$this->set('quota', $project['Meta']);
 		
