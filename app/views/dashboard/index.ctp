@@ -10,7 +10,7 @@
 				<?php endif; ?>
 			<?php else: ?>
 				<p class="message info">
-					You must be logged in to be able to track projects.
+					You must be <?php echo $html->link('logged in', '/login', array('title' => 'Log in')); ?> to be able to track projects.
 				</p>
 			<?php endif; ?>
 		</table>
@@ -38,7 +38,7 @@
 			<p>You must have projects being tracked to view your stats.</p>
 			<?php endif; ?>
 		<?php else: ?>
-			<p>You must be logged in to track and view your project stats.</p>
+			<p>You must be <?php echo $html->link('logged in', '/login', array('title' => 'Log in')); ?> to track and view your project stats.</p>
 		<?php endif; ?>
 	</div>
 </div>

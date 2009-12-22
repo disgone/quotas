@@ -14,18 +14,19 @@ class DashboardController extends AppController {
 			$this->Project->Behaviors->attach('Containable');
 			$this->Project->contain('Server', 'Quota');
 			
-			$mine = $this->Project->ProjectsUser->find('all', array('condtions' => array('User.id' => $this->Session->read('User.id'))));
+			$mine = $this->Project->ProjectsUser->find('all', array('conditions' => array('ProjectsUser.user_id' => $this->Session->read('User.id'))));
 			
 			if(isset($mine[0])) {
 				$ids = Set::extract("/ProjectsUser/project_id", $mine);
 				$projects = $this->Project->find('all', array('conditions' => array('Project.id' => $ids)));
 				
 				$total = array('used' => 0, 'allowance' => 0);
-				foreach($projects as $project) {
+				foreach($projects as &$project) {
 					$total['used'] += $project['Quota'][0]['consumed'];
 					$total['allowance'] += $project['Quota'][0]['allowance'];
 				}
 			}
+
 		}
 
 		$this->set(compact('projects', 'total'));

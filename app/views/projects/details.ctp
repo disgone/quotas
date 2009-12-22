@@ -30,7 +30,7 @@
 					</td>
 					<td>
 						<div class="stat">
-							<h3>Allotment</h3>
+							<h3>Current Quota</h3>
 							<p class="stat-focus">
 								<?php echo $units->format($quota['allowed']); ?>
 							</p>
@@ -41,7 +41,7 @@
 					</td>
 					<td>
 						<div class="stat">
-							<h3>Change</h3>
+							<h3>Today's Change</h3>
 							<p class="stat-focus">
 								<?php printf('%s', $units->format($quota['change'])); ?>
 							</p>
@@ -52,7 +52,7 @@
 					</td>
 					<td>
 						<div class="stat">
-							<h3>Cost/Month</h3>
+							<h3>Current Cost/Month</h3>
 							<p class="stat-focus">
 								$<?php echo number_format(($quota['current']*(30/1073741824)),2); ?>
 							</p>
@@ -78,9 +78,19 @@
 	<!-- Quota Graph -->
 	<div class="chart">
 		<div class="title">
-			<h3>Quota Usage Over Time</h3>
+			<h3>Quota Usage Over Time: <em><?php echo $project['Project']['name']; ?></em></h3>
 		</div>
 		<?php echo $this->element('amstock', array('key' => $project['Project']['id'], 'project_id' => $project['Project']['id'], 'project' => $project)); ?>
 	</div>
 	<!-- End Quota Graph -->
+	<?php if(isset($related[0])): ?>
+	<div class="project-related" style="margin-top:10px;">
+		<h3>Related Projects</h3>
+		<ul class="bullets">
+		<?php foreach($related as $project): ?>
+			<li><?php echo $html->link($project['Project']['number'] . ' on ' . $project['Server']['name'], array('action' => 'details', $project['Project']['id'])); ?> (<?php echo $project['Project']['path']; ?>)</li>
+		<?php endforeach; ?>
+		</ul>
+	</div>
+	<?php endif; ?>
 </div>

@@ -24,5 +24,5 @@
 ?>
 <h2><?php echo __('Please log in');?></h2>
 <p class="message error">
-	You must <?php echo $html->link('log in', '/login', array('title' => 'Log in')); ?> for this action.
+	This action requires you to <?php echo $html->link('log in', '/login', array('title' => 'Log in')); ?>.
 </p>

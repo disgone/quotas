@@ -18,7 +18,7 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="column double endcol">
+		<div class="column double fLeft endcol">
 			<table class="records" id="largest-decrease">
 				<thead>
 					<tr>

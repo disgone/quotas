@@ -1,7 +1,7 @@
 <?php
 
-class ActionController extends AppController {
-	var $name = 'Action';
+class LogController extends AppController {
+	var $name = 'Log';
 	var $uses = array("Project", "Quota", "User", "Action");
 	
 	var $paginate = array(
@@ -10,9 +10,9 @@ class ActionController extends AppController {
 		'recursive' => 0
 	);
 	
-	function admin_log() {
+	function admin_read() {
 		$this->adminOnly();
-		$this->pageTitle = "Activity Log";
+		$this->pageTitle = "History Log";
 		$this->set('activities', $this->paginate('Action'));
 	}
 }
