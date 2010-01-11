@@ -11,3 +11,4 @@ database.php
 *.pot
 *.po
 *.mo
+*.scc
