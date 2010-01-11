@@ -7,6 +7,8 @@ class AppController extends Controller {
 	var $logged = false;
 	
 	function beforeFilter() {
+		$this->RequestHandler->setContent('json', 'text/x-json');
+		
 		if(!$this->Session->check("User")) {
 			//Check for auto login
 			$cookie = $this->Cookie->read('User.pk');
@@ -24,14 +26,11 @@ class AppController extends Controller {
 			Cache::write("servers", $servers, 'mem');
 		}
 		
-		if($this->RequestHandler->isAjax()) {
-			 Configure::write('debug', 0);
-			 $this->layout = "ajax";
-		}
+		$this->set("isAdmin", $this->Login->isAdmin());
 	}
 	
 	function adminOnly() {
-		if($this->Session->read('User.Group.name') != "Admin") {
+		if(!$this->Login->isAdmin()) {
 			$this->Session->setFlash("Access denied.", "flash/error");
 			$this->redirect("/");
 		}

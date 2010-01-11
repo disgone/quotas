@@ -62,7 +62,7 @@
 					<legend>
 						<date title="1" key="0">{sum}</date>
 					</legend>
-				</graph>
+					<smoothed>false</smoothed></graph>
 				<graph>
 					<type>line</type>
 					<min_max>false</min_max>

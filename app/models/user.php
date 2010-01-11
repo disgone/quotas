@@ -56,14 +56,17 @@ class User extends AppModel {
 			'joinTable'					=> 'projects_users',
 			'foreignKey'				=> 'user_id',
 			'associationForeignKey' 	=> 'project_id',
-			'unique'					=> false,
-			'order'						=> array('Project.number +0' => 'ASC', 'Project.name' => 'ASC')
+			'unique'					=> false
 		)
 	);
 	
 	function confirmPassword($data) {
 		$valid = $data['password'] == $this->data['User']['confirm'] ? true : false; 
 		return $valid;
+	}
+	
+	function favorites($id) {
+		return $this->ProjectsUser->find('all', array('conditions' => array('ProjectsUser.user_id' => $id)));
 	}
 }
 ?>
