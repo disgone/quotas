@@ -18,11 +18,12 @@ class AppController extends Controller {
 		}
 		
 		if(($servers = Cache::read("servers", 'mem')) === false) {
-			App::import('Server');
-			$this->Server->unbindModel(
+			App::import('Model', 'Server');
+			$Server = new Server();
+			$Server->unbindModel(
 				array('hasMany' => array('Project'))
 			);
-			$servers = $this->Server->find('all');
+			$servers = $Server->find('all');
 			Cache::write("servers", $servers, 'mem');
 		}
 		

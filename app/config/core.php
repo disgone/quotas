@@ -239,7 +239,7 @@
 		 'engine' => 'File',
 		 'duration'=> 1200,
 		 'probability'=> 100,
-		 'path' => CACHE . DS . "data" . DS . "reports",
+		 'path' => CACHE . DS . "reports",
 		 'prefix' => 'reports_',
 		 'lock' => false,
 		 'serialize' => true,
