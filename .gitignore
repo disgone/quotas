@@ -1,13 +1,11 @@
-cake/
-bin/
 *.buildpath
 *.project
-/app/tmp/cache/*
+
+/app/tmp/
 /app/tmp/logs/*
 /app/tmp/quota/*.xml
+
 .settings/*
-empty
-database.php
 *.pot
 *.po
 *.mo
