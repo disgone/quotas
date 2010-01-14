@@ -77,14 +77,13 @@ class ProjectsController extends AppController {
 		
 		$this->Project->Behaviors->attach("Containable");
 		//Get the last time the project had a change in usage.
-		$changed = $this->Quota->getLastChange($id);
-		$following = $this->_isFollowing($id);
+		$is_following = $this->User->isTrackingProject($this->Session->read("User.id"), $id);
 		$related = $this->Project->find('all', array('contain' => array('Server', 'Quota'), 'conditions' => array('Project.id !=' => $id, 'Project.number LIKE' => $project['Project']['number'])));
 
 		$this->pageTitle = trim($project['Project']['number'] . " " . $project['Project']['name']);
 		
-		$this->set(compact('project', 'changed', 'related'));
-		$this->set('following', $following);
+		$this->set(compact('project', 'changed', 'related', 'crumbs'));
+		$this->set('is_following', $is_following);
 		$this->set('quota', $project['Meta']);
 		
 		unset($min, $max, $start, $end, $project, $quota, $durations);
@@ -370,17 +369,6 @@ class ProjectsController extends AppController {
 		return null;
 	}
 	
-	function _isFollowing($project_id) {
-		if($this->Session->check("User") == false)
-			return false;
-			
-		$favs = $this->User->favorites($this->Session->read("User.id"));
-		$favs = Set::classicExtract($favs, "{n}.ProjectsUser.project_id");
-
-		return in_array($project_id, $favs);
-	}
-	
-	
 	/*******************************************************
 	 * 		ADMIN FUNCTIONS
 	 * *****************************************************/
@@ -388,6 +376,7 @@ class ProjectsController extends AppController {
 	function admin_index() {
 		$this->adminOnly();
 	}
+
 }
 
 ?>

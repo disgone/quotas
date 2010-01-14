@@ -65,8 +65,31 @@ class User extends AppModel {
 		return $valid;
 	}
 	
+	/**
+	 * Returns a users favorite projects.
+	 * @param $id the user id of the person you are requesting favorites from
+	 * @return array
+	 */
 	function favorites($id) {
 		return $this->ProjectsUser->find('all', array('conditions' => array('ProjectsUser.user_id' => $id)));
+	}
+	
+	/**
+	 * Checks if a user has a project on their favorites list.
+	 * @param $id the user id
+	 * @param $project_id the id of the project
+	 * @return boolean
+	 */
+	function isTrackingProject($id, $project_id) {
+		if($id == null)
+			return false;
+			
+		$result = $this->ProjectsUser->find('all', array('conditions' => array('ProjectsUser.user_id' => $id, 'ProjectsUser.project_id' => $project_id)));
+		
+		if(!empty($result))
+			return true;
+			
+		return false;
 	}
 }
 ?>

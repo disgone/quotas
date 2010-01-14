@@ -4,7 +4,7 @@
 	<li class="fLeft"><span style="padding: 3px 5px;"><strong>Last Update:</strong> <?php echo $time->timeAgoInWords(strtotime($project['Quota'][count($project['Quota'])-1]['Quota']['created'])); ?> (<?php echo date('m/d g:ia', strtotime($project['Quota'][count($project['Quota'])-1]['Quota']['created'])); ?>)</span></li>
 	<?php if($session->check('User')): ?>
 		<li>
-			<?php if(!$following): ?>
+			<?php if(!$is_following): ?>
 				<?php echo $html->link('Add To My Projects', array('action' => 'track', "add", $project['Project']['id']), array("title" => "Add to My Projects list", "class" => "estar icon fav")); ?>
 			<?php else: ?>
 				<?php echo $html->link('Remove From My Projects', array('action' => 'track', "remove", $project['Project']['id']), array("title" => "Remove from My Projects list", "class" => "star icon fav")); ?>
