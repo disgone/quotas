@@ -1,32 +1,36 @@
+<?php echo $javascript->link('lib/jquery.lazyloader', false); ?>
+<?php echo $javascript->link('reports/reports_main', false); ?>
 <h2><?php echo $this->pageTitle; ?></h2>
 <div class="column-layout">
 	<div class="row">
-		<div class="column full">
-			<?php echo $this->element('reports/server_details', array('usage' => $usage)); ?>
+		<h3>Server Details</h3>
+		<div id="server-stats" class="column full">
+			<div class="loading"></div>
 		</div>
 	</div>
 	<div class="row">
+		<h3>Project Details</h3>
 		<div class="column double fLeft">
-			<table class="records" id="largest-increase">
+			<table class="records" id="movers-increase">
 				<thead>
 					<tr>
 						<th colspan="3">Largest Increase <em class="sm">(Today)</em></th>
 					</tr>
 				</thead>
 				<tbody>
-					<?php echo $this->element('reports/movers', array("movers" => $gainers)); ?>
+					<td><div class="loading"></div></td>
 				</tbody>
 			</table>
 		</div>
 		<div class="column double fLeft endcol">
-			<table class="records" id="largest-decrease">
+			<table class="records" id="movers-decrease">
 				<thead>
 					<tr>
 						<th colspan="3">Largest Decrease <em class="sm">(Today)</em></th>
 					</tr>
 				</thead>
 				<tbody>
-					<?php echo $this->element('reports/movers', array("movers" => $losers)); ?>
+					<td><div class="loading"></div></td>
 				</tbody>
 			</table>
 		</div>

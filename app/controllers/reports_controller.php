@@ -5,31 +5,19 @@ class ReportsController extends AppController {
 	var $helpers = array('Units');
 	var $uses = array('Project', 'Quota', 'Server', 'Scans');
 	
-	var $paginate = array(
-		'limit' => 30,
-		'order' => array('Project.number +0' => 'ASC', 'Project.name' => 'ASC'),
-		'recursive' => 0
-	);
-	
 	function index() {
 		$this->pageTitle = "Report Dashboard";
 		
 		if(($report = Cache::read("main", 'reports')) === false) {
-			$report['gainers'] 	= $this->Quota->getMovers();
-			$report['losers'] 	= $this->Quota->getMovers(array('dir' => 'asc'));
-			$report['usage'] 	= $this->Server->getUsage();
 			$report['projects'] = $this->Project->getNewProjects();
 			Cache::write("main", $report, 'reports');
 		}
-		
-		$gainers 	= $report['gainers'];
-		$losers 	= $report['losers'];
-		$usage		= $report['usage'];
+
 		$projects 	= $report['projects'];
 		
-		$this->set(compact('gainers', 'losers', 'usage', 'projects'));
+		$this->set(compact('projects'));
 		
-		unset($gainers, $losers, $usage, $projects);
+		unset($projects);
 	}
 	
 	function new_projects() {
@@ -56,15 +44,17 @@ class ReportsController extends AppController {
 		$this->set(compact('dupes'));
 	}
 	
-	function movers($type = null) {
-		if(($report = Cache::read("main", 'reports')) === false) {
-			$report['gainers'] 	= $this->Quota->getMovers();
-			$report['losers'] 	= $this->Quota->getMovers(array('dir' => 'asc'));
+	function movers($type = null) {		
+		if(($movers = Cache::read("movers", "reports")) === false) {
+			$movers['gainers'] 	= $this->Quota->getMovers();
+			$movers['losers'] 	= $this->Quota->getMovers(array('dir' => 'asc'));
+			Cache::write("movers", $movers, "reports");
 		}
-		$gainers 	= $report['gainers'];
-		$losers 	= $report['losers'];
 		
-		if($type == 'losers') {
+		$gainers 	= $movers['gainers'];
+		$losers 	= $movers['losers'];
+		
+		if($type == 'decrease') {
 			$this->set('movers', $losers);
 			$this->render('/elements/reports/movers', 'ajax');
 		}
@@ -72,6 +62,15 @@ class ReportsController extends AppController {
 			$this->set('movers', $gainers);
 			$this->render('/elements/reports/movers', 'ajax');
 		}
+	}
+	
+	function server_stats() {
+		if(($usage = Cache::read("server_usage", "reports")) === false) {
+			$usage = $this->Server->getUsage();
+			Cache::write("server_usage", $usage, "reports");
+		}
+		
+		$this->set('usage', $usage);
 	}
 }
 

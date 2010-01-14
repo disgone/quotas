@@ -569,6 +569,14 @@ th.sortDown a {
 	height: 23px;
 	}
 	
+.loading {
+	display: block;
+	margin: 3px auto;
+	width: 20px;
+	height: 20px;
+	background: transparent url(../img/ajax-loader.gif) center center no-repeat;
+	}
+	
 /*--------------------------------------------------
 	MESSAGES
 --------------------------------------------------*/
