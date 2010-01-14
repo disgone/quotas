@@ -46,7 +46,7 @@
 								<?php printf('%s', $units->format($quota['change'])); ?>
 							</p>
 							<p class="stat-supp">
-								% Change: <span class="value"><?php echo round(($quota['change']/$quota['allowed'])*100, 3); ?>%</span>
+								% Change: <span class="value"><?php echo round(($quota['change']/$quota['current'])*100, 3); ?>%</span>
 							</p>
 						</div>
 					</td>
