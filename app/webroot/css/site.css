@@ -639,6 +639,14 @@ th.sortDown a {
 	margin: 0;
 	}
 	
+.gain {
+	color: #008000;
+	}
+	
+.loss {
+	color: #B73B3B;
+	}
+	
 tr td.dark {
 	background: #F9F9F9 !important;
 	}

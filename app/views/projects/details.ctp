@@ -42,8 +42,8 @@
 					<td>
 						<div class="stat">
 							<h3>Today's Change</h3>
-							<p class="stat-focus">
-								<?php printf('%s', $units->format($quota['change'])); ?>
+							<p class="stat-focus<?php echo $quota['change'] == 0 ? '' : ($quota['change'] > 0 ? ' gain' : ' loss'); ?>">
+								<?php echo $quota['change'] >0 ? '+' : ''; ?><?php printf('%s', $units->format($quota['change'])); ?>
 							</p>
 							<p class="stat-supp">
 								% Change: <span class="value"><?php echo round(($quota['change']/$quota['current'])*100, 3); ?>%</span>
